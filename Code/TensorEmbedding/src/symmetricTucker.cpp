@@ -12,7 +12,7 @@ using namespace arma;
 // and we can use Rcpp::List to return both at the same time
 //
 // [[Rcpp::export]]
-SEXP rcpparma_bothproducts(SEXP A_r, int n, int p, int k) {
+SEXP symmetric_tensor_decomp(SEXP A_r, int n, int p, int k, int steps = 1000, double delta1 = 1E-2, double delta2 =1E-2) {
 
     
   Rcpp::NumericVector Ar(A_r);
@@ -24,6 +24,8 @@ SEXP rcpparma_bothproducts(SEXP A_r, int n, int p, int k) {
 
   mat gradL = tensorA.gradL(tensorA.L, tensorA.C);
   cube gradC = tensorA.gradC(tensorA.L, tensorA.C);
+
+  tensorA.OptConjugateGradient(steps, delta1, delta2);
 
     return List::create(
         Named("A")=A,

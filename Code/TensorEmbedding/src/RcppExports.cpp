@@ -6,9 +6,9 @@
 
 using namespace Rcpp;
 
-// rcpparma_bothproducts
-SEXP rcpparma_bothproducts(SEXP A_r, int n, int p, int k);
-RcppExport SEXP TensorEmbedding_rcpparma_bothproducts(SEXP A_rSEXP, SEXP nSEXP, SEXP pSEXP, SEXP kSEXP) {
+// symmetric_tensor_decomp
+SEXP symmetric_tensor_decomp(SEXP A_r, int n, int p, int k, int steps, double delta1, double delta2);
+RcppExport SEXP TensorEmbedding_symmetric_tensor_decomp(SEXP A_rSEXP, SEXP nSEXP, SEXP pSEXP, SEXP kSEXP, SEXP stepsSEXP, SEXP delta1SEXP, SEXP delta2SEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -16,7 +16,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< int >::type p(pSEXP);
     Rcpp::traits::input_parameter< int >::type k(kSEXP);
-    __result = Rcpp::wrap(rcpparma_bothproducts(A_r, n, p, k));
+    Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
+    Rcpp::traits::input_parameter< double >::type delta1(delta1SEXP);
+    Rcpp::traits::input_parameter< double >::type delta2(delta2SEXP);
+    __result = Rcpp::wrap(symmetric_tensor_decomp(A_r, n, p, k, steps, delta1, delta2));
     return __result;
 END_RCPP
 }

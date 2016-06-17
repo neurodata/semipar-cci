@@ -1,0 +1,3 @@
+useDynLib(TensorEmbedding)
+importFrom(Rcpp, evalCpp)
+exportPattern("^[[:alpha:]]+")

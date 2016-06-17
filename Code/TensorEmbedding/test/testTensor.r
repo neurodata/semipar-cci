@@ -1,22 +1,23 @@
 require("TensorEmbedding")
 
-n<- 100
-p<- 30
+n<- 20
+p<- 5
 
 k<- 5 # reduced dimension
 
-A_mean<- matrix(rnorm(n*n),n,n)*10
-A_mean<- (A_mean+t(A_mean))/2
+P<- matrix(rnorm(n*k),n,k)
+A_mean<- P%*%t(P)
+# A_mean<- (A_mean+t(A_mean))/2
 
 A <- array(0, dim = c(n,n,p))
 for(i in 1:p){
-  noise<- matrix(rnorm(n*n),n,n)
+  noise<- matrix(rnorm(n*n)*0.1,n,n)
   noise<- (noise+t(noise))/2
   A[,,i]<-  A_mean + noise
 }
 
 
-testObj<- TensorEmbedding::symmetric_tensor_decomp(A,n,p, k, 10000, 1E-4, 1E-4)
+testObj<- TensorEmbedding::symmetric_tensor_decomp(A,n,p, k, 1000, 1E-4, 1E-4)
 
 # A-testObj$A
 

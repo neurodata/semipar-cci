@@ -1,9 +1,9 @@
 require("tensr")
 
-n<- 3
+n<- 10
 p<- 3
 
-k<- 2 # reduced dimension
+k<- 5 # reduced dimension
 
 A <- array(rnorm(n*n*p), dim = c(n,n,p))
 
@@ -55,6 +55,7 @@ grad_C<-function(L,C){
       for(j in 1:k){
         K<- matrix(0, k,k)
         K[i,j]<- 1
+        K[j,i]<- 1
         grad[i,j,m]<- sum(2*diff* (L%*%K%*%t(L)))
       }
     }
@@ -78,6 +79,8 @@ grad_C_num<-function(L,C, i, j,m){
   l1<- sqr_loss(L,C)
   C0<- C
   C0[i,j,m] <-C0[i,j,m]+1E-8
+  if(i!=j)
+    C0[j,i,m] <-C0[j,i,m]+1E-8
   l2<- sqr_loss(L,C0)
   (l2-l1)/1E-8
 }
@@ -86,5 +89,22 @@ grad_L_num(L,C,2,2)
 grad_L(L,C)[2,2]
 
 
-grad_C_num(L,C,2,2,2)
-(grad_C(L,C))[2,2,2]
+grad_C_num(L,C,1,1,2)
+(grad_C(L,C))[1,1,2]
+
+
+
+##
+L<- matrix(rnorm(n*k),n,k)
+sqr_loss(L,C)
+for(i in 1:10000){
+  L<- L - (1E-3)*grad_L(L,C)
+  C<- C- (1E-3)*grad_C(L,C)
+  print(  sqr_loss(L,C))
+}
+
+A
+L%*%C[,,3]%*%t(L)-A[,,3]
+
+image(A[,,3], zlim = c(-2,2))
+image(L%*%C[,,3]%*%t(L) , zlim = c(-2,2))

@@ -12,7 +12,7 @@ class SymmTensor {
   mat L;   // left matrix n,k
   cube C;  // core tensor k,k,p
 
-  //direction for L and C to drop
+  // direction for L and C to drop
   mat directionL;
   cube directionC;
 
@@ -27,7 +27,7 @@ class SymmTensor {
   void setK(int _k) {
     k = _k;
 
-    mat Amean = sum(A,2) / p;
+    mat Amean = sum(A, 2) / p;
 
     vec s;
     mat V;
@@ -44,13 +44,66 @@ class SymmTensor {
     }
   }
 
+  // loss functions and its derivative wrt LCL:
+
+  // squared loss
+  double sqrLoss(mat L, cube C) {
+    cube diff = zeros(n, n, p);
+
+    for (int i = 0; i < p; ++i) {
+      mat C_local = C.slice(i);
+      diff.slice(i) = L * C_local * L.t() - A.slice(i);
+    }
+
+    return accu(diff % diff);
+  }
+
+  cube deriSqrLoss(mat L, cube C) {
+    cube diff = zeros(n, n, p);
+
+    for (int i = 0; i < p; ++i) {
+      mat C_local = C.slice(i);
+      diff.slice(i) = L * C_local * L.t() - A.slice(i);
+    }
+
+    return 2 * diff;
+  }
+
+  // logistic loss
+
+  double logisticLoss(mat L, cube C) {
+    cube theta = zeros(n, n, p);
+    for (int i = 0; i < p; ++i) {
+      mat C_local = C.slice(i);
+      theta.slice(i) = L * C_local * L.t();
+    }
+
+    cube loss = -theta % A + log(1 + exp(theta));
+    return accu(loss);
+  }
+
+  cube deriLogisticLoss(mat L, cube C) {
+    cube theta = zeros(n, n, p);
+
+    for (int i = 0; i < p; ++i) {
+      mat C_local = C.slice(i);
+      theta.slice(i) = L * C_local * L.t();
+    }
+
+    return -A + 1.0 / (1.0 + exp(-theta));
+  }
+
   // gradient for L
   mat gradL(mat L, cube C) {
     cube grad(n, k, p);
+
+    cube grad_LCL = deriSqrLoss(L, C);
+
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);
       mat diff = LC * L.t() - A.slice(i);
-      grad.slice(i) = 4 * diff * LC;
+      grad.slice(i) = 2 * grad_LCL.slice(i) * LC;
+      // grad.slice(i) = 4 *diff * LC;
     }
     return sum(grad, 2);  // sum over last dim
   }
@@ -60,6 +113,8 @@ class SymmTensor {
   cube gradC(mat L, cube C) {
     cube grad(k, k, p);
 
+    cube grad_LCL = deriSqrLoss(L, C);
+
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);
       mat diff = LC * L.t() - A.slice(i);
@@ -68,24 +123,12 @@ class SymmTensor {
           mat deriC = zeros(k, k);
           deriC(a, b) = 1;
           deriC(b, a) = 1;
-          grad(a, b, i) = accu(2 * diff % (L * deriC * L.t()));
+          grad(a, b, i) = accu(grad_LCL.slice(i) % (L * deriC * L.t()));
           grad(b, a, i) = grad(a, b, i);
         }
       }
     }
     return grad;
-  }
-
-  // loss functions
-  double sqrLoss(mat L, cube C) {
-    cube diff = zeros(n, n, p);
-
-    for (int i = 0; i < p; ++i) {
-      mat C_local = C.slice(i);
-      diff.slice(i) = A.slice(i) - L * C_local * L.t();
-    }
-
-    return accu(diff % diff);
   }
 
   // compute loss when move delta
@@ -105,9 +148,7 @@ class SymmTensor {
 
   double lineSearch(double l, double r, double loss_l, double loss_r,
                     int paramIdx = 0) {
-
-    if( fabs(loss_l -loss_r)<1E-3)
-        return l;
+    if (fabs(loss_l - loss_r) < 1E-3) return l;
 
     double m = (l + r) / 2;
 
@@ -117,39 +158,41 @@ class SymmTensor {
 
     if (loss_r < loss_m & loss_r < loss_l) return r;
 
-    if (loss_m < loss_l & loss_m < loss_r){
-        double opt_l = lineSearch(l, m, loss_l, loss_m, paramIdx);
-        double opt_r = lineSearch(m, r, loss_m, loss_r, paramIdx);
+    if (loss_m < loss_l & loss_m < loss_r) {
+      double opt_l = lineSearch(l, m, loss_l, loss_m, paramIdx);
+      double opt_r = lineSearch(m, r, loss_m, loss_r, paramIdx);
 
-        double loss_opt_l = lossAtDelta(opt_l, paramIdx);
-        double loss_opt_r = lossAtDelta(opt_r, paramIdx);
-        if(loss_opt_l< loss_opt_r)
-            return opt_l;
-        else
-            return opt_r;
-
+      double loss_opt_l = lossAtDelta(opt_l, paramIdx);
+      double loss_opt_r = lossAtDelta(opt_r, paramIdx);
+      if (loss_opt_l < loss_opt_r)
+        return opt_l;
+      else
+        return opt_r;
     }
     return l;
   }
 
   void OptConjugateGradient(int steps = 100, double delta1 = 1E-3,
-                        double delta2 = 1E-3) {
+                            double delta2 = 1E-3) {
+    mat gradientL = gradL(L, C);
+    cube gradientC = gradC(L, C);
 
-        mat gradientL = gradL(L, C);
-        cube gradientC = gradC(L, C);
+    directionL = gradientL;
+    directionC = gradientC;
 
-        directionL= gradientL;
-        directionC= gradientC;
-
+    double pre_loss = INFINITY;
 
     for (int i = 0; i < steps; ++i) {
       {
-
         mat gradient0 = gradientL;
         gradientL = gradL(L, C);
-        double beta = accu( gradientL % gradientL) / accu( gradient0 % gradient0);
-        if(!std::isnan(beta))
-            directionL= gradientL + beta *  directionL;
+        // Polak–Ribière conjugate gradient
+        double beta = accu(gradientL % (gradientL - gradient0)) /
+                      accu(gradient0 % gradient0);
+
+        if (beta < 0) beta = 0;
+
+        if (!std::isnan(beta)) directionL = gradientL + beta * directionL;
 
         double cur_loss = sqrLoss(L, C);
         double loss_delta = lossAtDelta(delta1, 0);
@@ -158,12 +201,10 @@ class SymmTensor {
       }
 
       {
-
         cube gradient0 = gradientC;
         gradientC = gradC(L, C);
-        double beta = accu( gradientC % gradientC) / accu( gradient0 % gradient0);
-        if(!std::isnan(beta))
-            directionC = gradientC + beta *  directionC;
+        double beta = accu(gradientC % gradientC) / accu(gradient0 % gradient0);
+        if (!std::isnan(beta)) directionC = gradientC + beta * directionC;
 
         double cur_loss = sqrLoss(L, C);
         double loss_delta = lossAtDelta(delta2, 1);
@@ -172,6 +213,11 @@ class SymmTensor {
       }
       {
         double cur_loss = sqrLoss(L, C);
+        if (fabs(cur_loss - pre_loss) < 1E-3)
+          break;
+        else
+          pre_loss = cur_loss;
+
         cout << cur_loss << endl;
       }
     }

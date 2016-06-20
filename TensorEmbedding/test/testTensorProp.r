@@ -15,36 +15,34 @@ A_mean2<- P%*%t(P)
 
 A <- array(0, dim = c(n,n,p))
 for(i in 1:p){
-  noise<- matrix(rnorm(n*n),n,n)*5
+  noise<- matrix(rnorm(n*n),n,n)
   noise<- (noise+t(noise))/2
   if(i<= (p/2))
   A[,,i]<-  A_mean1 + noise
   else
-    A[,,i]<-  A_mean2 + noise
-  
+    A[,,i]<-  A_mean2  + noise
 }
 
+propMat<- 1/(1+exp(-A))
+
+simA <- (array(runif(n*n*p), dim = c(n,n,p)))
+
+for(i in 1:p){
+  simA[,,i]<-  (simA[,,i] + t(simA[,,i]))/2
+}
+
+simA <- (simA < propMat)*1
+
 k=5
-testObj<- TensorEmbedding::symmetric_tensor_decomp(A,n,p, k, 500, 1E-4, 1E-4)
+testObj<- TensorEmbedding::symmetric_tensor_decomp(simA,n,p, k, 1000, 1E-4, 1E-3, loss_type = 1, tol = 1E-12,restrictCoreToDiag = TRUE)
 
 L <-  testObj$L
 C <- testObj$C
 
-# image(A[,,1], zlim=c(-3,3))
-# image(A[,,2], zlim=c(-3,3))
-# 
-# image(A_mean1, zlim=c(-3,3))
-# image(L%*% C[,,1]%*%t(L), zlim=c(-3,3))
-# 
-# 
-# hist(A_mean1 - L%*% C[,,1]%*%t(L))
-# hist(A_mean2 - L%*% C[,,6]%*%t(L))
-# 
-# image(C[,,1])
-# image(C[,,6])
-
 require(ggplot2)
 require(reshape)
+
+# C[C>100]<-0
 
 cMelted<- numeric()
 
@@ -57,6 +55,22 @@ for(i in 1:p){
 p1 <- ggplot(cMelted, aes(X1, X2)) + geom_tile(aes(fill = value),
       colour = "white") + scale_fill_gradient(low = "white",high = "red") + facet_wrap(~group, ncol=5)
 
-pdf("compare_2_groups.pdf",8,6)
-p1
-dev.off()
+# pdf("compare_2_groups.pdf",8,6)
+# p1
+# dev.off()
+
+out<- seq(range(C)[1], range(C)[2], length.out = k)
+
+
+plot(c(1:k), out, type = "n", ylim = c(0,50))
+for(i in 1:(p/2)){
+  lines(c(1:k), diag(C[,,i]), col = "blue")
+}
+for(i in (p/2+1):p){
+  lines(c(1:k), diag(C[,,i]), col = "red")
+}
+
+
+km_L <- kmeans(L,centers = 2)
+
+km_L  

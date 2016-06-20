@@ -7,8 +7,8 @@
 using namespace Rcpp;
 
 // symmetric_tensor_decomp
-SEXP symmetric_tensor_decomp(SEXP A_r, int n, int p, int k, int steps, double delta1, double delta2);
-RcppExport SEXP TensorEmbedding_symmetric_tensor_decomp(SEXP A_rSEXP, SEXP nSEXP, SEXP pSEXP, SEXP kSEXP, SEXP stepsSEXP, SEXP delta1SEXP, SEXP delta2SEXP) {
+SEXP symmetric_tensor_decomp(SEXP A_r, int n, int p, int k, int steps, double delta1, double delta2, int loss_type, double tol, bool restrictCoreToDiag);
+RcppExport SEXP TensorEmbedding_symmetric_tensor_decomp(SEXP A_rSEXP, SEXP nSEXP, SEXP pSEXP, SEXP kSEXP, SEXP stepsSEXP, SEXP delta1SEXP, SEXP delta2SEXP, SEXP loss_typeSEXP, SEXP tolSEXP, SEXP restrictCoreToDiagSEXP) {
 BEGIN_RCPP
     Rcpp::RObject __result;
     Rcpp::RNGScope __rngScope;
@@ -19,7 +19,10 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
     Rcpp::traits::input_parameter< double >::type delta1(delta1SEXP);
     Rcpp::traits::input_parameter< double >::type delta2(delta2SEXP);
-    __result = Rcpp::wrap(symmetric_tensor_decomp(A_r, n, p, k, steps, delta1, delta2));
+    Rcpp::traits::input_parameter< int >::type loss_type(loss_typeSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< bool >::type restrictCoreToDiag(restrictCoreToDiagSEXP);
+    __result = Rcpp::wrap(symmetric_tensor_decomp(A_r, n, p, k, steps, delta1, delta2, loss_type, tol, restrictCoreToDiag));
     return __result;
 END_RCPP
 }

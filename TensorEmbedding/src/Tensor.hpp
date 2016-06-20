@@ -1,5 +1,7 @@
 using namespace arma;
 
+enum LossType { sqr, logistic };
+
 // symmetric 3D tensor
 // n x n x p
 // latent factoring dimension k
@@ -7,6 +9,10 @@ class SymmTensor {
  public:
   int n, p, k;
   cube A;
+
+  // loss type
+  LossType loss_pick;
+  bool coreDiag; //restrict each layer of core to be diagonal
 
   // A =~ L C L
   mat L;   // left matrix n,k
@@ -16,9 +22,12 @@ class SymmTensor {
   mat directionL;
   cube directionC;
 
-  SymmTensor(cube _A) {
-    A = _A;
+  SymmTensor(cube _A, LossType _loss_pick = sqr, bool _coreDiag = false) {
+    loss_pick = _loss_pick;
 
+    coreDiag = _coreDiag;
+
+    A = _A;
     n = A.n_rows;
     p = A.n_slices;
   }
@@ -97,7 +106,13 @@ class SymmTensor {
   mat gradL(mat L, cube C) {
     cube grad(n, k, p);
 
-    cube grad_LCL = deriSqrLoss(L, C);
+    cube grad_LCL;
+    switch (loss_pick) {
+      case sqr:
+        grad_LCL = deriSqrLoss(L, C);
+      case logistic:
+        grad_LCL = deriLogisticLoss(L, C);
+    }
 
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);
@@ -111,20 +126,36 @@ class SymmTensor {
   // gradient for C
 
   cube gradC(mat L, cube C) {
-    cube grad(k, k, p);
+    cube grad= zeros(k, k, p);
 
-    cube grad_LCL = deriSqrLoss(L, C);
+    cube grad_LCL;
+    switch (loss_pick) {
+      case sqr:
+        grad_LCL = deriSqrLoss(L, C);
+      case logistic:
+        grad_LCL = deriLogisticLoss(L, C);
+    }
 
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);
       mat diff = LC * L.t() - A.slice(i);
-      for (int a = 0; a < k; ++a) {
-        for (int b = 0; b <= a; ++b) {
+
+      if (coreDiag) {
+        for (int a = 0; a < k; ++a) {
           mat deriC = zeros(k, k);
-          deriC(a, b) = 1;
-          deriC(b, a) = 1;
-          grad(a, b, i) = accu(grad_LCL.slice(i) % (L * deriC * L.t()));
-          grad(b, a, i) = grad(a, b, i);
+          deriC(a, a) = 1;
+          grad(a, a, i) = accu(grad_LCL.slice(i) % (L * deriC * L.t()));
+        }
+      }
+      else {
+        for (int a = 0; a < k; ++a) {
+          for (int b = 0; b <= a; ++b) {
+            mat deriC = zeros(k, k);
+            deriC(a, b) = 1;
+            deriC(b, a) = 1;
+            grad(a, b, i) = accu(grad_LCL.slice(i) % (L * deriC * L.t()));
+            grad(b, a, i) = grad(a, b, i);
+          }
         }
       }
     }
@@ -173,7 +204,7 @@ class SymmTensor {
   }
 
   void OptConjugateGradient(int steps = 100, double delta1 = 1E-3,
-                            double delta2 = 1E-3) {
+                            double delta2 = 1E-3, double tol = 1E-8) {
     mat gradientL = gradL(L, C);
     cube gradientC = gradC(L, C);
 
@@ -213,7 +244,8 @@ class SymmTensor {
       }
       {
         double cur_loss = sqrLoss(L, C);
-        if (fabs(cur_loss - pre_loss) < 1E-3)
+        // if ((abs(directionL)).max() + (abs(directionC)).max() < 1E-5)
+        if (fabs((pre_loss - cur_loss) / cur_loss) < tol)
           break;
         else
           pre_loss = cur_loss;

@@ -73,4 +73,5 @@ for(i in (p/2+1):p){
 
 km_L <- kmeans(L,centers = 2)
 
-km_L  
+km_L$centers
+

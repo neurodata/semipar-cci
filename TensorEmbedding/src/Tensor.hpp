@@ -1,7 +1,5 @@
 using namespace arma;
 
-enum LossType { sqr, logistic };
-
 // symmetric 3D tensor
 // n x n x p
 // latent factoring dimension k
@@ -11,8 +9,8 @@ class SymmTensor {
   cube A;
 
   // loss type
-  LossType loss_pick;
-  bool coreDiag; //restrict each layer of core to be diagonal
+  bool logistic;
+  bool coreDiag;  // restrict each layer of core to be diagonal
 
   // A =~ L C L
   mat L;   // left matrix n,k
@@ -22,14 +20,21 @@ class SymmTensor {
   mat directionL;
   cube directionC;
 
-  SymmTensor(cube _A, LossType _loss_pick = sqr, bool _coreDiag = false) {
-    loss_pick = _loss_pick;
+  // variance for elements in L and C
+  // regularization to ensure convexity
+  double varLC;
+
+  SymmTensor(cube _A, bool _logistic = true, bool _coreDiag = false) {
+
+    logistic = _logistic;
 
     coreDiag = _coreDiag;
 
     A = _A;
     n = A.n_rows;
     p = A.n_slices;
+
+    varLC = 1E4;
   }
 
   // set latent dimension
@@ -64,7 +69,8 @@ class SymmTensor {
       diff.slice(i) = L * C_local * L.t() - A.slice(i);
     }
 
-    return accu(diff % diff);
+    return accu(diff % diff) + accu(C % C) / 2 / varLC +
+           accu(L % L) / 2 / varLC;
   }
 
   cube deriSqrLoss(mat L, cube C) {
@@ -78,7 +84,7 @@ class SymmTensor {
     return 2 * diff;
   }
 
-  // logistic loss
+  // logistic loss w/ regularization
 
   double logisticLoss(mat L, cube C) {
     cube theta = zeros(n, n, p);
@@ -88,7 +94,7 @@ class SymmTensor {
     }
 
     cube loss = -theta % A + log(1 + exp(theta));
-    return accu(loss);
+    return accu(loss) + accu(C % C) / 2 / varLC + accu(L % L) / 2 / varLC;
   }
 
   cube deriLogisticLoss(mat L, cube C) {
@@ -107,12 +113,10 @@ class SymmTensor {
     cube grad(n, k, p);
 
     cube grad_LCL;
-    switch (loss_pick) {
-      case sqr:
-        grad_LCL = deriSqrLoss(L, C);
-      case logistic:
-        grad_LCL = deriLogisticLoss(L, C);
-    }
+    if (logistic)
+      grad_LCL = deriLogisticLoss(L, C);
+    else
+      grad_LCL = deriSqrLoss(L, C);
 
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);
@@ -120,21 +124,21 @@ class SymmTensor {
       grad.slice(i) = 2 * grad_LCL.slice(i) * LC;
       // grad.slice(i) = 4 *diff * LC;
     }
-    return sum(grad, 2);  // sum over last dim
+    mat loglikDeri = sum(grad, 2);
+
+    return loglikDeri + L / varLC;  // sum over last dim
   }
 
   // gradient for C
 
   cube gradC(mat L, cube C) {
-    cube grad= zeros(k, k, p);
+    cube grad = zeros(k, k, p);
 
     cube grad_LCL;
-    switch (loss_pick) {
-      case sqr:
-        grad_LCL = deriSqrLoss(L, C);
-      case logistic:
-        grad_LCL = deriLogisticLoss(L, C);
-    }
+    if (logistic)
+      grad_LCL = deriLogisticLoss(L, C);
+    else
+      grad_LCL = deriSqrLoss(L, C);
 
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);
@@ -146,8 +150,7 @@ class SymmTensor {
           deriC(a, a) = 1;
           grad(a, a, i) = accu(grad_LCL.slice(i) % (L * deriC * L.t()));
         }
-      }
-      else {
+      } else {
         for (int a = 0; a < k; ++a) {
           for (int b = 0; b <= a; ++b) {
             mat deriC = zeros(k, k);
@@ -159,20 +162,21 @@ class SymmTensor {
         }
       }
     }
-    return grad;
+
+    return grad + C / varLC;
   }
 
   // compute loss when move delta
   double lossAtDelta(double delta, int paramIdx = 0) {
-    double cur_loss = sqrLoss(L, C);
+    double cur_loss = logisticLoss(L, C);
     double result = 0;
     if (paramIdx == 0) {
       mat prop = L - delta * directionL;
-      result = sqrLoss(prop, C);
+      result = logisticLoss(prop, C);
     }
     if (paramIdx == 1) {
       cube prop = C - delta * directionC;
-      result = sqrLoss(L, prop);
+      result = logisticLoss(L, prop);
     }
     return result;
   }
@@ -225,7 +229,7 @@ class SymmTensor {
 
         if (!std::isnan(beta)) directionL = gradientL + beta * directionL;
 
-        double cur_loss = sqrLoss(L, C);
+        double cur_loss = logisticLoss(L, C);
         double loss_delta = lossAtDelta(delta1, 0);
         double opt_delta = lineSearch(0, delta1, cur_loss, loss_delta, 0);
         L -= opt_delta * directionL;
@@ -237,13 +241,13 @@ class SymmTensor {
         double beta = accu(gradientC % gradientC) / accu(gradient0 % gradient0);
         if (!std::isnan(beta)) directionC = gradientC + beta * directionC;
 
-        double cur_loss = sqrLoss(L, C);
+        double cur_loss = logisticLoss(L, C);
         double loss_delta = lossAtDelta(delta2, 1);
         double opt_delta = lineSearch(0, delta2, cur_loss, loss_delta, 1);
         C -= opt_delta * directionC;
       }
       {
-        double cur_loss = sqrLoss(L, C);
+        double cur_loss = logisticLoss(L, C);
         // if ((abs(directionL)).max() + (abs(directionC)).max() < 1E-5)
         if (fabs((pre_loss - cur_loss) / cur_loss) < tol)
           break;

@@ -104,8 +104,49 @@ km_L<- kmeans(L, centers = B)
 
 P_fit<- km_L$centers[km_L$cluster,]
 
-image(logit(P_fit%*%C[,,(p/2+1)]%*%t(P_fit)))
-image(logit(A[,,(p/2+1)]))
+
+image(logit(A[,,(p/2+1)]), zlim=c(0.5,1) ,main="True probability")
+image(logit(L%*%C[,,(p/2+1)]%*%t(L)), zlim=c(0.5,1), main="Estimated probability with Tucker decomp")
+image(logit(P_fit%*%C[,,(p/2+1)]%*%t(P_fit)), zlim=c(0.5,1), main="Estimated probability with Tucker  + kmeans")
+
+
+image(logit(A[,,(p/2+1)]), zlim=c(0.5,1.1) ,main="True probability")
+image(logit(L%*%C[,,(p/2+1)]%*%t(L)), zlim=c(0.5,1.1), main="Estimated probability with Tucker decomp")
+image(logit(P_fit%*%C[,,(p/2+1)]%*%t(P_fit)), zlim=c(0.5,1.1), main="Estimated probability with Tucker  + kmeans")
+
+
+
+
+
+######
+require(ggplot2)
+require(reshape)
+
+
+blockOrder<- order(km_L$cluster)
+
+heatmaps<-list()
+heatmaps[[1]]<- logit(A[,,(p/2+1)])[blockOrder,blockOrder]
+heatmaps[[2]]<- logit(L%*%C[,,(p/2+1)]%*%t(L))[blockOrder,blockOrder]
+heatmaps[[3]]<- matrix(logit(P_fit%*%C[,,(p/2+1)]%*%t(P_fit)),n,n)[blockOrder,blockOrder]
+
+heatmaps[[3]][1,1]<-0
+heatmaps[[3]][1,2]<-1
+
+group_names<- c("True", "Tucker decomp", "Tucker  + kmeans")
+
+cMelted<- numeric()
+for(i in 1:3){
+  cGroup1 <- melt(heatmaps[[i]])
+  cMelted<- rbind( cMelted, cbind(cGroup1, "group"=group_names[i]))
+}
+
+
+p1 <- ggplot(cMelted, aes(X1, X2)) + geom_tile(aes(fill = value),                                               colour = "white") + scale_fill_gradient(low="white", high="red") + facet_wrap(~group, ncol=3)
+
+png("comp.jpg",1200,800,units = "px",res = 200)
+p1
+dev.off()
 
 
 table(logit(P_fit%*%C[,,(p/2+1)]%*%t(P_fit)))
@@ -114,9 +155,6 @@ table(logit(A[,,(p/2+1)]))
 plot(logit(L%*%C[,,(p/2+1)]%*%t(L)), logit(P_fit%*%C[,,(p/2+1)]%*%t(P_fit)))
 
 
-######
-require(ggplot2)
-require(reshape)
 
 # C[C>100]<-0
 
@@ -127,9 +165,6 @@ for(i in 1:p){
   cMelted<- rbind( cMelted, cbind(cGroup1, "group"=i))
 }
 
-
-p1 <- ggplot(cMelted, aes(X1, X2)) + geom_tile(aes(fill = value),
-      colour = "white") + scale_fill_gradient(low = "white",high = "red") + facet_wrap(~group, ncol=5)
 
 # pdf("compare_2_groups.pdf",8,6)
 # p1

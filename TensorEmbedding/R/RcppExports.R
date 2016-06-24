@@ -5,3 +5,7 @@ symmetric_tensor_decomp <- function(A_r, n, p, k, steps = 1000L, delta1 = 1E-2, 
     .Call('TensorEmbedding_symmetric_tensor_decomp', PACKAGE = 'TensorEmbedding', A_r, n, p, k, steps, delta1, delta2, logistic, tol, restrictCoreToDiag)
 }
 
+symmetric_decomp_shared_core <- function(A_r, n, p, k, steps = 1000L, delta1 = 1E-2, delta2 = 1E-2, logistic = TRUE, tol = 1E-8, restrictCoreToDiag = TRUE) {
+    .Call('TensorEmbedding_symmetric_decomp_shared_core', PACKAGE = 'TensorEmbedding', A_r, n, p, k, steps, delta1, delta2, logistic, tol, restrictCoreToDiag)
+}
+

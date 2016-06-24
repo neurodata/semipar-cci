@@ -26,3 +26,23 @@ BEGIN_RCPP
     return __result;
 END_RCPP
 }
+// symmetric_decomp_shared_core
+SEXP symmetric_decomp_shared_core(SEXP A_r, int n, int p, int k, int steps, double delta1, double delta2, bool logistic, double tol, bool restrictCoreToDiag);
+RcppExport SEXP TensorEmbedding_symmetric_decomp_shared_core(SEXP A_rSEXP, SEXP nSEXP, SEXP pSEXP, SEXP kSEXP, SEXP stepsSEXP, SEXP delta1SEXP, SEXP delta2SEXP, SEXP logisticSEXP, SEXP tolSEXP, SEXP restrictCoreToDiagSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject __result;
+    Rcpp::RNGScope __rngScope;
+    Rcpp::traits::input_parameter< SEXP >::type A_r(A_rSEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< int >::type p(pSEXP);
+    Rcpp::traits::input_parameter< int >::type k(kSEXP);
+    Rcpp::traits::input_parameter< int >::type steps(stepsSEXP);
+    Rcpp::traits::input_parameter< double >::type delta1(delta1SEXP);
+    Rcpp::traits::input_parameter< double >::type delta2(delta2SEXP);
+    Rcpp::traits::input_parameter< bool >::type logistic(logisticSEXP);
+    Rcpp::traits::input_parameter< double >::type tol(tolSEXP);
+    Rcpp::traits::input_parameter< bool >::type restrictCoreToDiag(restrictCoreToDiagSEXP);
+    __result = Rcpp::wrap(symmetric_decomp_shared_core(A_r, n, p, k, steps, delta1, delta2, logistic, tol, restrictCoreToDiag));
+    return __result;
+END_RCPP
+}

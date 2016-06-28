@@ -15,6 +15,7 @@ class SymmTensor {
   // A =~ L C L
   mat L;   // left matrix n,k
   cube C;  // core tensor k,k,p
+  vec w;   // weight vec p
 
   // direction for L and C to drop
   mat directionL;
@@ -25,7 +26,6 @@ class SymmTensor {
   double varLC;
 
   SymmTensor(cube _A, bool _logistic = true, bool _coreDiag = false) {
-
     logistic = _logistic;
 
     coreDiag = _coreDiag;
@@ -33,6 +33,8 @@ class SymmTensor {
     A = _A;
     n = A.n_rows;
     p = A.n_slices;
+
+    w = ones(p);
 
     varLC = 1E4;
   }
@@ -58,31 +60,35 @@ class SymmTensor {
     }
   }
 
+  // set weight for each 2-mode array
+
+  void setW(vec _w) { w = _w; }
+
   // loss functions and its derivative wrt LCL:
 
   // squared loss
-  double sqrLoss(mat L, cube C) {
-    cube diff = zeros(n, n, p);
+  // double sqrLoss(mat L, cube C) {
+  //   cube diff = zeros(n, n, p);
 
-    for (int i = 0; i < p; ++i) {
-      mat C_local = C.slice(i);
-      diff.slice(i) = L * C_local * L.t() - A.slice(i);
-    }
+  //   for (int i = 0; i < p; ++i) {
+  //     mat C_local = C.slice(i);
+  //     diff.slice(i) = L * C_local * L.t() - A.slice(i);
+  //   }
 
-    return accu(diff % diff) + accu(C % C) / 2 / varLC +
-           accu(L % L) / 2 / varLC;
-  }
+  //   return accu(diff % diff) + accu(C % C) / 2 / varLC +
+  //          accu(L % L) / 2 / varLC;
+  // }
 
-  cube deriSqrLoss(mat L, cube C) {
-    cube diff = zeros(n, n, p);
+  // cube deriSqrLoss(mat L, cube C) {
+  //   cube diff = zeros(n, n, p);
 
-    for (int i = 0; i < p; ++i) {
-      mat C_local = C.slice(i);
-      diff.slice(i) = L * C_local * L.t() - A.slice(i);
-    }
+  //   for (int i = 0; i < p; ++i) {
+  //     mat C_local = C.slice(i);
+  //     diff.slice(i) = L * C_local * L.t() - A.slice(i);
+  //   }
 
-    return 2 * diff;
-  }
+  //   return 2 * diff;
+  // }
 
   // logistic loss w/ regularization
 
@@ -94,6 +100,12 @@ class SymmTensor {
     }
 
     cube loss = -theta % A + log(1 + exp(theta));
+
+    for (int i = 0; i < p; ++i) {
+      loss.slice(i) *= w(i);
+    }
+
+
     return accu(loss) + accu(C % C) / 2 / varLC + accu(L % L) / 2 / varLC;
   }
 
@@ -105,7 +117,13 @@ class SymmTensor {
       theta.slice(i) = L * C_local * L.t();
     }
 
-    return -A + 1.0 / (1.0 + exp(-theta));
+    cube deriLoss = -A + 1.0 / (1.0 + exp(-theta));
+
+    for (int i = 0; i < p; ++i) {
+      deriLoss.slice(i) *= w(i);
+    }
+
+    return deriLoss;
   }
 
   // gradient for L
@@ -113,10 +131,9 @@ class SymmTensor {
     cube grad(n, k, p);
 
     cube grad_LCL;
-    if (logistic)
-      grad_LCL = deriLogisticLoss(L, C);
-    else
-      grad_LCL = deriSqrLoss(L, C);
+    if (logistic) grad_LCL = deriLogisticLoss(L, C);
+    // else
+    // grad_LCL = deriSqrLoss(L, C);
 
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);
@@ -135,10 +152,9 @@ class SymmTensor {
     cube grad = zeros(k, k, p);
 
     cube grad_LCL;
-    if (logistic)
-      grad_LCL = deriLogisticLoss(L, C);
-    else
-      grad_LCL = deriSqrLoss(L, C);
+    if (logistic) grad_LCL = deriLogisticLoss(L, C);
+    // else
+    // grad_LCL = deriSqrLoss(L, C);
 
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);

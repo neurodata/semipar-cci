@@ -61,10 +61,9 @@ SEXP symm_group_tensor_decomp(SEXP A_r, SEXP group_r, int n, int m, int k,
 
     groupCount(i) = pick.n_elem;
 
-    mat A_pick_sum = zeros(n,n);
+    mat A_pick_sum = zeros(n, n);
 
-    for (int j = 0; j <  groupCount(i); ++j)
-    {
+    for (int j = 0; j < groupCount(i); ++j) {
       A_pick_sum += A.slice(pick(j));
     }
 
@@ -81,12 +80,16 @@ SEXP symm_group_tensor_decomp(SEXP A_r, SEXP group_r, int n, int m, int k,
   mat gradL = tensorA.gradL(tensorA.L, tensorA.C);
   cube gradC = tensorA.gradC(tensorA.L, tensorA.C);
 
+  mat diagC = tensorA.extractCdiag();
+
   cout << "finish" << endl;
   cout << tensorA.logisticLoss(tensorA.L, tensorA.C) << endl;
 
   return List::create(Named("A") = A, Named("L") = tensorA.L,
                       Named("C") = tensorA.C, Named("gradL") = gradL,
-                      Named("gradC") = gradC);
+                      Named("gradC") = gradC,
+                      Named("diagC") = diagC
+                      );
 }
 
 // SEXP symmetric_decomp_shared_core(SEXP A_r, int n, int p, int k,

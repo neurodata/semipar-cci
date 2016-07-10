@@ -65,35 +65,16 @@ class SymmTensor {
   void setW(vec _w) { w = _w; }
 
   // loss functions and its derivative wrt LCL:
-
-  // squared loss
-  // double sqrLoss(mat L, cube C) {
-  //   cube diff = zeros(n, n, p);
-
-  //   for (int i = 0; i < p; ++i) {
-  //     mat C_local = C.slice(i);
-  //     diff.slice(i) = L * C_local * L.t() - A.slice(i);
-  //   }
-
-  //   return accu(diff % diff) + accu(C % C) / 2 / varLC +
-  //          accu(L % L) / 2 / varLC;
-  // }
-
-  // cube deriSqrLoss(mat L, cube C) {
-  //   cube diff = zeros(n, n, p);
-
-  //   for (int i = 0; i < p; ++i) {
-  //     mat C_local = C.slice(i);
-  //     diff.slice(i) = L * C_local * L.t() - A.slice(i);
-  //   }
-
-  //   return 2 * diff;
-  // }
-
   // logistic loss w/ regularization
 
   double logisticLoss(mat L, cube C) {
+    vec C_flat = reshape(C, k * k * p, 1, 1);
+
+    if (any(C_flat < 0)) return INFINITY;
+
     cube theta = zeros(n, n, p);
+
+#pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       mat C_local = C.slice(i);
       theta.slice(i) = L * C_local * L.t();
@@ -101,10 +82,10 @@ class SymmTensor {
 
     cube loss = -theta % A + log(1 + exp(theta));
 
+#pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       loss.slice(i) *= w(i);
     }
-
 
     return accu(loss) + accu(C % C) / 2 / varLC + accu(L % L) / 2 / varLC;
   }
@@ -112,6 +93,7 @@ class SymmTensor {
   cube deriLogisticLoss(mat L, cube C) {
     cube theta = zeros(n, n, p);
 
+#pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       mat C_local = C.slice(i);
       theta.slice(i) = L * C_local * L.t();
@@ -119,6 +101,7 @@ class SymmTensor {
 
     cube deriLoss = -A + 1.0 / (1.0 + exp(-theta));
 
+#pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       deriLoss.slice(i) *= w(i);
     }
@@ -132,9 +115,10 @@ class SymmTensor {
 
     cube grad_LCL;
     if (logistic) grad_LCL = deriLogisticLoss(L, C);
-    // else
-    // grad_LCL = deriSqrLoss(L, C);
+// else
+// grad_LCL = deriSqrLoss(L, C);
 
+#pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);
       mat diff = LC * L.t() - A.slice(i);
@@ -153,9 +137,10 @@ class SymmTensor {
 
     cube grad_LCL;
     if (logistic) grad_LCL = deriLogisticLoss(L, C);
-    // else
-    // grad_LCL = deriSqrLoss(L, C);
+// else
+// grad_LCL = deriSqrLoss(L, C);
 
+#pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       mat LC = L * C.slice(i);
       mat diff = LC * L.t() - A.slice(i);
@@ -274,40 +259,16 @@ class SymmTensor {
       }
     }
   }
-  // = 1E-3)
 
-  // // simple gradient descent (which sucks)
-  // void gradientDescent(int steps = 1E4, double _delta1 = 1E-3, double _delta2
-  // = 1E-3) {
-  //   double cur_loss = sqrLoss(L, C);
+  mat extractCdiag() {
+    mat Cdiag = zeros<mat>(p, k);
+    for (int i = 0; i < p; ++i) {
+      mat C_local = C.slice(i);
+      Cdiag.row(i) = trans(C_local.diag());
+    }
 
-  //   for (int i = 0; i < steps; ++i) {
-  //       double delta1 = _delta1;
-  //       double delta2 = _delta2;
-
-  //     {
-  //       double new_loss =  lineSearchAux(delta1,0);
-
-  //       if (new_loss < cur_loss) {
-  //         L -= delta1 * gradL(L, C);
-  //         cur_loss = new_loss;
-  //       } else {
-  //         delta1 = delta1 / 10.0;
-  //       }
-  //     }
-
-  //     {
-  //       double new_loss =  lineSearchAux(delta2,1);
-  //       if (new_loss < cur_loss) {
-  //         C -= delta2 * gradC(L, C);
-  //         cur_loss = new_loss;
-  //       } else {
-  //         delta2 = delta2 / 10.0;
-  //       }
-  //     }
-  //     cout << cur_loss << endl;
-  //   }
-  // }
+    return Cdiag;
+  }
 
   // end of class definition
 };

@@ -83,6 +83,8 @@ tensorDecomp<- TensorEmbedding::symm_group_tensor_decomp(tensorA, subject_serial
 
 save(tensorDecomp, file = "tensorDecompSubj.Rda")
 
+load(file= "tensorDecompSubj.Rda")
+
 L <- tensorDecomp$L
 C <- tensorDecomp$C
 diagC<- tensorDecomp$diagC
@@ -112,4 +114,51 @@ require("pROC")
 
 roc(c(tensorA[,,1:10]), rep(c(logit(L%*%C[,,1]%*%t(L))),10), plot = T)
 
+
+###get per subject avg
+
+flat_tensor<- matrix( c(tensorA), n*n, m)
+subject_mean<- numeric()
+for(i in unique(batch_subject_id)){
+  pick<-  batch_subject_id==i
+  local_pick <- flat_tensor[,pick]
+  if(!is.null(dim(local_pick)))
+    local_pick<- rowMeans(local_pick)
+  subject_mean<- cbind(subject_mean, local_pick)
+}
+
+reduced_batch_id <- substr(unique(batch_subject_id),1,4)
+
+batch_mean<- numeric()
+for(i in unique(reduced_batch_id)){
+  pick<-  reduced_batch_id==i
+  local_pick <- subject_mean[,pick]
+  if(!is.null(dim(local_pick)))
+    local_pick<- rowMeans(local_pick)
+  batch_mean<- cbind(batch_mean, local_pick)
+}
+
+
+
+batch_mean_C<- numeric()
+for(i in unique(reduced_batch_id)){
+  pick<-  reduced_batch_id==i
+  local_pick <- tensorDecomp$diagC[pick,]
+  if(!is.null(dim(local_pick)))
+    local_pick<- colMeans(local_pick)
+  batch_mean_C<- rbind(batch_mean_C, local_pick)
+}
+
+pdf("BNU1.pdf",8,4)
+par(mfrow=c(1,2))
+image(matrix(batch_mean[,1],70,70),zlim=c(0,1))
+image(logit(L%*%diag(batch_mean_C[1,])%*%t(L)),zlim = c(0,1))
+dev.off()
+
+
+pdf("BNU3.pdf",8,4)
+par(mfrow=c(1,2))
+image(matrix(batch_mean[,2],70,70),zlim=c(0,1))
+image(logit(L%*%diag(batch_mean_C[2,])%*%t(L)),zlim = c(0,1))
+dev.off()
 

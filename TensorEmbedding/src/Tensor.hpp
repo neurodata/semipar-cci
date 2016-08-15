@@ -82,7 +82,6 @@ class SymmTensor {
 
     cube loss = -theta % A + log(1 + exp(theta));
 
-#pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       loss.slice(i) *= w(i);
     }
@@ -101,7 +100,6 @@ class SymmTensor {
 
     cube deriLoss = -A + 1.0 / (1.0 + exp(-theta));
 
-#pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       deriLoss.slice(i) *= w(i);
     }

@@ -1,0 +1,179 @@
+#Tensor Decomposition
+
+Do tensor decomp first (without using any info about gender).
+
+```{r}
+require("TensorEmbedding")
+require("base")
+setwd("~/git/semipar-cci/")
+
+#load processed data
+load("Data/processed/BNU3.RDa")
+
+m<- length(BNU3)
+n<- nrow(BNU3[[1]]$A)
+
+A<- array(0,dim = c(n,n,m))
+for(i in 1:m){
+  A[,,i]<- BNU3[[i]]$A
+}
+
+
+id<- unlist(lapply(BNU3, function(x){x$id}))
+
+k<- 30
+
+#tensor decomp:
+# fit <- TensorEmbedding::symm_group_tensor_decomp(A, id, n, m, k, 1000, 1E-5, 1E-5)
+# save(fit,file="usecase/BNU_fit.Rda")
+
+#let's load the serialized one for now
+load(file="usecase/BNU_fit.Rda")
+```
+
+
+Plot the eigenvalues, colored by gender
+```{r}
+
+SEX<- unlist(lapply(BNU3, function(x){x$SEX}))
+
+plot(c(1,k),range(fit$diagC),type="n")
+for(i in 1:m){
+  lines(fit$diagC[i,],col=SEX[i])
+}
+```
+
+Let's do LDA on the low-dim vectors
+
+```{r}
+
+#require("ggplot2")
+# overlayHist<- function(x,y){
+#   dat<- data.frame(
+#     "class"=y,
+#     "feature"=x
+#   )
+#   ggplot(dat, aes(x=feature, fill=as.factor(class))) + geom_histogram(alpha=0.2, position="identity", bins = 20)
+#   
+# }
+# 
+# overlayHist(fit$diagC[,30],y)
+
+y<- SEX-1
+
+computeProb<-function(x,m1,cov1,m0,cov0){
+  d1<-(x-m1)
+  log_prob1<- -(d1%*%solve(cov1,d1) + log(det(cov1)))/2
+  
+  d0<-(x-m0)
+  log_prob0<- -(d0%*%solve(cov0,d0) + log(det(cov0)))/2
+  
+  prob<-  1/(1+exp(log_prob0-log_prob1))
+  prob 
+}
+
+
+# sel<- order(apply(fit$diagC,MARGIN = 2,sd) / colMeans(fit$diagC))< 20
+
+useTopKforC14 <-function(k){
+  looCV <- function(i,sel){
+    # x<- fit$diagC[y==1,]
+    x<- fit$diagC[-i,sel][y[-i]==1,]
+    m1<- colMeans(x)
+    cov1<- cov(x)
+    diag(cov1)<- diag(cov1)+ 1E-8
+    
+    # x<- fit$diagC[y==0,]
+    x<- fit$diagC[-i,sel][y[-i]==0,]
+    m0<- colMeans(x)
+    cov0<- cov(x)
+    diag(cov0)<- diag(cov0)+ 1E-8
+    
+    
+    pred<- computeProb(fit$diagC[i,sel],m1,cov1,m0,cov0)
+    
+    1*(as.numeric(pred)>0.5)== y[i]
+  }
+  
+  sel<- 1:k
+  estCorrect<- unlist(lapply(1:m, function(x){looCV(x,sel)}))
+  1-sum(estCorrect)/m
+}
+
+```
+
+Here is the misclassification error for low rank QDA, with different K
+
+```{R}
+KError<- sapply(2:k, useTopKforC14)
+plot(2:k,KError,col="red",type="l")
+
+min(KError)
+
+optK<- c(2:k)[KError==min(KError)]
+```
+
+
+Try Random Forests
+Here is the misclassification error
+
+```{R}
+
+require("randomForest")
+
+rf_loo<-function(exc_i){
+rf<-randomForest(x=fit$diagC[-exc_i,1:optK],y=as.factor(y[-exc_i]),ntree = 1000)
+predict(rf,newdata = fit$diagC[exc_i,1:optK])==(y[exc_i])
+}
+
+rfestCorrect<- unlist(lapply(1:m, rf_loo))
+
+1-sum(rfestCorrect)/m
+
+```
+
+
+
+Let's compare with simple full rank approach
+
+```{R}
+
+
+naiveEstimator<-function(exc_i){
+
+  sumASex1 = matrix(0, n, n)
+  sumASex2 = matrix(0, n, n)
+  countSex1 = 0
+  countSex2 = 0
+  for (i in 1:m) {
+    if (i != exc_i) {
+    it <- BNU3[[i]]
+    if (it$SEX == 1) {
+      sumASex1 <- sumASex1 + it$A
+      countSex1 <- countSex1 + 1
+    } else{
+      sumASex2 <- sumASex2 + it$A
+      countSex2 <- countSex2 + 1
+      }
+    }
+  }
+
+M1<- sumASex1/countSex1
+M2<- sumASex2/countSex2
+
+ y<- BNU3[[exc_i]]$A
+ 
+ p1<- sum((y-M1)^2)
+ p2<- sum((y-M2)^2)
+ 
+ 1*(p1>p2) == (SEX[exc_i]-1)
+
+}
+
+
+
+NEestCorrect<- unlist(lapply(1:m, naiveEstimator))
+
+1-sum(NEestCorrect)/m
+
+```

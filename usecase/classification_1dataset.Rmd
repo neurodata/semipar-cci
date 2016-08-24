@@ -1,10 +1,16 @@
-#Tensor Decomposition
+#TensorDecomp Based Classification on BNU3 dataset
 
-Do tensor decomp first (without using any info about gender).
+In this experiment, we carry out tensor decomposition on one dataset and obtain low dimensional representation of 46 subjects. The goal is to assess if TensorDecomp results in any loss (if not improvement) in discriminability wrt labels (gender in this case).
+
+
+## Tensor decomp
+
+Tensor decomp first, without using any info about labels.
 
 ```{r}
 require("TensorEmbedding")
 require("base")
+require("plyr")
 setwd("~/git/semipar-cci/")
 
 #load processed data
@@ -32,7 +38,7 @@ load(file="usecase/BNU_fit.Rda")
 ```
 
 
-Plot the eigenvalues, colored by gender
+Plot the eigenvalues, colored by labels
 ```{r}
 
 SEX<- unlist(lapply(BNU3, function(x){x$SEX}))
@@ -43,7 +49,12 @@ for(i in 1:m){
 }
 ```
 
-Let's do LDA on the low-dim vectors
+## Classification
+
+###QDA
+To control variance in the covariances, we use simple scalar*identiy for the two classes
+
+1. On TensorDecomp-produced vector
 
 ```{r}
 
@@ -80,14 +91,20 @@ useTopKforC14 <-function(k){
     # x<- fit$diagC[y==1,]
     x<- fit$diagC[-i,sel][y[-i]==1,]
     m1<- colMeans(x)
-    cov1<- cov(x)
-    diag(cov1)<- diag(cov1)+ 1E-8
+    # cov1<- diag(apply(x, 2, sd)^2)
+    cov1<- diag( mean((t(x)- m1)^2),length(m1))
+    
+    
+    # diag(cov1)<- diag(cov1)+ 1E-8
     
     # x<- fit$diagC[y==0,]
     x<- fit$diagC[-i,sel][y[-i]==0,]
     m0<- colMeans(x)
-    cov0<- cov(x)
-    diag(cov0)<- diag(cov0)+ 1E-8
+    # cov0<- diag(apply(x, 2, sd)^2)
+    # cov0<- cov(x)
+    # diag(cov0)<- diag(cov0)+ 1E-8
+    cov0<- diag( mean((t(x)- m0)^2),length(m0))
+
     
     
     pred<- computeProb(fit$diagC[i,sel],m1,cov1,m0,cov0)
@@ -102,11 +119,11 @@ useTopKforC14 <-function(k){
 
 ```
 
-Here is the misclassification error for low rank QDA, with different K
+With different lower dimension K
 
 ```{R}
 KError<- sapply(2:k, useTopKforC14)
-plot(2:k,KError,col="red",type="l")
+plot(2:k,KError,col="red",type="l",xlab="k",ylab="C14 Error Rate")
 
 min(KError)
 
@@ -114,66 +131,117 @@ optK<- c(2:k)[KError==min(KError)]
 ```
 
 
-Try Random Forests
-Here is the misclassification error
-
+2. On adjecency matrices
 ```{R}
 
-require("randomForest")
+lowerTri<-lower.tri(BNU3[[1]]$A)
 
-rf_loo<-function(exc_i){
-rf<-randomForest(x=fit$diagC[-exc_i,1:optK],y=as.factor(y[-exc_i]),ntree = 1000)
-predict(rf,newdata = fit$diagC[exc_i,1:optK])==(y[exc_i])
+matA<- matrix(0,m,n*(n-1)/2)
+for(i in 1:m){
+  matA[i,]<- BNU3[[i]]$A[lowerTri]
 }
-
-rfestCorrect<- unlist(lapply(1:m, rf_loo))
-
-1-sum(rfestCorrect)/m
-
-```
-
-
-
-Let's compare with simple full rank approach
-
-```{R}
 
 
 naiveEstimator<-function(exc_i){
 
-  sumASex1 = matrix(0, n, n)
-  sumASex2 = matrix(0, n, n)
-  countSex1 = 0
-  countSex2 = 0
-  for (i in 1:m) {
-    if (i != exc_i) {
-    it <- BNU3[[i]]
-    if (it$SEX == 1) {
-      sumASex1 <- sumASex1 + it$A
-      countSex1 <- countSex1 + 1
-    } else{
-      sumASex2 <- sumASex2 + it$A
-      countSex2 <- countSex2 + 1
-      }
-    }
-  }
-
-M1<- sumASex1/countSex1
-M2<- sumASex2/countSex2
-
- y<- BNU3[[exc_i]]$A
+  data1 <- matA[-exc_i,][y[-exc_i] ==1,]
+  data0 <- matA[-exc_i,][y[-exc_i] ==0,]
  
- p1<- sum((y-M1)^2)
- p2<- sum((y-M2)^2)
+
+  M1<- colMeans(data1)
+  M0<- colMeans(data0)
+
+  # C1<- sd(data1)^2
+  # C0<- sd(data0)^2
+  C1<- mean((t(data1)- M1)^2)
+  C0<- mean((t(data0)- M0)^2)
+
+  
+ 
+ p1<- -sum((matA[exc_i,]-M1)^2/C1)-n*n*log(C1)
+ p2<- -sum((matA[exc_i,]-M0)^2/C0)-n*n*log(C0)
  
  1*(p1>p2) == (SEX[exc_i]-1)
-
+ 
 }
-
-
 
 NEestCorrect<- unlist(lapply(1:m, naiveEstimator))
 
 1-sum(NEestCorrect)/m
 
 ```
+
+###K-nearest neighbor
+
+
+KNN function:
+
+```{R}
+
+knn<- function(i,dist,k=10,cl){
+  o<- order(dist[i,])
+  ct<-count(cl[o>1 & o<=(k+1)])
+  majority_vote<- ct$x[ct$freq == max(ct$freq)] 
+  if(length(majority_vote)>1)
+    sample(x = majority_vote,size = 1)
+  else
+    majority_vote
+}
+
+knn_mc_rate <-function(dist,k){
+sum(SEX != sapply(c(1:m), function(x){knn(x,dist,k,SEX)}))/m
+}
+
+
+```
+
+
+
+1. On TensorDecomp-produced vector
+
+```{R}
+
+
+dist<- matrix(0,m,m)
+for(i in 1:m){
+  for(j in 1:(i)){
+    dist[i,j]<- sqrt(sum((fit$diagC[i,]-fit$diagC[j,])^2))
+    dist[j,i]<- dist[i,j]
+  }
+}
+
+
+knn_rate_vs_k<- sapply(c(1:30), function(k)knn_mc_rate(dist,k))
+
+plot(c(1:30),knn_rate_vs_k, type="l",xlab="k",ylab="C14 Error Rate", col="red")
+
+min(knn_rate_vs_k)
+
+```
+
+
+2. On full adjacency matrices
+
+```{R}
+
+
+dist<- matrix(0,m,m)
+for(i in 1:m){
+  for(j in 1:(i)){
+    dist[i,j]<- sqrt(sum((matA[i,]-matA[j,])^2))
+    dist[j,i]<- dist[i,j]
+  }
+}
+
+
+knn_rate_vs_k<- sapply(c(1:(30)), function(k)knn_mc_rate(dist,k))
+
+plot(c(1:(30)),knn_rate_vs_k, type="l",xlab="k",ylab="C14 Error Rate", col="red")
+
+min(knn_rate_vs_k)
+
+```
+
+##Conclusion
+
+The TensorDecomp-produced vectors seem to perform slightly better than the raw adjecency matrices. This suggests that TensorDecomp preserves most of the useful variabiltiy w.r.t labels, in one dataset.

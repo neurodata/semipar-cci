@@ -1,32 +1,64 @@
 require("TensorEmbedding")
 require("base")
+require("rPython")
+
+hash<- function(x){
+  python.exec( "def h(a): return abs(hash(a))%1000" )
+  python.call( "h", x)
+}
+
 setwd("~/git/semipar-cci/")
 
-load("Data/processed/BNU3.RDa")
-
-m<- length(BNU3)
-n<- nrow(BNU3[[1]]$A)
-
-A<- array(0,dim = c(n,n,m))
-for(i in 1:m){
-  A[,,i]<- BNU3[[i]]$A
+loadData<- function(dataset){
+  load(file=paste("Data/processed/",dataset,".RDa",sep=""))
+  dataList
 }
 
 
-id<- unlist(lapply(BNU3, function(x){x$id}))
+BNU1<-loadData("BNU1")
+BNU3<-loadData("BNU3")
+KKI2009<-loadData("KKI2009")
+MRN114<-loadData("MRN114")
+
+
+hash("BNU1")
+
+data4sets<- list(BNU1,BNU3, KKI2009, MRN114)
+
+A<- numeric()
+id<- numeric()
+batchID<- numeric()
+SEX<- numeric()
+
+for(i in 1:length(data4sets)){
+  d<- data4sets[[i]]
+  
+  m<- length(d)
+  n<- nrow(d[[1]]$A)
+  
+  for(j in 1:m){
+    A<- cbind(A, c(d[[j]]$A))
+    id<- c(id, hash(paste(i,d[[j]]$id)))
+    batchID<- c(batchID,i) 
+    SEX<- c(SEX, d[[j]]$SEX)
+  }
+}
+
+
+m<- ncol(A)
+n<- sqrt(nrow(A))
 
 k<- 30
 fit <- TensorEmbedding::symm_group_tensor_decomp(A, id, n, m, k, 500, 1E-5, 1E-5)
 
-
-SEX<- unlist(lapply(BNU3, function(x){x$SEX}))
+save(fit,file="usecase/4datasetFit.RDa")
 
 
 y<- SEX-1
 
 
 plot(c(1,k),range(fit$diagC),type="n")
-for(i in 1:m){
+for(i in 1:length(unique(id))){
   lines(fit$diagC[i,],col=y[i]+1)
 }
 

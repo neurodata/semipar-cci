@@ -73,16 +73,17 @@ class SymmTensor {
     if (any(C_flat < 0)) return INFINITY;
 
     cube theta = zeros(n, n, p);
+    cube loss = zeros(n, n, p);
 
 #pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       mat C_local = C.slice(i);
       theta.slice(i) = L * C_local * L.t();
-    }
+      loss.slice(i) =
+          -theta.slice(i) % A.slice(i) + log(1 + exp(theta.slice(i)));
 
-    cube loss = -theta % A + log(1 + exp(theta));
-
-    for (int i = 0; i < p; ++i) {
+      // cube loss = -theta % A + log(1 + exp(theta));
+      //    for (int i = 0; i < p; ++i) {
       loss.slice(i) *= w(i);
     }
 
@@ -91,16 +92,14 @@ class SymmTensor {
 
   cube deriLogisticLoss(mat L, cube C) {
     cube theta = zeros(n, n, p);
+    cube deriLoss = zeros(n, n, p);
 
 #pragma omp parallel for
     for (int i = 0; i < p; ++i) {
       mat C_local = C.slice(i);
       theta.slice(i) = L * C_local * L.t();
-    }
 
-    cube deriLoss = -A + 1.0 / (1.0 + exp(-theta));
-
-    for (int i = 0; i < p; ++i) {
+      deriLoss.slice(i) = -A.slice(i) + 1.0 / (1.0 + exp(-theta.slice(i)));
       deriLoss.slice(i) *= w(i);
     }
 
@@ -218,6 +217,7 @@ class SymmTensor {
 
     for (int i = 0; i < steps; ++i) {
       {
+        R_CheckUserInterrupt();
         mat gradient0 = gradientL;
         gradientL = gradL(L, C);
         // Polak–Ribière conjugate gradient

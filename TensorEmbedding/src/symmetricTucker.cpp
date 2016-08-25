@@ -3,7 +3,7 @@
 
 #include "Tensor.hpp"
 
-#include "TensorSharedCore.hpp"
+// #include "TensorSharedCore.hpp"
 
 using namespace Rcpp;
 using namespace arma;

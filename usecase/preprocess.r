@@ -1,67 +1,74 @@
 require("TensorEmbedding")
 require("base")
 setwd("~/git/semipar-cci/")
+source("usecase/getA.r")
 
-covariates<- read.csv(file = "Data/covariates/BNU3.csv")
-
-covariateSubjectID<- unique(covariates$SUBID)
-
-listGraphML<- list.files(path = "Data/desikan/BNU3", pattern = "*.graphml")
-
-graphMLSubjectID<- as.numeric(unlist(lapply(listGraphML, function(x){strsplit(x,"_")[[1]][2]})))
-
-
-intersectedID<- intersect( graphMLSubjectID, covariateSubjectID)
+dataset<- "BNU3"
+dataset<- "BNU1"
+dataset<- "KKI2009"
+dataset<- "MRN114"
+dataset<- "NKI1" #only has male
+dataset<- "SWU4" #large
 
 
-covariates2<- covariates[covariates$SUBID %in% intersectedID,]
+covariatePath<- paste("Data/covariates/",dataset,".csv",sep="")
+covariates<- read.csv(file = covariatePath)
 
-listGraphML2<- listGraphML[graphMLSubjectID %in% intersectedID]
+#BNU1
+# covariates$SEX
 
-length(listGraphML2)
 
-x<- listGraphML2[1]
+#KKI2009
+# covariates$SEX<- as.numeric(covariates$Sex)
+# covariates$SUBID<- covariates$SubjectID
 
-BNU3<- lapply(listGraphML2, function(x){
+
+#MRN114
+# covariates$SEX<- as.numeric(covariates$Sex)+1
+# covariates$SUBID<- covariates$URSI
+
+#NKI1
+# covariates$SEX
+#SWU4
+
+covariates <- covariates[covariates$SEX%in%c(1,2),]
+
+covariates$SEX
+
+graphmlPath<- paste("Data/desikan/",dataset,sep="")
+
+listGraphML<- list.files(path = graphmlPath, pattern = "*.graphml")
+
+graphMLSubjectID<- (unlist(lapply(listGraphML, function(x){strsplit(x,"_")[[1]][2]})))
+
+graphMLSubjectID
+
+
+
+dataList<- lapply(listGraphML, function(x){
   numID <- as.numeric(unlist(strsplit(x,"_"))[2])
-  list(
-    "A"= getA(paste("Data/desikan/BNU3/",x,sep="")),
-    "id" = numID,
-    "SEX" = min(covariates2$SEX[covariates2$SUBID==numID]),
-    "AGE_AT_SCAN_1" = min(covariates2$AGE_AT_SCAN_1[covariates2$SUBID==numID])
-  )
-  })
+  if(numID%in%covariates$SUBID){
+    list(
+      "A"= getA(paste("Data/desikan/",dataset,"/",x,sep="")),
+      "id" = numID,
+      "SEX" = min(as.numeric(as.character(covariates$SEX))[covariates$SUBID==numID]),
+      "AGE_AT_SCAN_1" = min(as.numeric(as.character(covariates$AGE_AT_SCAN_1))[covariates$SUBID==numID])
+    )
+  }else{NULL}
+})
 
+dataList<- dataList[!sapply(dataList, is.null)]
 
-pdf("Data/viz/BNU3.pdf",4,8)
+lapply(dataList, function(x)print(x$id))
+
+pdf(paste("Data/viz/",dataset,".pdf",sep=""),4,8)
 par(mfrow=c(4,2))
-for(it in BNU3){
+for(i in 1:length(dataList)){
+  it<- dataList[[i]]
   image(it$A)
-  title(it$id)
+  title(i)
 }
 dev.off()
 
-save(BNU3,file="BNU3.RDa")
-
-
-pdf("Data/viz/BNU3.pdf",4,8)
-par(mfrow=c(4,2))
-sumASex1=matrix(0,n,n)
-sumASex2=matrix(0,n,n)
-countSex1=0
-countSex2=0
-for(it in BNU3){
-  if(it$SEX==1){
-    sumASex1<- sumASex1+it$A
-    countSex1<- countSex1+1
-  }else{
-    sumASex2<- sumASex2+it$A
-    countSex2<- countSex2+1
-  }
-}
-
-image(sumASex1/countSex1)
-title("Sex=1")
-image(sumASex2/countSex2)
-title("Sex=2")
+save(dataList,file=paste("Data/processed/",dataset,".RDa",sep=""))
 

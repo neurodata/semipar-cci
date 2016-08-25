@@ -1,6 +1,5 @@
-#TensorDecomp Based Classification on BNU3 dataset
+#TensorDecomp Based Classification on 4 datasets
 
-In this experiment, we carry out tensor decomposition on one dataset and obtain low dimensional representation of 46 subjects. The goal is to assess if TensorDecomp results in any loss (if not improvement) in discriminability wrt labels (gender in this case).
 
 
 ## Tensor decomp
@@ -158,7 +157,7 @@ knn_mc_rate <-function(dist,k){
 
 
 
-1. On TensorDecomp-produced vector
+1. On TensorDecomp-produced vector (without Batch Effects)
 
 ```{R}
 
@@ -181,7 +180,30 @@ min(knn_rate_vs_k)
 ```
 
 
-2. On full adjacency matrices
+2. On TensorDecomp-produced vector (with Batch Effects)
+
+```{R}
+
+
+dist<- matrix(0,m,m)
+for(i in 1:m){
+  for(j in 1:(i)){
+    dist[i,j]<- sqrt(sum((vectorsSortedByUID[i,]-vectorsSortedByUID[j,])^2))
+    dist[j,i]<- dist[i,j]
+  }
+}
+
+
+knn_rate_vs_k<- sapply(c(1:30), function(k)knn_mc_rate(dist,k))
+
+plot(c(1:30),knn_rate_vs_k, type="l",xlab="k",ylab="C14 Error Rate", col="red")
+
+min(knn_rate_vs_k)
+
+```
+
+
+3. On full adjacency matrices
 
 ```{R}
 

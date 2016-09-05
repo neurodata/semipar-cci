@@ -1,0 +1,152 @@
+#TensorDecomp Based Classification on MRN114 dataset
+
+In this experiment, we carry out tensor decomposition on one dataset and obtain low dimensional representation of 46 subjects. The goal is to assess if TensorDecomp results in any loss (if not improvement) in discriminability wrt labels (gender in this case).
+
+
+## Tensor decomp
+
+Tensor decomp first, without using any info about labels.
+
+```{r}
+require("TensorEmbedding")
+require("base")
+require("rPython")
+require("plyr")
+
+hash<- function(x){
+  python.exec( "def h(a): return abs(hash(a))%100000" )
+  python.call( "h", x)
+}
+
+
+setwd("~/git/semipar-cci/")
+
+#load processed data
+load("./Data/processed/MRN114.Rda")
+
+d<-dataList
+
+SEX<- numeric()
+
+m<- length(d)
+n<- nrow(d[[1]]$A)
+id<- numeric()
+
+
+A<- numeric()
+for(j in 1:m){
+    A<- cbind(A, c(d[[j]]$A))
+    SEX<- c(SEX, d[[j]]$SEX)
+        id<- c(id, hash(paste(d[[j]]$id)))
+}
+
+# id<- unlist(lapply(d, function(x){x$id}))
+
+k<- 30
+
+#tensor decomp:
+# fit <- TensorEmbedding::symm_group_tensor_decomp(A, id, n, m, k, 1000, 1E-5, 1E-5)
+# save(fit,file="usecase/MRN114.Rda")
+
+#let's load the serialized one for now
+load(file="usecase/MRN114.Rda")
+```
+
+
+Plot the eigenvalues, colored by labels
+```{r}
+
+SEXwUID<- tapply(SEX, id, function(x){x[1]})
+uid0<- unique(id)
+sUID<- order(uid0)
+UID<- uid0[sUID]
+m<- length(uid0)
+
+vectorsSortedByUID<- fit$diagC[sUID,]
+
+
+plot(c(1,k),range(vectorsSortedByUID),type="n")
+for(i in 1:m){
+  lines(vectorsSortedByUID[i,],col=SEX[i])
+}
+```
+
+## Classification
+
+
+###K-nearest neighbor
+
+
+KNN function:
+
+```{R}
+
+knn<- function(i,dist,k=10,cl){
+  o<- order(dist[i,])
+  ct<-count(cl[o>1 & o<=(k+1)])
+  majority_vote<- ct$x[ct$freq == max(ct$freq)] 
+  if(length(majority_vote)>1)
+    sample(x = majority_vote,size = 1)
+  else
+    majority_vote
+}
+
+knn_mc_rate <-function(dist,k){
+  sum(SEXwUID != sapply(c(1:m), function(x){knn(x,dist,k,SEXwUID)}))/m
+}
+
+
+```
+
+
+
+
+1. On TensorDecomp-produced vector
+
+```{R}
+
+dist<- matrix(0,m,m)
+for(i in 1:m){
+  for(j in 1:(i)){
+    dist[i,j]<- sqrt(sum((vectorsSortedByUID[i,]-vectorsSortedByUID[j,])^2))
+    dist[j,i]<- dist[i,j]
+  }
+}
+
+
+knn_rate_vs_k<- sapply(c(1:30), function(k)knn_mc_rate(dist,k))
+
+plot(c(1:30),knn_rate_vs_k, type="l",xlab="k",ylab="C14 Error Rate", col="red")
+
+min(knn_rate_vs_k)
+
+```
+
+
+
+2. On full adjacency matrices
+
+```{R}
+
+countByID<- tapply(id, id, function(x){length(x)})
+subOnePerIdx<- cumsum(countByID)
+
+
+matA<- t(A[,order(id)][,subOnePerIdx])
+
+dist<- matrix(0,m,m)
+for(i in 1:m){
+  for(j in 1:(i)){
+    dist[i,j]<- sqrt(sum((matA[i,]-matA[j,])^2))
+    dist[j,i]<- dist[i,j]
+  }
+}
+
+
+knn_rate_vs_k<- sapply(c(1:(30)), function(k)knn_mc_rate(dist,k))
+
+plot(c(1:(30)),knn_rate_vs_k, type="l",xlab="k",ylab="C14 Error Rate", col="red")
+
+min(knn_rate_vs_k)
+
+```

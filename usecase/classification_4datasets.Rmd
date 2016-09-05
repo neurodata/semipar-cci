@@ -11,6 +11,8 @@ require("TensorEmbedding")
 require("base")
 require("rPython")
 require("plyr")
+  require("GGally")
+ require("ggplot2")
 
 hash<- function(x){
   python.exec( "def h(a): return abs(hash(a))%100000" )
@@ -72,16 +74,6 @@ load(file="usecase/4datasetFitID.RDa")
 ```
 
 
-Plot the eigenvalues, colored by labels
-```{r}
-
-m<- length(unique(id))
-
-plot(c(1,k),range(fit$diagC),type="n")
-for(i in 1:m){
-  lines(fit$diagC[i,],col=SEX[i])
-}
-```
 
 ## Batch effects by data sources
 
@@ -104,6 +96,31 @@ for(i in 1:4){
   lines(colMeans(vectorsSortedByUID[batchIDwUID==i,]),col=i,lwd=1)
 }
 ```
+
+
+Plot the eigenvalues, colored by labels
+```{r}
+
+m<- length(unique(id))
+
+plot(c(1,k),range(vectorsSortedByUID),type="n")
+
+for(i in 1:m){
+  lines(vectorsSortedByUID[i,],col=SEXwUID[i])
+}
+```
+
+
+Plot the eigenvalues, colored by labels
+```{r}
+
+
+CharSex =  as.character(SEXwUID)
+
+dataPairs <- data.frame("ev"=vectorsSortedByUID, "SEX"=as.factor(CharSex))
+ggpairs(dataPairs,columns = c(1:5), aes(colour = SEX, alpha=0.4))
+```
+
 
 Remove batch mean from each subject
 

@@ -16,6 +16,8 @@ setwd("~/git/semipar-cci/")
 #load processed data
 load("Data/processed/BNU3.RDa")
 
+BNU3<-dataList
+
 m<- length(BNU3)
 n<- nrow(BNU3[[1]]$A)
 

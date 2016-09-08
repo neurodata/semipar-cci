@@ -25,7 +25,7 @@ for(i in 1:p){
 }
 
 k=5
-testObj<- TensorEmbedding::symmetric_tensor_decomp(A,n,p, k, 500, 1E-4, 1E-4)
+testObj<- TensorEmbedding::symmetric_tensor_decompEM(A,n,p, k, 10, 1E-4, 1E-4)
 
 L <-  testObj$L
 C <- testObj$C

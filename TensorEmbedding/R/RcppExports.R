@@ -5,6 +5,10 @@ symmetric_tensor_decomp <- function(A_r, n, m, k, steps = 1000L, delta1 = 1E-2, 
     .Call('TensorEmbedding_symmetric_tensor_decomp', PACKAGE = 'TensorEmbedding', A_r, n, m, k, steps, delta1, delta2, tol, restrictCoreToDiag)
 }
 
+symmetric_tensor_decompEM <- function(A_r, n, m, k, steps = 1000L, delta1 = 1E-2, delta2 = 1E-2, tol = 1E-8, loss_type = 1L, restrictCoreToDiag = TRUE) {
+    .Call('TensorEmbedding_symmetric_tensor_decompEM', PACKAGE = 'TensorEmbedding', A_r, n, m, k, steps, delta1, delta2, tol, loss_type, restrictCoreToDiag)
+}
+
 symm_group_tensor_decomp <- function(A_r, group_r, n, m, k, steps = 1000L, delta1 = 1E-2, delta2 = 1E-2, tol = 1E-8, restrictCoreToDiag = TRUE) {
     .Call('TensorEmbedding_symm_group_tensor_decomp', PACKAGE = 'TensorEmbedding', A_r, group_r, n, m, k, steps, delta1, delta2, tol, restrictCoreToDiag)
 }

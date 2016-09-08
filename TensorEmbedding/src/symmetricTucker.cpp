@@ -2,7 +2,7 @@
 #include "RcppArmadillo.h"
 
 #include "Tensor.hpp"
-
+#include "TensorEM.hpp"
 // #include "TensorSharedCore.hpp"
 
 using namespace Rcpp;
@@ -29,6 +29,30 @@ SEXP symmetric_tensor_decomp(SEXP A_r, int n, int m, int k, int steps = 1000,
 
   cout << "finish" << endl;
   cout << tensorA.logisticLoss(tensorA.L, tensorA.C) << endl;
+
+  return List::create(Named("A") = A, Named("L") = tensorA.L,
+                      Named("C") = tensorA.C, Named("gradL") = gradL,
+                      Named("gradC") = gradC);
+}
+
+// [[Rcpp::export]]
+SEXP symmetric_tensor_decompEM(SEXP A_r, int n, int m, int k, int steps = 1000,
+                               double delta1 = 1E-2, double delta2 = 1E-2,
+                               double tol = 1E-8, int loss_type = 1,
+                               bool restrictCoreToDiag = true) {
+  Rcpp::NumericVector Ar(A_r);
+  const cube A(Ar.begin(), n, n, m, false);
+
+  SymmTensorEM tensorA(A, loss_type, restrictCoreToDiag);
+  tensorA.setK(k);
+
+  tensorA.OptConjugateGradient(steps, delta1, delta2, tol);
+
+  mat gradL = tensorA.gradL(tensorA.L, tensorA.C);
+  cube gradC = tensorA.gradC(tensorA.L, tensorA.C);
+
+  cout << "finish" << endl;
+  // cout << tensorA.logisticLoss(tensorA.L, tensorA.C) << endl;
 
   return List::create(Named("A") = A, Named("L") = tensorA.L,
                       Named("C") = tensorA.C, Named("gradL") = gradL,
@@ -87,9 +111,7 @@ SEXP symm_group_tensor_decomp(SEXP A_r, SEXP group_r, int n, int m, int k,
 
   return List::create(Named("A") = A, Named("L") = tensorA.L,
                       Named("C") = tensorA.C, Named("gradL") = gradL,
-                      Named("gradC") = gradC,
-                      Named("diagC") = diagC
-                      );
+                      Named("gradC") = gradC, Named("diagC") = diagC);
 }
 
 // SEXP symmetric_decomp_shared_core(SEXP A_r, int n, int p, int k,

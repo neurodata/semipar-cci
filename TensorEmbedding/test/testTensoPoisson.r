@@ -1,8 +1,8 @@
 # .rs.restartR()
 require("TensorEmbedding")
 
-n<- 30
-p<- 10
+n<- 50
+p<- 20
 
 k<- 10 # reduced dimension
 
@@ -37,7 +37,7 @@ for(i in 1:p){
 }
 
 k=10
-testObj<- TensorEmbedding::symmetric_tensor_decompEM(simA,n,p, k, steps = 1000, 1E-6, 1E-6,loss_type = 2, tol = 1E-12,restrictCoreToDiag = TRUE)
+testObj<- TensorEmbedding::symmetric_tensor_decompEM(simA,n,p, k, steps = 5000, 1E-6, 1E-6,loss_type = 2, tol = 1E-12,restrictCoreToDiag = TRUE)
 
 L <-  testObj$L
 C <- testObj$C
@@ -68,12 +68,13 @@ out<- seq(range(C)[1], range(C)[2], length.out = k)
 
 plot(c(1:k), out, type = "n")
 for(i in 1:(p/2)){
-  lines(c(1:k), diag(C[,,i]), col = "blue")
+  lines(c(1:k), (C[i,]), col = "blue")
 }
 for(i in (p/2+1):p){
-  lines(c(1:k), diag(C[,,i]), col = "red")
+  lines(c(1:k), (C[i,]), col = "red")
 }
 
 
-plot( (L%*% C[,,1]%*%t(L)), (A[,,1]),xlim =  range((A[,,1])))
+plot( (L%*% diag(C[1,])%*%t(L)), (A[,,1]),xlim =  range((A[,,1])))
+
 

@@ -23,6 +23,10 @@ class SymmTensorEM {
   cube theta;
   double r;
 
+  mat mapL;
+  mat mapC;
+  cube mapCcube;
+
   // direction for L and C to drop
   mat directionL;
   cube directionC;
@@ -58,7 +62,9 @@ class SymmTensorEM {
 
     vec s;
     mat V;
-    svd(L, s, V, Amean);
+
+    if (loss_type == 1) svd(L, s, V, Amean);
+    if (loss_type == 2) svd(L, s, V, log(Amean + 0.001));
 
     // L = trans(chol(Amean));
 
@@ -258,6 +264,11 @@ class SymmTensorEM {
     double cur_loss = expectedLoss(L, C);
     expectationW();
 
+    double best_loss = INFINITY;
+
+    // double delta1_decre = log(1E-8 / delta1) / (double)steps;
+    // double delta2_decre = log(1E-8 / delta2) / (double)steps;
+
     for (int i = 0; i < steps; ++i) {
       {
         R_CheckUserInterrupt();
@@ -277,6 +288,9 @@ class SymmTensorEM {
         L -= opt_delta * directionL;
       }
 
+      double cur_loss = expectedLoss(L, C);
+      expectationW();
+
       {
         cube gradient0 = gradientC;
         gradientC = gradC(L, C);
@@ -288,17 +302,35 @@ class SymmTensorEM {
         double opt_delta = lineSearch(0, delta2, cur_loss, loss_delta, 1);
         C -= opt_delta * directionC;
       }
-      {
-        double cur_loss = expectedLoss(L, C);
-        expectationW();
-        // if ((abs(directionL)).max() + (abs(directionC)).max() < 1E-5)
-        if (fabs((pre_loss - cur_loss) / cur_loss) < tol)
-          break;
-        else
-          pre_loss = cur_loss;
 
-        cout << cur_loss << endl;
+      cur_loss = expectedLoss(L, C);
+      expectationW();
+      // if ((abs(directionL)).max() + (abs(directionC)).max() < 1E-5)
+      if (cur_loss < best_loss) {
+        mapL = L;
+        mapC = extractCdiag();
+        mapCcube = C;
+        best_loss = cur_loss;
       }
+
+      // delta1 *= exp(delta1_decre);
+      // delta2 *= exp(delta2_decre);
+
+      if ((abs(directionL)).max() + (abs(directionC)).max() < tol) {
+        // if (fabs((pre_loss - cur_loss) / cur_loss) < tol) {
+        // if (delta1 < 1E-8 & delta2 < 1E-8)
+        break;
+        // else {
+        // delta1 *= 0.1;
+        // delta2 *= 0.1;
+        // }
+      }
+
+      pre_loss = cur_loss;
+
+      cout << "step " << i << ", current loglik " << cur_loss
+           << ", best loglik: " << best_loss << endl;
+      cout << delta1 << " " << delta2 << endl;
     }
   }
 

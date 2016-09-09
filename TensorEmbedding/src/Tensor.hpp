@@ -9,7 +9,7 @@ class SymmTensor {
   cube A;
 
   // loss type
-  bool logistic;
+  int loss_type;
   bool coreDiag;  // restrict each layer of core to be diagonal
 
   // A =~ L C L
@@ -25,8 +25,8 @@ class SymmTensor {
   // regularization to ensure convexity
   double varLC;
 
-  SymmTensor(cube _A, bool _logistic = true, bool _coreDiag = false) {
-    logistic = _logistic;
+  SymmTensor(cube _A, int _loss_type = 1, bool _coreDiag = false) {
+    loss_type = _loss_type;
 
     coreDiag = _coreDiag;
 
@@ -67,7 +67,7 @@ class SymmTensor {
   // loss functions and its derivative wrt LCL:
   // logistic loss w/ regularization
 
-  double logisticLoss(mat L, cube C) {
+  double computeLoss(mat L, cube C) {
     // vec C_flat = reshape(C, k * k * p, 1, 1);
 
     // if (any(C_flat < 0)) return INFINITY;
@@ -79,9 +79,11 @@ class SymmTensor {
     for (int i = 0; i < p; ++i) {
       mat C_local = C.slice(i);
       theta.slice(i) = L * C_local * L.t();
-      loss.slice(i) =
-          -theta.slice(i) % A.slice(i) + log(1 + exp(theta.slice(i)));
-
+      if (loss_type == 1)
+        loss.slice(i) =
+            -theta.slice(i) % A.slice(i) + log(1 + exp(theta.slice(i)));
+      if (loss_type == 2)
+        loss.slice(i) = -theta.slice(i) % A.slice(i) + exp(theta.slice(i));
       // cube loss = -theta % A + log(1 + exp(theta));
       //    for (int i = 0; i < p; ++i) {
       loss.slice(i) *= w(i);
@@ -90,7 +92,7 @@ class SymmTensor {
     return accu(loss) + accu(C % C) / 2 / varLC + accu(L % L) / 2 / varLC;
   }
 
-  cube deriLogisticLoss(mat L, cube C) {
+  cube computeDeriLoss(mat L, cube C) {
     cube theta = zeros(n, n, p);
     cube deriLoss = zeros(n, n, p);
 
@@ -99,7 +101,9 @@ class SymmTensor {
       mat C_local = C.slice(i);
       theta.slice(i) = L * C_local * L.t();
 
-      deriLoss.slice(i) = -A.slice(i) + 1.0 / (1.0 + exp(-theta.slice(i)));
+      if (loss_type == 1)
+        deriLoss.slice(i) = -A.slice(i) + 1.0 / (1.0 + exp(-theta.slice(i)));
+      if (loss_type == 2) deriLoss.slice(i) = -A.slice(i) + exp(theta.slice(i));
       deriLoss.slice(i) *= w(i);
     }
 
@@ -111,7 +115,7 @@ class SymmTensor {
     cube grad(n, k, p);
 
     cube grad_LCL;
-    if (logistic) grad_LCL = deriLogisticLoss(L, C);
+    grad_LCL = computeDeriLoss(L, C);
 // else
 // grad_LCL = deriSqrLoss(L, C);
 
@@ -133,7 +137,7 @@ class SymmTensor {
     cube grad = zeros(k, k, p);
 
     cube grad_LCL;
-    if (logistic) grad_LCL = deriLogisticLoss(L, C);
+    grad_LCL = computeDeriLoss(L, C);
 // else
 // grad_LCL = deriSqrLoss(L, C);
 
@@ -166,15 +170,15 @@ class SymmTensor {
 
   // compute loss when move delta
   double lossAtDelta(double delta, int paramIdx = 0) {
-    double cur_loss = logisticLoss(L, C);
+    double cur_loss = computeLoss(L, C);
     double result = 0;
     if (paramIdx == 0) {
       mat prop = L - delta * directionL;
-      result = logisticLoss(prop, C);
+      result = computeLoss(prop, C);
     }
     if (paramIdx == 1) {
       cube prop = C - delta * directionC;
-      result = logisticLoss(L, prop);
+      result = computeLoss(L, prop);
     }
     return result;
   }
@@ -228,7 +232,7 @@ class SymmTensor {
 
         if (!std::isnan(beta)) directionL = gradientL + beta * directionL;
 
-        double cur_loss = logisticLoss(L, C);
+        double cur_loss = computeLoss(L, C);
         double loss_delta = lossAtDelta(delta1, 0);
         double opt_delta = lineSearch(0, delta1, cur_loss, loss_delta, 0);
         L -= opt_delta * directionL;
@@ -240,13 +244,13 @@ class SymmTensor {
         double beta = accu(gradientC % gradientC) / accu(gradient0 % gradient0);
         if (!std::isnan(beta)) directionC = gradientC + beta * directionC;
 
-        double cur_loss = logisticLoss(L, C);
+        double cur_loss = computeLoss(L, C);
         double loss_delta = lossAtDelta(delta2, 1);
         double opt_delta = lineSearch(0, delta2, cur_loss, loss_delta, 1);
         C -= opt_delta * directionC;
       }
       {
-        double cur_loss = logisticLoss(L, C);
+        double cur_loss = computeLoss(L, C);
         // if ((abs(directionL)).max() + (abs(directionC)).max() < 1E-5)
         if (fabs((pre_loss - cur_loss) / cur_loss) < tol)
           break;

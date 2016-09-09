@@ -13,13 +13,12 @@ using namespace arma;
 // [[Rcpp::export]]
 SEXP symmetric_tensor_decomp(SEXP A_r, int n, int m, int k, int steps = 1000,
                              double delta1 = 1E-2, double delta2 = 1E-2,
-                             double tol = 1E-8,
+                             double tol = 1E-8, int loss_type = 1,
                              bool restrictCoreToDiag = true) {
   Rcpp::NumericVector Ar(A_r);
   const cube A(Ar.begin(), n, n, m, false);
 
-  bool logistic = true;
-  SymmTensor tensorA(A, logistic, restrictCoreToDiag);
+  SymmTensor tensorA(A, loss_type, restrictCoreToDiag);
   tensorA.setK(k);
 
   tensorA.OptConjugateGradient(steps, delta1, delta2, tol);
@@ -28,7 +27,7 @@ SEXP symmetric_tensor_decomp(SEXP A_r, int n, int m, int k, int steps = 1000,
   cube gradC = tensorA.gradC(tensorA.L, tensorA.C);
 
   cout << "finish" << endl;
-  cout << tensorA.logisticLoss(tensorA.L, tensorA.C) << endl;
+  cout << tensorA.computeLoss(tensorA.L, tensorA.C) << endl;
 
   return List::create(Named("A") = A, Named("L") = tensorA.L,
                       Named("C") = tensorA.C, Named("gradL") = gradL,
@@ -54,15 +53,15 @@ SEXP symmetric_tensor_decompEM(SEXP A_r, int n, int m, int k, int steps = 1000,
   cout << "finish" << endl;
   // cout << tensorA.logisticLoss(tensorA.L, tensorA.C) << endl;
 
-  return List::create(Named("A") = A, Named("L") = tensorA.L,
-                      Named("C") = tensorA.C, Named("gradL") = gradL,
-                      Named("gradC") = gradC);
+  return List::create(Named("A") = A, Named("L") = tensorA.mapL,
+                      Named("C") = tensorA.mapC);
 }
 
 // [[Rcpp::export]]
 SEXP symm_group_tensor_decomp(SEXP A_r, SEXP group_r, int n, int m, int k,
                               int steps = 1000, double delta1 = 1E-2,
                               double delta2 = 1E-2, double tol = 1E-8,
+                              int loss_type = 1,
                               bool restrictCoreToDiag = true) {
   Rcpp::NumericVector Ar(A_r);
   const cube A(Ar.begin(), n, n, m, false);
@@ -94,8 +93,8 @@ SEXP symm_group_tensor_decomp(SEXP A_r, SEXP group_r, int n, int m, int k,
     groupAvgA.slice(i) = A_pick_sum / (double)groupCount(i);
   }
 
-  bool logistic = true;
-  SymmTensor tensorA(groupAvgA, logistic, restrictCoreToDiag);
+  // bool logistic = true;
+  SymmTensor tensorA(groupAvgA, loss_type, restrictCoreToDiag);
   tensorA.setK(k);
   tensorA.setW(groupCount);
 
@@ -107,7 +106,7 @@ SEXP symm_group_tensor_decomp(SEXP A_r, SEXP group_r, int n, int m, int k,
   mat diagC = tensorA.extractCdiag();
 
   cout << "finish" << endl;
-  cout << tensorA.logisticLoss(tensorA.L, tensorA.C) << endl;
+  cout << tensorA.computeLoss(tensorA.L, tensorA.C) << endl;
 
   return List::create(Named("A") = A, Named("L") = tensorA.L,
                       Named("C") = tensorA.C, Named("gradL") = gradL,

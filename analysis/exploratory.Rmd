@@ -1,4 +1,4 @@
-```{r}
+```{r,echo=FALSE}
 require('igraph')
 require('ggplot2')
 require('reshape')
@@ -46,7 +46,7 @@ HemisphereList<- lapply(graphList, function(x){
 ```
 
 
-```{r}
+```{r,echo=FALSE}
 
 colnames(AdjacencyList[[1]])
 
@@ -70,7 +70,7 @@ plotHeatmap<-function(denseA, zlimMax=1){
 
 ```
 
-# Adjacency Matrix
+#1. Adjacency matrix view of the 24 subjects
 
 ### One random subject:
 The adjacency matrix of the whole brain. 
@@ -79,21 +79,19 @@ Segments:
 Bottom left: *Left Hemisphere*
 Upper right: *Right Hemisphere*
 
-```{r}
+```{r,echo=FALSE}
 wholeBrain<- plotHeatmap(AbyHemiSphere)
 wholeBrain+ geom_hline(yintercept = nrow(AbyHemiSphere)/2 ) + geom_vline(xintercept = nrow(AbyHemiSphere)/2 )
 ```
 
 
 ### On average:
-The adjacency matrix of the whole brain. 
-
 Segments:
 Bottom left: *Left Hemisphere*
 Upper right: *Right Hemisphere*
 
 
-```{r}
+```{r,echo=FALSE}
 
 m<- length(AdjacencyList)
 
@@ -115,9 +113,7 @@ avgWholeBrain<- plotHeatmap(averageAdjacency)
 avgWholeBrain+ geom_hline(yintercept = nrow(AbyHemiSphere)/2 ) + geom_vline(xintercept = nrow(AbyHemiSphere)/2 )
 ```
 
-##Now we focus on the average graph:
-
-```{r}
+```{r,echo=FALSE}
 
 lDegree<- rowSums(averageAdjacency[1:(n/2),1:(n/2)])
 rDegree<- rowSums(averageAdjacency[(n/2+1):(n),(n/2+1):(n)])
@@ -129,33 +125,34 @@ df<- data.frame("ROI_Index"= rep(c(1:(n/2)),2),
 
 ```
 
+### Compare left and right hemisphere in average
 Degree plot by ROI index
 
-```{r}
+```{r,echo=FALSE}
 ggplot(data=df,
        aes(x=ROI_Index, y=Degree, colour=Hemisphere)) +
   geom_line()
 ```
 
 Degree distribution
-```{r}
+```{r,echo=FALSE}
 ggplot(df, aes(x=Degree, fill=Hemisphere)) + geom_density(alpha = 0.7, bw = 3)
 ```
 
 
-#Compare age related degeneration
+#2. Age related degeneration
 
-plot of the age (in weeks)
+### Plot of the age (in weeks)
 ```{r}
 weeks<- covariates$AGE_WEEKS
 plot(weeks)
 
 quantile(weeks,c(0.25,0.75))
 ```
+so we use 63 and 78.0 to divide mice into three groups: *young*,*middle* and *old*.
 
-so we use <63 as the cut-off for young mice, >78.0 for old mice
-
-```{r}
+### Adjacency matrices of the three groups
+```{r,echo=FALSE}
 
 youngAvgA <- computeAvgA(AdjacencyList[weeks<=63])
 middleageAvgA <- computeAvgA(AdjacencyList[weeks>63 & weeks<= 78  ])
@@ -175,13 +172,13 @@ oldAvgWholeBrain<- plotHeatmap(oldAvgA,zlimMax = zlim) + geom_hline(yintercept =
 ```
 
 Young:
-```{r}
+```{r,echo=FALSE}
 sum(weeks<=63)
 youngAvgWholeBrain
 ```
 
 Middle:
-```{r}
+```{r,echo=FALSE}
 sum(weeks>63 & weeks<= 78)
 
 middleageAvgWholeBrain
@@ -189,15 +186,17 @@ middleageAvgWholeBrain
 ```
 
 Old:
-```{r}
+```{r,echo=FALSE}
 sum(weeks> 78)
 oldAvgWholeBrain
 ```
 
-#Degree distribution of the 3 age groups:
-###Young mice have higher level of connectivy  (degree) than the middle and old.
+Obviously, *old group seems significantly more degenerate than the young and middle*, while the difference beween young and middle is more subtle.
 
-```{r}
+###Degree distribution of the 3 age groups:
+
+
+```{r,echo=FALSE}
 
 df<- data.frame("ROI_Index"= rep(c(1:(n/2)),3),
                 "Age"=as.factor(rep(c("Young","Middle","Old"),each=n/2)),
@@ -208,11 +207,14 @@ ggplot(df, aes(x=Degree, fill=Age)) + geom_density(alpha = 0.7, bw = 3)
 
 ```
 
+Young mice have higher level of connectivy  (degree) than the middle and old.
 
-#After dimension reduction:
+#Use of dimension reduction:
 
-Pairs plot of the first 5 dimensions:
-```{r}
+We applied joint embedding on the 24 subjects and extract the diagonal distinct vectors
+
+### Pairs plot of the first 5 dimensions:
+```{r,echo=FALSE}
 
 require('GGally')
 
@@ -244,8 +246,9 @@ ggpairs(newDf,aes(col=ageGroup,alpha=0.4, binwidth=1))
 
 ```
 
-Average scree plots of the 3 groups:
-```{r}
+
+###Average scree plots of the 3 groups:
+```{r,echo=FALSE}
 
 C1<- diagC[ageGroup=="Young",]
 C2<- diagC[ageGroup=="Middle",]
@@ -262,4 +265,4 @@ ggplot(data=df,
 
 ```
 
-From the low dimension representation, old group looks obviously distinct from the middle and young groups.
+From the low dimension representation, *old group looks distinct from the middle and young groups*. This is consistent with the finding in the adjacency plots.

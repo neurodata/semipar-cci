@@ -12,6 +12,8 @@ output:
 require('igraph')
 require('ggplot2')
 require('reshape')
+require('lsr')
+
 setwd("~/git/ABadea/")
 
 listGs<- list.files(path = "./graphml/", pattern = "*.graphml")
@@ -320,6 +322,7 @@ Two sample t-test for middle and old
 ```{r}
 
 t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+cohensD(middleageAvgAList,oldAvgAList)
 
 ```
 
@@ -556,6 +559,7 @@ Two sample t-test for middle and old
 ```{r}
 
 t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+cohensD(middleageAvgAList,oldAvgAList)
 
 ```
 
@@ -628,4 +632,5 @@ Two sample t-test for middle and old
 
 t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
 
+cohensD(middleageAvgAList,oldAvgAList)
 ```

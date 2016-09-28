@@ -15,6 +15,8 @@
 
     ## Loading required package: reshape
 
+    ## Loading required package: lsr
+
 Age related degeneration
 ========================
 
@@ -184,6 +186,12 @@ t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
     ## mean of x mean of y 
     ##  49.39056  36.70181
 
+``` r
+cohensD(middleageAvgAList,oldAvgAList)
+```
+
+    ## [1] 2.13097
+
 <!-- ###Non-zeros distribution of the 3 age groups: -->
 <!-- The sum of number of non-zeros in the average adjacency: -->
 <!-- ```{r, echo=FALSE} -->
@@ -315,6 +323,12 @@ t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
     ## mean of x mean of y 
     ##  57.71888  34.43976
 
+``` r
+cohensD(middleageAvgAList,oldAvgAList)
+```
+
+    ## [1] 3.351144
+
 Genotype 2 ( 12 data points across whole age span)
 
 ``` r
@@ -366,3 +380,9 @@ t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
     ## sample estimates:
     ## mean of x mean of y 
     ##  46.68876  38.96386
+
+``` r
+cohensD(middleageAvgAList,oldAvgAList)
+```
+
+    ## [1] 2.65004

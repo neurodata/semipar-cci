@@ -1,0 +1,631 @@
+---
+title: "Title"
+author: "Author"
+date: '`r Sys.Date()`'
+output:
+  md_document: 
+    variant: markdown_github
+---
+
+
+```{r,echo=FALSE}
+require('igraph')
+require('ggplot2')
+require('reshape')
+setwd("~/git/ABadea/")
+
+listGs<- list.files(path = "./graphml/", pattern = "*.graphml")
+
+#read in covariates and graph list
+#find those with common ids, sort by id
+
+covariates<- read.csv("./covariates/predictors.csv",stringsAsFactors = F)
+ids <- unlist( lapply(listGs,function(x)strtrim(x,6)))
+common_id<- intersect(covariates$RUNNO , ids)
+
+covariates <- covariates[covariates$RUNNO%in%common_id,]
+covariates <- covariates[order(covariates$RUNNO),]  
+
+listGs<- listGs[ids%in%common_id]
+listGs<- listGs[order(listGs)]
+
+#load and sort the tensor decomp data
+load("./tensorDecompBinary.Rda")
+load("./listData.Rda")
+ids2 <- unlist( lapply(dataList,function(x)strtrim(x$id,6)))
+diagC<- tensorDecomp$C[ids2%in% common_id,]
+diagC<- diagC[order(ids2[ids2%in% common_id]),]
+
+
+
+graphList<- lapply(listGs, function(x){
+  read.graph( file = paste("./graphml/",x,sep = ""),format = "graphml")
+})
+
+AdjacencyList<- lapply(graphList, function(x){
+  get.adjacency(x)
+})
+
+HemisphereList<- lapply(graphList, function(x){
+  get.vertex.attribute(x,name="hemisphere")
+})
+
+```
+
+
+```{r,echo=FALSE}
+
+
+order_by_hemi<- order(HemisphereList[[1]])
+
+
+AbyHemiSphere<- (as.matrix(AdjacencyList[[1]]))[order_by_hemi,order_by_hemi]
+
+plotHeatmap<-function(denseA, zlimMax=1){
+  rownames(denseA) <- c(1:nrow(denseA))
+  colnames(denseA) <- c(1:nrow(denseA))
+  m<-melt(denseA)
+  n<- nrow(denseA)
+  p <- ggplot(m, aes(X1, X2)) +
+    geom_tile(aes(fill =  value), colour = "white") + 
+    scale_fill_gradient(low = "white",  high = "red",limits=c(0,zlimMax)) +
+    theme(axis.ticks = element_blank(), axis.text.x = element_blank(),axis.text.y = element_blank()) 
+  
+  p
+}
+
+
+m<- length(AdjacencyList)
+
+
+n<- nrow(AdjacencyList[[1]])
+
+computeAvgA<- function(l){
+  m<- length(l)
+  sumAdj<- matrix(0,n,n)
+  for(i in 1:m){
+   sumAdj<- sumAdj + (l[[i]]) [order_by_hemi,order_by_hemi]
+  }
+  as.matrix(sumAdj/m)
+}
+
+averageAdjacency<- computeAvgA(AdjacencyList)
+
+```
+
+#Age related degeneration
+
+
+### The avg.degree vs age (weeks)
+
+```{r}
+
+weeks<- covariates$AGE_WEEKS
+
+degreeForAll<-c(sapply(AdjacencyList,function(x){
+  rowSums(as.matrix(x))
+}))
+
+
+df<- data.frame("ROI_Index_L_and_R"= rep(c(1:n),m),
+                "Age"= as.factor(rep(weeks,each=n)),
+                "Degree" = degreeForAll)
+
+ggplot(data=df,
+       aes(x=ROI_Index_L_and_R, y=Degree, colour=Age)) +
+  geom_line()
+
+ggplot(df, aes(x=Degree, fill=Age)) + geom_density(alpha = 0.7, bw = 5)
+
+```
+
+Plot total degree over age:
+
+```{r}
+
+sumAForAll<-c(sapply(AdjacencyList,function(x){
+  sum(as.matrix(x))
+}))
+
+degreeForAll<-(lapply(AdjacencyList,function(x){
+  rowSums(as.matrix(x))
+}))
+
+nnz<-sapply(degreeForAll, function(x){sum(x>0)})
+
+df<- data.frame("Age"= weeks,
+                "AvgDegree" = sumAForAll/n,
+                "AvgDegreeNZ" = sumAForAll/nnz,
+                "GenoType" = as.factor(covariates$GENOTYPE),
+                "Gender" = as.factor(covariates$GENDER)
+                )
+
+
+ggplot(data=df,
+       aes(x=Age, y=AvgDegree,col=GenoType)) +
+  geom_line()+ggtitle("AvgDegree vs Age")
+
+ggplot(data=df,
+       aes(x=Age, y=AvgDegree,col=Gender)) +
+  geom_line()+ggtitle("AvgDegrees vs Age")
+
+
+ggplot(data=df,
+       aes(x=Age, y=AvgDegreeNZ,col=GenoType)) +
+  geom_line()+ggtitle("AvgDegree (non-zero) vs Age")
+
+ggplot(data=df,
+       aes(x=Age, y=AvgDegreeNZ,col=Gender)) +
+  geom_line()+ggtitle("AvgDegrees (non-zero) vs Age")
+
+```
+
+### Divide age into 3 groups
+
+We use 25% (63) and 75% (78) quantiles as cutoffs to divide mice into three group:
+*young*,*middle* and *old*.
+```{r}
+plot(weeks)
+abline(h=63,lty=2)
+abline(h=78,lty=2)
+
+quantile(weeks,c(0.25,0.75))
+```
+
+### Comparing Adjacency matrices
+
+Obviously, *old group seems significantly more degenerate than the young and middle*, while the difference beween young and middle is more subtle.
+
+```{r,echo=FALSE}
+
+youngAvgA <- computeAvgA(AdjacencyList[weeks<=63])
+middleageAvgA <- computeAvgA(AdjacencyList[weeks>63 & weeks<= 78  ])
+oldAvgA <- computeAvgA(AdjacencyList[weeks>78])
+
+zlim<- max(c(youngAvgA, middleageAvgA, oldAvgA))
+
+youngAvgWholeBrain<- plotHeatmap(youngAvgA,zlimMax = zlim)+ geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+
+  ggtitle("Young")
+
+middleageAvgWholeBrain<- plotHeatmap(middleageAvgA,zlimMax = zlim)+ geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+
+  ggtitle("Middle")
+
+oldAvgWholeBrain<- plotHeatmap(oldAvgA,zlimMax = zlim) + geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+
+  ggtitle("old") 
+
+```
+
+
+Young (n=):
+```{r,echo=FALSE}
+sum(weeks<=63)
+youngAvgWholeBrain
+```
+
+Middle (n=):
+```{r,echo=FALSE}
+sum(weeks>63 & weeks<= 78)
+
+middleageAvgWholeBrain
+
+```
+
+Old (n=):
+```{r,echo=FALSE}
+sum(weeks> 78)
+oldAvgWholeBrain
+```
+
+
+<!-- The dichotomized view with connecting probability>0: it shows the old clearly has less connectivity than the middleage and young. -->
+
+<!-- ```{r,echo=FALSE} -->
+
+<!-- zlim<- 1 -->
+
+<!-- youngAvgWholeBrainDicho<- plotHeatmap((youngAvgA>0)*1,zlimMax = zlim)+ geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+ -->
+<!--   ggtitle("Young") -->
+
+<!-- middleageAvgWholeBrainDicho<- plotHeatmap( (middleageAvgA>0)*1,zlimMax = zlim)+ geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+ -->
+<!--   ggtitle("Middle") -->
+
+<!-- oldAvgWholeBrainDicho<- plotHeatmap((oldAvgA>0)*1,zlimMax = zlim) + geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+ -->
+<!--   ggtitle("old")  -->
+
+<!-- youngAvgWholeBrainDicho -->
+<!-- middleageAvgWholeBrainDicho -->
+<!-- oldAvgWholeBrainDicho -->
+
+<!-- ``` -->
+
+###Degree distribution of the 3 age groups:
+
+Middle and young mice have higher level of connectivy  (degree) than the old.
+
+The degree in the average adjacency:
+
+```{r,echo=FALSE}
+
+df<- data.frame("ROI_Index"= rep(c(1:(n)),3),
+                "Age"=as.factor(rep(c("Young","Middle","Old"),each=n)),
+                "Degree" = c(rowSums(youngAvgA),rowSums(middleageAvgA),rowSums(oldAvgA))
+)
+
+df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
+
+# df<-df[df$Age!="Young",]
+
+ggplot(df, aes(x=Degree, fill=Age)) + geom_density(alpha = 0.7, bw = 10)
+
+```
+
+```{r,echo=FALSE}
+
+ageGroup <-  (weeks<=63)*1 + (weeks>63 & weeks<=78)*2+(weeks>78)*3
+ageGroup[ageGroup==1] = "Young"
+ageGroup[ageGroup==2] = "Middle"
+ageGroup[ageGroup==3] = "Old"
+
+df<- data.frame(
+  "Age"= c("Young","Middle","Old"),
+  "AvgDegree"=c(sum((youngAvgA)),sum((middleageAvgA)*1),sum((oldAvgA)*1))/n
+  )
+
+df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
+
+
+ggplot(data=df, aes(x=Age, y=AvgDegree, fill=Age)) +
+    geom_bar(stat="identity")
+    
+```
+
+```{r,echo=FALSE}
+
+getAvgDegree<- function(l){
+  sapply(l, function(x) mean(rowSums(as.matrix(x))))
+}
+
+getAvgDegree(AdjacencyList[weeks<=63])
+
+youngAvgAList <- getAvgDegree(AdjacencyList[weeks<=63])
+middleageAvgAList <- getAvgDegree(AdjacencyList[weeks>63 & weeks<= 78  ])
+oldAvgAList <- getAvgDegree(AdjacencyList[weeks>78])
+
+n1<- length(youngAvgAList)
+n2<- length(middleageAvgAList)
+n3<- length(oldAvgAList)
+
+
+df<- data.frame(
+  "x" = runif(n1+n2+n3,-1,1),
+  "Age"= as.factor(c(rep("Young",n1),rep("Middle",n2),rep("Old",n3))),
+  "AvgDegree"=c(youngAvgAList,middleageAvgAList,oldAvgAList)
+  )
+
+df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
+
+for(i in unique(df$Age)){
+  pick<- df$Age==i
+  r<- range(df$x[pick])
+  df$x[pick]<- (df$x[pick]-r[1])/(r[2]-r[1])*2-1
+}
+
+p <- ggplot(df, aes(x=x,y=AvgDegree, color = Age, group = Age))
+p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("red","green","blue"))
+
+```
+
+
+Two sample t-test for middle and old
+```{r}
+
+t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+
+```
+
+
+<!-- ###Non-zeros distribution of the 3 age groups: -->
+
+<!-- The sum of number of non-zeros in the average adjacency: -->
+
+<!-- ```{r, echo=FALSE} -->
+
+<!-- df<- data.frame("ROI_Index"= rep(c(1:(n)),3), -->
+<!--                 "Age"=as.factor(rep(c("Young","Middle","Old"),each=n)), -->
+<!--                 "Number_Non_Zero" = c(rowSums(youngAvgA>0), -->
+<!--                                       rowSums(middleageAvgA>0), -->
+<!--                                       rowSums(oldAvgA>0)) -->
+<!-- ) -->
+
+<!-- df$Age<- ordered(df$Age, levels = c("Young","Middle","Old")) -->
+
+<!-- # df<-df[df$Age!="Young",] -->
+
+<!-- ggplot(df, aes(x=Number_Non_Zero, fill=Age)) + geom_density(alpha = 0.7, bw = 10) -->
+
+<!-- ``` -->
+
+<!-- ```{r,echo=FALSE} -->
+
+
+<!-- ageGroup<-  (weeks<=63)*1 + (weeks>63 & weeks<=78)*2+(weeks>78)*3 -->
+<!-- ageGroup[ageGroup==1] = "Young" -->
+<!-- ageGroup[ageGroup==2] = "Middle" -->
+<!-- ageGroup[ageGroup==3] = "Old" -->
+
+<!-- df<- data.frame( -->
+<!--   "Age"= c("Young","Middle","Old"), -->
+<!--   "Number_Non_Zero"=c(sum((youngAvgA>0)*1),sum((middleageAvgA>0)*1),sum((oldAvgA>0)*1)) -->
+<!--   ) -->
+
+<!-- df$Age<- ordered(df$Age, levels = c("Young","Middle","Old")) -->
+
+
+<!-- ggplot(data=df, aes(x=Age, y=Number_Non_Zero, fill=Age)) + -->
+<!--     geom_bar(stat="identity") -->
+
+<!-- ``` -->
+
+###Genotypes
+###Degree distribution of the 3 genotype groups:
+
+Genotype 0 has less connectivity than group 1 and 2:
+
+```{r,echo=FALSE}
+
+avgAgene0 <- computeAvgA(AdjacencyList[covariates$GENOTYPE==0])
+avgAgene1 <- computeAvgA(AdjacencyList[covariates$GENOTYPE==1])
+avgAgene2 <- computeAvgA(AdjacencyList[covariates$GENOTYPE==2])
+
+df<- data.frame("ROI_Index_L_R"= rep(c(1:(n)),3),
+                "Genotype"=as.factor(rep(c("0","1","2"),each=n)),
+                "Degree" = c(rowSums(avgAgene0),rowSums(avgAgene1),rowSums(avgAgene2)),
+                "Number_Non_Zero" = c(rowSums(avgAgene0>0),rowSums(avgAgene1>0),rowSums(avgAgene2>0))
+
+)
+
+maxZ<- max(c(avgAgene0,avgAgene1,avgAgene2))
+
+plotHeatmap(avgAgene0, maxZ)+
+  ggtitle("Genotype 0")
+plotHeatmap(avgAgene1, maxZ)+
+  ggtitle("Genotype 1")
+plotHeatmap(avgAgene2, maxZ)+
+  ggtitle("Genotype 2")
+
+
+```
+
+
+The degree distribution:
+
+```{r,echo=FALSE}
+
+ggplot(df, aes(x=Degree, fill=Genotype)) + geom_density(alpha = 0.7, bw = 10)
+
+df2<- data.frame("Genotype"=as.factor((c("0","1","2"))),
+                "AvgDegree"=c(sum(avgAgene0),sum(avgAgene1),sum(avgAgene2))/n
+)
+
+ggplot(data=df2, aes(x=Genotype, y=AvgDegree, fill=Genotype)) +
+    geom_bar(stat="identity")
+```
+
+<!-- The non-zeros distribution in the average adjacency: -->
+
+<!-- ```{r,echo=FALSE} -->
+
+<!-- ggplot(df, aes(x=Number_Non_Zero, fill=Genotype)) + geom_density(alpha = 0.7, bw = 10) -->
+
+<!-- df2<- data.frame( -->
+<!--   "Genotype"= c("0","1","2"), -->
+<!--   "Number_Non_Zero"=c(sum((avgAgene0>0)*1),sum((avgAgene1>0)*1),sum((avgAgene2>0)*1)) -->
+<!--   ) -->
+
+<!-- ggplot(data=df2, aes(x=Genotype, y=Number_Non_Zero, fill=Genotype)) + -->
+<!--     geom_bar(stat="identity") -->
+
+<!-- ``` -->
+
+###Sex
+###Degree distribution of the 2 Sex:
+
+```{r,echo=FALSE}
+
+avgAgender1 <- computeAvgA(AdjacencyList[covariates$GENDER==1])
+avgAgender2 <- computeAvgA(AdjacencyList[covariates$GENDER==2])
+
+
+df<- data.frame("ROI_Index_L_R"= rep(c(1:n),2),
+                "Gender"=as.factor(rep(c("1","2"),each=n)),
+                "Degree" = c(rowSums(avgAgender1),rowSums(avgAgender2)),
+                "Number_Non_Zero" = c(rowSums(avgAgender1>0),rowSums(avgAgender2>0)))
+
+maxZ<- max(c(avgAgender1,avgAgender2))
+
+plotHeatmap(avgAgender1, maxZ)+
+  ggtitle("Gender 1")
+plotHeatmap(avgAgender2, maxZ)+
+  ggtitle("Gender 2")
+
+```
+
+The degree distribution:
+
+```{r,echo=FALSE}
+
+ggplot(df, aes(x=Degree, fill=Gender)) + geom_density(alpha = 0.7, bw = 5)
+
+df2<- data.frame("Gender"=as.factor((c("1","2"))),
+                "Avg.Degree"=c(sum((avgAgender1)),sum((avgAgender2)))/n)
+
+ggplot(data=df2, aes(x=Gender, y=Avg.Degree, fill=Gender)) +
+    geom_bar(stat="identity")
+```
+
+<!-- The non-zeros distribution in the average adjacency: -->
+
+<!-- ```{r,echo=FALSE} -->
+
+<!-- ggplot(df, aes(x=Number_Non_Zero, fill=Gender)) + geom_density(alpha = 0.7, bw = 10) -->
+
+<!-- df2<- data.frame( -->
+<!--   "Gender"= c("1","2"), -->
+<!--   "Number_Non_Zero"=c(sum((avgAgender1>0)),sum((avgAgender2>0))) -->
+<!--   ) -->
+
+<!-- ggplot(data=df2, aes(x=Gender, y=Number_Non_Zero, fill=Gender)) + -->
+<!--     geom_bar(stat="identity") -->
+
+<!-- ``` -->
+
+
+# age x genotype
+
+Genotype 0 (only 4 data points in middle age group, skipped)
+
+```{r}
+
+sum(covariates$GENOTYPE==0)
+
+
+```
+
+
+Genotype 1 ( 9 data points across whole age span)
+
+```{r}
+
+sum(covariates$GENOTYPE==1)
+
+pickGene <- covariates$GENOTYPE==1
+
+youngAvgA <- computeAvgA(AdjacencyList[weeks<=63 & pickGene])
+middleageAvgA <- computeAvgA(AdjacencyList[weeks>63 & weeks<= 78  & pickGene])
+oldAvgA <- computeAvgA(AdjacencyList[weeks>78 & pickGene])
+
+df<- data.frame(
+  "Age"= c("Young","Middle","Old"),
+  "AvgDegree"=c(sum((youngAvgA)),sum((middleageAvgA)),sum((oldAvgA)))/n
+  )
+
+df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
+
+
+ggplot(data=df, aes(x=Age, y=AvgDegree, fill=Age)) +
+    geom_bar(stat="identity")
+
+
+```
+
+
+```{r,echo=FALSE}
+
+pickGene <- covariates$GENOTYPE==1
+
+youngAvgAList <- getAvgDegree(AdjacencyList[weeks<=63 & pickGene])
+middleageAvgAList <- getAvgDegree(AdjacencyList[weeks>63 & weeks<= 78 & pickGene ])
+oldAvgAList <- getAvgDegree(AdjacencyList[weeks>78 & pickGene])
+
+n1<- length(youngAvgAList)
+n2<- length(middleageAvgAList)
+n3<- length(oldAvgAList)
+
+
+df<- data.frame(
+  "x" = runif(n1+n2+n3,-1,1),
+  "Age"= as.factor(c(rep("Young",n1),rep("Middle",n2),rep("Old",n3))),
+  "AvgDegree"=c(youngAvgAList,middleageAvgAList,oldAvgAList)
+  )
+
+df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
+
+for(i in unique(df$Age)){
+  pick<- df$Age==i
+  r<- range(df$x[pick])
+  df$x[pick]<- (df$x[pick]-r[1])/(r[2]-r[1])*2-1
+}
+
+p <- ggplot(df, aes(x=x,y=AvgDegree, color = Age, group = Age))
+p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("green","blue","red" ))
+```
+
+
+
+Two sample t-test for middle and old
+```{r}
+
+t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+
+```
+
+
+Genotype 2 ( 12 data points across whole age span)
+
+```{r}
+
+sum(covariates$GENOTYPE==2)
+
+pickGene <- covariates$GENOTYPE==2
+
+youngAvgA <- computeAvgA(AdjacencyList[weeks<=63 & pickGene])
+middleageAvgA <- computeAvgA(AdjacencyList[weeks>63 & weeks<= 78  & pickGene])
+oldAvgA <- computeAvgA(AdjacencyList[weeks>78 & pickGene])
+
+df<- data.frame(
+  "Age"= c("Young","Middle","Old"),
+  "AvgDegree"=c(sum((youngAvgA)),sum((middleageAvgA)),sum((oldAvgA)))/n
+  )
+
+df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
+
+
+ggplot(data=df, aes(x=Age, y=AvgDegree, fill=Age)) +
+    geom_bar(stat="identity")
+
+
+```
+
+
+```{r,echo=FALSE}
+
+pickGene <- covariates$GENOTYPE==2
+
+youngAvgAList <- getAvgDegree(AdjacencyList[weeks<=63 & pickGene])
+middleageAvgAList <- getAvgDegree(AdjacencyList[weeks>63 & weeks<= 78 & pickGene ])
+oldAvgAList <- getAvgDegree(AdjacencyList[weeks>78 & pickGene])
+
+n1<- length(youngAvgAList)
+n2<- length(middleageAvgAList)
+n3<- length(oldAvgAList)
+
+
+df<- data.frame(
+  "x" = runif(n1+n2+n3,-1,1),
+  "Age"= as.factor(c(rep("Young",n1),rep("Middle",n2),rep("Old",n3))),
+  "AvgDegree"=c(youngAvgAList,middleageAvgAList,oldAvgAList)
+  )
+
+df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
+
+
+
+for(i in unique(df$Age)){
+  pick<- df$Age==i
+  r<- range(df$x[pick])
+  df$x[pick]<- (df$x[pick]-r[1])/(r[2]-r[1])*2-1
+}
+
+p <- ggplot(df, aes(x=x,y=AvgDegree, color = Age, group = Age))
+
+p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("green","blue","red" ))
+```
+
+
+
+Two sample t-test for middle and old
+```{r}
+
+t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+
+```

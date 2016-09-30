@@ -70,7 +70,7 @@ df<- data.frame("Age"= weeks,
 
 ggplot(data=df,
        aes(x=Age, y=AvgDegree,col=GenoType)) +
-  geom_line()+ggtitle("AvgDegree vs Age")
+  geom_point()+ggtitle("AvgDegree vs Age")+geom_vline(aes(xintercept=c(63)),linetype=2)+geom_vline(aes(xintercept=c(78)),linetype=2) 
 ```
 
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-4-1.png)
@@ -78,7 +78,7 @@ ggplot(data=df,
 ``` r
 ggplot(data=df,
        aes(x=Age, y=AvgDegree,col=Gender)) +
-  geom_line()+ggtitle("AvgDegrees vs Age")
+  geom_point()+ggtitle("AvgDegrees vs Age")+geom_vline(aes(xintercept=c(63)),linetype=2)+geom_vline(aes(xintercept=c(78)),linetype=2) 
 ```
 
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-4-2.png)
@@ -86,7 +86,7 @@ ggplot(data=df,
 ``` r
 ggplot(data=df,
        aes(x=Age, y=AvgDegreeNZ,col=GenoType)) +
-  geom_line()+ggtitle("AvgDegree (non-zero) vs Age")
+  geom_point()+ggtitle("AvgDegree (non-zero) vs Age")+geom_vline(aes(xintercept=c(63)),linetype=2)+geom_vline(aes(xintercept=c(78)),linetype=2) 
 ```
 
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-4-3.png)
@@ -94,7 +94,7 @@ ggplot(data=df,
 ``` r
 ggplot(data=df,
        aes(x=Age, y=AvgDegreeNZ,col=Gender)) +
-  geom_line()+ggtitle("AvgDegrees (non-zero) vs Age")
+  geom_point()+ggtitle("AvgDegrees (non-zero) vs Age")+geom_vline(aes(xintercept=c(63)),linetype=2)+geom_vline(aes(xintercept=c(78)),linetype=2) 
 ```
 
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-4-4.png)
@@ -168,23 +168,18 @@ The degree in the average adjacency:
 
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-12-1.png)
 
-Two sample t-test for middle and old
+Two sample Wilcoxon-test for middle and old
 
 ``` r
-t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+wilcox.test(middleageAvgAList,oldAvgAList,"greater")
 ```
 
     ## 
-    ##  Two Sample t-test
+    ##  Wilcoxon rank sum test
     ## 
     ## data:  middleageAvgAList and oldAvgAList
-    ## t = 3.6909, df = 14, p-value = 0.00121
-    ## alternative hypothesis: true difference in means is greater than 0
-    ## 95 percent confidence interval:
-    ##  6.633716      Inf
-    ## sample estimates:
-    ## mean of x mean of y 
-    ##  49.39056  36.70181
+    ## W = 48, p-value = 0.0005495
+    ## alternative hypothesis: true location shift is greater than 0
 
 ``` r
 cohensD(middleageAvgAList,oldAvgAList)
@@ -305,23 +300,18 @@ ggplot(data=df, aes(x=Age, y=AvgDegree, fill=Age)) +
 
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-20-1.png)
 
-Two sample t-test for middle and old
+Two sample test for middle and old
 
 ``` r
-t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+wilcox.test(middleageAvgAList,oldAvgAList,"greater")
 ```
 
     ## 
-    ##  Two Sample t-test
+    ##  Wilcoxon rank sum test
     ## 
     ## data:  middleageAvgAList and oldAvgAList
-    ## t = 3.671, df = 3, p-value = 0.01749
-    ## alternative hypothesis: true difference in means is greater than 0
-    ## 95 percent confidence interval:
-    ##  8.355577      Inf
-    ## sample estimates:
-    ## mean of x mean of y 
-    ##  57.71888  34.43976
+    ## W = 6, p-value = 0.1
+    ## alternative hypothesis: true location shift is greater than 0
 
 ``` r
 cohensD(middleageAvgAList,oldAvgAList)
@@ -366,20 +356,15 @@ ggplot(data=df, aes(x=Age, y=AvgDegree, fill=Age)) +
 Two sample t-test for middle and old
 
 ``` r
-t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+wilcox.test(middleageAvgAList,oldAvgAList,"greater")
 ```
 
     ## 
-    ##  Two Sample t-test
+    ##  Wilcoxon rank sum test
     ## 
     ## data:  middleageAvgAList and oldAvgAList
-    ## t = 3.2456, df = 6, p-value = 0.008781
-    ## alternative hypothesis: true difference in means is greater than 0
-    ## 95 percent confidence interval:
-    ##  3.09994     Inf
-    ## sample estimates:
-    ## mean of x mean of y 
-    ##  46.68876  38.96386
+    ## W = 12, p-value = 0.03571
+    ## alternative hypothesis: true location shift is greater than 0
 
 ``` r
 cohensD(middleageAvgAList,oldAvgAList)

@@ -145,20 +145,21 @@ df<- data.frame("Age"= weeks,
 
 ggplot(data=df,
        aes(x=Age, y=AvgDegree,col=GenoType)) +
-  geom_line()+ggtitle("AvgDegree vs Age")
+  geom_point()+ggtitle("AvgDegree vs Age")+geom_vline(aes(xintercept=c(63)),linetype=2)+geom_vline(aes(xintercept=c(78)),linetype=2) 
+
 
 ggplot(data=df,
        aes(x=Age, y=AvgDegree,col=Gender)) +
-  geom_line()+ggtitle("AvgDegrees vs Age")
+  geom_point()+ggtitle("AvgDegrees vs Age")+geom_vline(aes(xintercept=c(63)),linetype=2)+geom_vline(aes(xintercept=c(78)),linetype=2) 
 
 
 ggplot(data=df,
        aes(x=Age, y=AvgDegreeNZ,col=GenoType)) +
-  geom_line()+ggtitle("AvgDegree (non-zero) vs Age")
+  geom_point()+ggtitle("AvgDegree (non-zero) vs Age")+geom_vline(aes(xintercept=c(63)),linetype=2)+geom_vline(aes(xintercept=c(78)),linetype=2) 
 
 ggplot(data=df,
        aes(x=Age, y=AvgDegreeNZ,col=Gender)) +
-  geom_line()+ggtitle("AvgDegrees (non-zero) vs Age")
+  geom_point()+ggtitle("AvgDegrees (non-zero) vs Age")+geom_vline(aes(xintercept=c(63)),linetype=2)+geom_vline(aes(xintercept=c(78)),linetype=2) 
 
 ```
 
@@ -300,6 +301,7 @@ n3<- length(oldAvgAList)
 
 df<- data.frame(
   "x" = runif(n1+n2+n3,-1,1),
+    "Weeks" = weeks,
   "Age"= as.factor(c(rep("Young",n1),rep("Middle",n2),rep("Old",n3))),
   "AvgDegree"=c(youngAvgAList,middleageAvgAList,oldAvgAList)
   )
@@ -312,17 +314,18 @@ for(i in unique(df$Age)){
   df$x[pick]<- (df$x[pick]-r[1])/(r[2]-r[1])*2-1
 }
 
-p <- ggplot(df, aes(x=x,y=AvgDegree, color = Age, group = Age))
+p <- ggplot(df, aes(x=Weeks,y=AvgDegree, color = Age, group = Age))
 p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("red","green","blue"))
 
 ```
 
 
-Two sample t-test for middle and old
+Two sample Wilcoxon-test for middle and old
 ```{r}
 
-t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+wilcox.test(middleageAvgAList,oldAvgAList,"greater")
 cohensD(middleageAvgAList,oldAvgAList)
+
 
 ```
 
@@ -537,6 +540,7 @@ n3<- length(oldAvgAList)
 
 df<- data.frame(
   "x" = runif(n1+n2+n3,-1,1),
+    "Weeks" = weeks[pickGene],
   "Age"= as.factor(c(rep("Young",n1),rep("Middle",n2),rep("Old",n3))),
   "AvgDegree"=c(youngAvgAList,middleageAvgAList,oldAvgAList)
   )
@@ -549,16 +553,16 @@ for(i in unique(df$Age)){
   df$x[pick]<- (df$x[pick]-r[1])/(r[2]-r[1])*2-1
 }
 
-p <- ggplot(df, aes(x=x,y=AvgDegree, color = Age, group = Age))
+p <- ggplot(df, aes(x=Weeks,y=AvgDegree, color = Age, group = Age))
 p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("green","blue","red" ))
 ```
 
 
 
-Two sample t-test for middle and old
+Two sample test for middle and old
 ```{r}
 
-t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+wilcox.test(middleageAvgAList,oldAvgAList,"greater")
 cohensD(middleageAvgAList,oldAvgAList)
 
 ```
@@ -606,6 +610,7 @@ n3<- length(oldAvgAList)
 
 df<- data.frame(
   "x" = runif(n1+n2+n3,-1,1),
+  "Weeks" = weeks[pickGene],
   "Age"= as.factor(c(rep("Young",n1),rep("Middle",n2),rep("Old",n3))),
   "AvgDegree"=c(youngAvgAList,middleageAvgAList,oldAvgAList)
   )
@@ -620,7 +625,7 @@ for(i in unique(df$Age)){
   df$x[pick]<- (df$x[pick]-r[1])/(r[2]-r[1])*2-1
 }
 
-p <- ggplot(df, aes(x=x,y=AvgDegree, color = Age, group = Age))
+p <- ggplot(df, aes(x=Weeks,y=AvgDegree, color = Age, group = Age))
 
 p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("green","blue","red" ))
 ```
@@ -630,7 +635,7 @@ p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35
 Two sample t-test for middle and old
 ```{r}
 
-t.test(middleageAvgAList,oldAvgAList,"greater", var.equal=T)
+wilcox.test(middleageAvgAList,oldAvgAList,"greater")
 
 cohensD(middleageAvgAList,oldAvgAList)
 ```

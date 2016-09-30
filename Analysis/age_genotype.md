@@ -166,7 +166,7 @@ The degree in the average adjacency:
     ## [1] 46.62651 47.08434 49.95181 49.74699 52.87349 16.83133 53.65663 55.33133
     ## [9] 51.71687
 
-![](age_genotype_files/figure-markdown_github/unnamed-chunk-12-1.png)
+![](age_genotype_files/figure-markdown_github/unnamed-chunk-12-1.png)![](age_genotype_files/figure-markdown_github/unnamed-chunk-12-2.png)
 
 Two sample Wilcoxon-test for middle and old
 
@@ -295,9 +295,6 @@ ggplot(data=df, aes(x=Age, y=AvgDegree, fill=Age)) +
 
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-19-1.png)
 
-    ## Warning in max(data$density): no non-missing arguments to max; returning -
-    ## Inf
-
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-20-1.png)
 
 Two sample test for middle and old
@@ -347,9 +344,6 @@ ggplot(data=df, aes(x=Age, y=AvgDegree, fill=Age)) +
 ```
 
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-22-1.png)
-
-    ## Warning in max(data$density): no non-missing arguments to max; returning -
-    ## Inf
 
 ![](age_genotype_files/figure-markdown_github/unnamed-chunk-23-1.png)
 

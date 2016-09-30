@@ -1,0 +1,516 @@
+```{r,echo=FALSE}
+require('igraph')
+require('ggplot2')
+require('reshape')
+require('gridExtra')
+
+
+setwd("~/git/ABadea/")
+
+listGs<- list.files(path = "./graphml/", pattern = "*.graphml")
+
+#read in covariates and graph list
+#find those with common ids, sort by id
+
+covariates<- read.csv("./covariates/predictors.csv",stringsAsFactors = F)
+ids <- unlist( lapply(listGs,function(x)strtrim(x,6)))
+common_id<- intersect(covariates$RUNNO , ids)
+
+covariates <- covariates[covariates$RUNNO%in%common_id,]
+covariates <- covariates[order(covariates$RUNNO),]  
+
+listGs<- listGs[ids%in%common_id]
+listGs<- listGs[order(listGs)]
+
+#load and sort the tensor decomp data
+load("./tensorDecompBinary.Rda")
+load("./listData.Rda")
+ids2 <- unlist( lapply(dataList,function(x)strtrim(x$id,6)))
+diagC<- tensorDecomp$C[ids2%in% common_id,]
+diagC<- diagC[order(ids2[ids2%in% common_id]),]
+
+
+
+graphList<- lapply(listGs, function(x){
+  read.graph( file = paste("./graphml/",x,sep = ""),format = "graphml")
+})
+
+AdjacencyList<- lapply(graphList, function(x){
+  get.adjacency(x)
+})
+
+HemisphereList<- lapply(graphList, function(x){
+  get.vertex.attribute(x,name="hemisphere")
+})
+
+```
+
+
+```{r,echo=FALSE}
+
+colnames(AdjacencyList[[1]])
+
+order_by_hemi<- order(HemisphereList[[1]])
+
+
+AbyHemiSphere<- (as.matrix(AdjacencyList[[1]]))[order_by_hemi,order_by_hemi]
+
+plotHeatmap<-function(denseA, zlimMax=1){
+  rownames(denseA) <- c(1:nrow(denseA))
+  colnames(denseA) <- c(1:nrow(denseA))
+  m<-melt(denseA)
+  n<- nrow(denseA)
+  p <- ggplot(m, aes(X1, X2)) +
+    geom_tile(aes(fill =  value), colour = "white") + 
+    scale_fill_gradient(low = "white",  high = "red",limits=c(0,zlimMax)) +
+    theme(axis.ticks = element_blank(), axis.text.x = element_blank(),axis.text.y = element_blank()) 
+  
+  p
+}
+
+```
+
+#1. Adjacency matrix view of the 25 subjects
+
+### One random subject:
+The adjacency matrix of the whole brain:
+the left and right hemispheres look similar with some random difference.
+
+Segments:
+Bottom left: *Left Hemisphere*
+Upper right: *Right Hemisphere*
+
+```{r,echo=FALSE}
+wholeBrain<- plotHeatmap(AbyHemiSphere)
+wholeBrain+ geom_hline(yintercept = nrow(AbyHemiSphere)/2 ) + geom_vline(xintercept = nrow(AbyHemiSphere)/2 )
+```
+
+### On average:
+
+If we look at them by average, the left and right look almost the same
+
+Segments:
+Bottom left: *Left Hemisphere*
+Upper right: *Right Hemisphere*
+
+
+```{r,echo=FALSE}
+
+m<- length(AdjacencyList)
+
+
+n<- nrow(AdjacencyList[[1]])
+
+computeAvgA<- function(l){
+  m<- length(l)
+  sumAdj<- matrix(0,n,n)
+  for(i in 1:m){
+  sumAdj<- sumAdj + (AdjacencyList[[i]])[order_by_hemi,order_by_hemi]
+  }
+  as.matrix(sumAdj/m)
+}
+
+averageAdjacency<- computeAvgA(AdjacencyList)
+
+
+avgWholeBrain<- plotHeatmap(averageAdjacency)
+avgWholeBrain+ geom_hline(yintercept = nrow(AbyHemiSphere)/2 ) + geom_vline(xintercept = nrow(AbyHemiSphere)/2 )
+```
+
+```{r,echo=FALSE}
+
+lDegree<- rowSums(averageAdjacency[1:(n/2),1:(n/2)])
+rDegree<- rowSums(averageAdjacency[(n/2+1):(n),(n/2+1):(n)])
+
+
+
+df<- data.frame("ROI_Index"= rep(c(1:(n/2)),2),
+                "Hemisphere"=as.factor(rep(c("L","R"),each=n/2)),
+                "Degree" = c(lDegree,rDegree)
+)
+
+```
+
+### Compare left and right hemispheres in average
+
+The degree plots conditional on the L and R hemisphere also confirms that the left and right are similar:
+
+Degree plot by ROI index
+```{r,echo=FALSE}
+ggplot(data=df,
+       aes(x=ROI_Index, y=Degree, colour=Hemisphere)) +
+  geom_line()
+```
+
+Degree distribution
+```{r,echo=FALSE}
+ggplot(df, aes(x=Degree, fill=Hemisphere)) + geom_density(alpha = 0.7, bw = 3)
+```
+
+
+#2. Age related degeneration
+
+
+### The degree distribution over age (weeks)
+
+```{r}
+
+weeks<- covariates$AGE_WEEKS
+
+degreeForAll<-c(sapply(AdjacencyList,function(x){
+  rowSums(as.matrix(x))
+}))
+
+
+df<- data.frame("ROI_Index_L_and_R"= rep(c(1:n),m),
+                "Age"= as.factor(rep(weeks,each=n)),
+                "Degree" = degreeForAll)
+
+
+ggplot(data=df,
+       aes(x=ROI_Index_L_and_R, y=Degree, colour=Age)) +
+  geom_line()
+
+ggplot(df, aes(x=Degree, fill=Age)) + geom_density(alpha = 0.7, bw = 5)
+
+
+```
+
+
+
+```{r}
+
+
+sumAForAll<-c(sapply(AdjacencyList,function(x){
+  sum(as.matrix(x))
+}))
+
+sumNNZForAll<-c(sapply(AdjacencyList,function(x){
+  sum(as.matrix(x>0))
+}))
+
+
+degreeForAll<-(lapply(AdjacencyList,function(x){
+  rowSums(as.matrix(x))
+}))
+
+avgDegreeNZ<- sapply(degreeForAll, function(x){mean(x[x>0])})
+
+
+df<- data.frame("Age"= weeks,
+                "SumA" = sumAForAll,
+                "AvgDegree" = avgDegreeNZ,
+                "GenoType" = as.factor(covariates$GENOTYPE),
+                "Gender" = as.factor(covariates$GENDER)
+                )
+
+ggplot(data=df,
+       aes(x=Age, y=SumA,col=GenoType)) +
+  geom_line()+ggtitle("Number of Edges vs Age")
+
+ggplot(data=df,
+       aes(x=Age, y=SumA,col=Gender)) +
+  geom_line()+ggtitle("Number of Edges vs Age")
+
+
+
+
+ggplot(data=df,
+       aes(x=Age, y=avgDegreeNZ,col=GenoType)) +
+  geom_line()+ggtitle("Average Degree vs Age")
+
+
+
+ggplot(data=df,
+       aes(x=Age, y=avgDegreeNZ,col=Gender)) +
+  geom_line()+ggtitle("Average Degree vs Age")
+
+
+
+```
+
+### Divide age into 3 groups
+
+We use 63 and 78.0 as cutoffs to divide mice into three groups: *young*,*middle* and *old*.
+```{r}
+plot(weeks)
+abline(h=63,lty=2)
+abline(h=78,lty=2)
+
+quantile(weeks,c(0.25,0.75))
+```
+
+### Comparing Adjacency matrices
+
+Obviously, *old group seems significantly more degenerate than the young and middle*, while the difference beween young and middle is more subtle.
+
+```{r,echo=FALSE}
+
+youngAvgA <- computeAvgA(AdjacencyList[weeks<=63])
+middleageAvgA <- computeAvgA(AdjacencyList[weeks>63 & weeks<= 78  ])
+oldAvgA <- computeAvgA(AdjacencyList[weeks>78])
+
+zlim<- max(c(youngAvgA, middleageAvgA, oldAvgA))
+
+youngAvgWholeBrain<- plotHeatmap(youngAvgA,zlimMax = zlim)+ geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+
+  ggtitle("Young")
+
+middleageAvgWholeBrain<- plotHeatmap(middleageAvgA,zlimMax = zlim)+ geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+
+  ggtitle("Middle")
+
+oldAvgWholeBrain<- plotHeatmap(oldAvgA,zlimMax = zlim) + geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+
+  ggtitle("old") 
+
+```
+
+
+Young:
+```{r,echo=FALSE}
+sum(weeks<=63)
+youngAvgWholeBrain
+```
+
+Middle:
+```{r,echo=FALSE}
+sum(weeks>63 & weeks<= 78)
+
+middleageAvgWholeBrain
+
+```
+
+Old:
+```{r,echo=FALSE}
+sum(weeks> 78)
+oldAvgWholeBrain
+```
+
+The distance between Middle and Young:
+
+```{r}
+sqrt(sum((middleageAvgA-youngAvgA)^2))
+```
+
+
+The distance between Old and Middle:
+
+```{r}
+sqrt(sum((oldAvgA-middleageAvgA)^2))
+```
+
+
+###Dichotomizing the average plots shows a clearer difference
+
+The dichotomized view with connecting probability>0: it shows the old clearly has less connectivity than the middleage and young.
+
+```{r,echo=FALSE}
+
+zlim<- 1
+
+youngAvgWholeBrainDicho<- plotHeatmap((youngAvgA>0)*1,zlimMax = zlim)+ geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+
+  ggtitle("Young")
+
+middleageAvgWholeBrainDicho<- plotHeatmap( (middleageAvgA>0)*1,zlimMax = zlim)+ geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+
+  ggtitle("Middle")
+
+oldAvgWholeBrainDicho<- plotHeatmap((oldAvgA>0)*1,zlimMax = zlim) + geom_hline(yintercept = n/2 ) + geom_vline(xintercept =  n/2 )+
+  ggtitle("old") 
+
+youngAvgWholeBrainDicho
+middleageAvgWholeBrainDicho
+oldAvgWholeBrainDicho
+
+```
+
+The count of the vectices with probability > 0 in the average plot
+
+```{r,echo=FALSE}
+
+
+ageGroup<-  (weeks<=63)*1 + (weeks>63 & weeks<=78)*2+(weeks>78)*3
+ageGroup[ageGroup==1] = "Young"
+ageGroup[ageGroup==2] = "Middle"
+ageGroup[ageGroup==3] = "Old"
+
+df<- data.frame(
+  "Age"= c("Young","Middle","Old"),
+  "Count"=c(sum((youngAvgA>0)*1),sum((middleageAvgA>0)*1),sum((oldAvgA>0)*1))
+  )
+
+ggplot(data=df, aes(x=Age, y=Count, fill=Age)) +
+    geom_bar(stat="identity")
+    
+```
+
+###Degree distribution of the 3 age groups:
+
+Middle and young mice have higher level of connectivy  (degree) than the old.
+
+
+```{r,echo=FALSE}
+
+df<- data.frame("ROI_Index"= rep(c(1:(n)),3),
+                "Age"=as.factor(rep(c("Young","Middle","Old"),each=n)),
+                "Degree" = c(rowSums(youngAvgA),rowSums(middleageAvgA),rowSums(oldAvgA))
+)
+
+df<-df[df$Age!="Young",]
+
+ggplot(df, aes(x=Degree, fill=Age)) + geom_density(alpha = 0.7, bw = 6)
+
+```
+
+
+```{r, echo=FALSE}
+
+
+df<- data.frame("ROI_Index"= rep(c(1:(n)),3),
+                "Age"=as.factor(rep(c("Young","Middle","Old"),each=n)),
+                "Degree" = c(rowSums(youngAvgA>0),rowSums(middleageAvgA>0),rowSums(oldAvgA>0))
+)
+
+df<-df[df$Age!="Young",]
+
+ggplot(df, aes(x=Degree, fill=Age)) + geom_density(alpha = 0.7, bw = 20)
+
+```
+
+
+```{r}
+sum(youngAvgA>0)
+sum(middleageAvgA>0)
+sum(oldAvgA>0)
+
+mean(youngAvgA[youngAvgA>0])
+mean(middleageAvgA[middleageAvgA>0])
+mean(oldAvgA[oldAvgA>0])
+
+```
+
+#Use of dimension reduction as an more wieldly alternative to adjaceny matrices:
+
+We applied joint embedding on the 25 subjects and extract the diagonal distinct vectors
+
+### Pairs plot of the first 5 dimensions:
+```{r,echo=FALSE}
+
+require('GGally')
+
+
+df<- data.frame("Latent Dimension Idx"= rep(c(1:30),m),
+                "Age"=as.factor(rep(ageGroup,each=30)),
+                "Latent Coordinate" = c(t(diagC))
+)
+
+
+
+K<- 5
+
+seleDf<- diagC[,1:K]
+
+
+# seleDf<- cbind((seleDf))
+
+colnames(seleDf)<- c(  sapply(c(1:K),function(x){paste("x",x,sep = ".")}))
+
+newDf<- as.data.frame(seleDf)
+newDf<- cbind(newDf, ageGroup)
+ggpairs(newDf,aes(col=ageGroup,alpha=0.4, binwidth=1))
+
+
+```
+
+
+###Average scree plots of the 3 groups:
+From the low dimension representation, *old group looks distinct from the middle and young groups*. This is consistent with the finding in the adjacency plots. This suggests that one can use the low dimensional representation as a surrogate for the large adjacency matrix.
+
+```{r,echo=FALSE}
+
+C1<- diagC[ageGroup=="Young",]
+C2<- diagC[ageGroup=="Middle",]
+C3<- diagC[ageGroup=="Old",]
+
+df<- data.frame("Latent.Dim"= rep(c(1:(30)),3),
+                "AgeGroup"=as.factor(rep(c("Young","Middle","Old"),each=30)),
+                "Latent.Coor" = c(colMeans(C1),colMeans(C2),colMeans(C3))
+)
+
+ggplot(data=df,
+       aes(x=Latent.Dim, y=Latent.Coor, colour=AgeGroup)) +
+  geom_line()
+
+```
+
+
+
+
+###Genotypes
+###Degree distribution of the 3 genotype groups:
+
+Genotype 0 has less connectivity than group 1 and 2:
+
+```{r,echo=FALSE}
+
+avgAgene0 <- computeAvgA(AdjacencyList[covariates$GENOTYPE==0])
+avgAgene1 <- computeAvgA(AdjacencyList[covariates$GENOTYPE==1])
+avgAgene2 <- computeAvgA(AdjacencyList[covariates$GENOTYPE==2])
+
+
+df<- data.frame("ROI_Index_L_R"= rep(c(1:(n)),3),
+                "Genotype"=as.factor(rep(c("0","1","2"),each=n)),
+                "Degree" = c(rowSums(avgAgene0),rowSums(avgAgene1),rowSums(avgAgene2))
+)
+
+maxZ<- max(c(avgAgene0,avgAgene1,avgAgene2))
+
+plotHeatmap(avgAgene0, maxZ)+
+  ggtitle("Genotype 0")
+plotHeatmap(avgAgene1, maxZ)+
+  ggtitle("Genotype 1")
+plotHeatmap(avgAgene2, maxZ)+
+  ggtitle("Genotype 2")
+
+
+sum(avgAgene0>0)
+sum(avgAgene1>0)
+sum(avgAgene2>0)
+
+mean(avgAgene0[avgAgene0>0])
+mean(avgAgene1[avgAgene1>0])
+mean(avgAgene2[avgAgene2>0])
+
+
+ggplot(df, aes(x=Degree, fill=Genotype)) + geom_density(alpha = 0.7, bw = 1)
+
+```
+
+
+
+###Sex
+###Degree distribution of the 2 Sex:
+
+
+
+```{r,echo=FALSE}
+
+avgAgender1 <- computeAvgA(AdjacencyList[covariates$GENDER==1])
+avgAgender2 <- computeAvgA(AdjacencyList[covariates$GENDER==2])
+
+
+df<- data.frame("ROI_Index_L_R"= rep(c(1:n),2),
+                "Gender"=as.factor(rep(c("1","2"),each=n)),
+                "Degree" = c(rowSums(avgAgender1),rowSums(avgAgender2))
+)
+
+maxZ<- max(c(avgAgender1,avgAgender2))
+
+plotHeatmap(avgAgender1, maxZ)+
+  ggtitle("Gender 1")
+plotHeatmap(avgAgender2, maxZ)+
+  ggtitle("Gender 2")
+
+
+ggplot(df, aes(x=Degree, fill=Gender)) + geom_density(alpha = 0.7, bw = 2)
+
+```
+
+

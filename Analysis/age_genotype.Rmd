@@ -317,6 +317,9 @@ for(i in unique(df$Age)){
 p <- ggplot(df, aes(x=Weeks,y=AvgDegree, color = Age, group = Age))
 p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("red","green","blue"))
 
+p  + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("red","green","blue"))
+
+
 ```
 
 
@@ -545,7 +548,6 @@ df<- data.frame(
   "AvgDegree"=c(youngAvgAList,middleageAvgAList,oldAvgAList)
   )
 
-df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
 
 for(i in unique(df$Age)){
   pick<- df$Age==i
@@ -553,8 +555,15 @@ for(i in unique(df$Age)){
   df$x[pick]<- (df$x[pick]-r[1])/(r[2]-r[1])*2-1
 }
 
+df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
+
 p <- ggplot(df, aes(x=Weeks,y=AvgDegree, color = Age, group = Age))
-p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("green","blue","red" ))
+
+# p + geom_violin(trim = T) + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("red","green","blue" ))
+
+p +  geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values =  c("red","green","blue" ))
+
+
 ```
 
 
@@ -615,8 +624,6 @@ df<- data.frame(
   "AvgDegree"=c(youngAvgAList,middleageAvgAList,oldAvgAList)
   )
 
-df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
-
 
 
 for(i in unique(df$Age)){
@@ -624,10 +631,12 @@ for(i in unique(df$Age)){
   r<- range(df$x[pick])
   df$x[pick]<- (df$x[pick]-r[1])/(r[2]-r[1])*2-1
 }
+df$Age<- ordered(df$Age, levels = c("Young","Middle","Old"))
+
 
 p <- ggplot(df, aes(x=Weeks,y=AvgDegree, color = Age, group = Age))
 
-p + geom_violin() + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("green","blue","red" ))
+p + geom_jitter() + facet_grid(~ Age)+  geom_boxplot(alpha =0.35, outlier.color = 'NA')+ scale_colour_manual(values = c("red","green","blue" ))
 ```
 
 

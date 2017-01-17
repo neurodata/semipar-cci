@@ -1,6 +1,10 @@
+---
+output: pdf_document
+---
 ###1. Current model (joint embedding)
 
 For group $j$ and subject $i$:
+
 
 $$A_{ji} \sim Bern(logit( F C_{ji} F^T))$$
 $$C_{ji} \sim N( C_j, I\sigma_1^2)$$

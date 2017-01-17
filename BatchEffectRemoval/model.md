@@ -33,6 +33,6 @@ $$logit( F C_{ji} F^T)$$
 
 Good properties about this model:
 
-1. Remove vertex-wise batch effect with F, instead of on loading L.
-2. Shrinakge of the error estimates on F_j, preventing overfitting with batch-wise model.
+1. Remove vertex-wise batch effect with $F$, instead of on loading $C$.
+2. Shrinakge of the error estimates on $F_j$, preventing overfitting with batch-wise model.
 3. Closed-form solution for optimization: Polya-Gamma EM algorithm on logit, closed-form Normal on $F_j$.

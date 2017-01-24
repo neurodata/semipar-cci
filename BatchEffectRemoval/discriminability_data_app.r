@@ -24,10 +24,78 @@ label_list[[1]]<- unlist(lapply( BNU1, function(x){x$SEX}))
 label_list[[2]]<- unlist(lapply( KKI2009, function(x){x$SEX}))
 label_list[[3]]<- unlist(lapply( MRN114, function(x){x$SEX}))
 
+
+
+# avg
+avgA<- lapply(A_list,function(x){
+  A<- matrix(unlist(x),70*70)
+  matrix(rowMeans(A),70)
+  })
+
+image(avgA[[3]])
+
+pdf("avgA1.pdf",6,6)
+image(avgA[[1]])
+dev.off()
+
+pdf("avgA2.pdf",6,6)
+image(avgA[[2]])
+dev.off()
+
+pdf("avgA3.pdf",6,6)
+image(avgA[[3]])
+dev.off()
+
+# sex=1 avg
+avgAsex1<- lapply(c(1:3),function(x){
+  A<- matrix(unlist(A_list[[x]]),70*70)
+  A<- A[,label_list[[x]]==1]
+  matrix(rowMeans(A),70)
+})
+
+pdf("avgA1sex1.pdf",6,6)
+image(avgAsex1[[1]])
+dev.off()
+
+pdf("avgA2sex1.pdf",6,6)
+image(avgAsex1[[2]])
+dev.off()
+
+pdf("avgA3sex1.pdf",6,6)
+image(avgAsex1[[3]])
+dev.off()
+
+# sex=2 avg
+avgAsex2<- lapply(c(1:3),function(x){
+  A<- matrix(unlist(A_list[[x]]),70*70)
+  A<- A[,label_list[[x]]==2]
+  matrix(rowMeans(A),70)
+})
+
+pdf("avgA1sex2.pdf",6,6)
+image(avgAsex2[[1]])
+dev.off()
+
+pdf("avgA2sex2.pdf",6,6)
+image(avgAsex2[[2]])
+dev.off()
+
+pdf("avgA3sex2.pdf",6,6)
+image(avgAsex2[[3]])
+dev.off()
+
+
+lapply(label_list, length)
+
 source("batchremoval.r")
 
 r=10
 testRun<- runBatchRemoval(A_list, r=r, 200)
+load("resultDataA.RDa")
+
+
+
+
 
 F_list =  testRun$MAP$F_list
 C_list =  testRun$MAP$C_list
@@ -120,15 +188,15 @@ pdf("batch_removal_data.pdf",10,6)
 ggplot(data=df, aes(x=index,y=value))+geom_line(aes(group=subject,col=label))+ facet_grid(~ batch)
 dev.off()
 
-save(testRun,file="resultDataA.RDa")
-
+# save(testRun,file="resultDataA.RDa")
 
 A_list_flat<- c(A_list[[1]],A_list[[2]],A_list[[3]])
 A_list_new<- list()
 A_list_new[[1]]<- A_list_flat
 testRun2<- runBatchRemoval(A_list_new, r=r, 200)
 
-save(testRun2,file="resultDataANoBE.RDa")
+# save(testRun2,file="resultDataANoBE.RDa")
+load("resultDataANoBE.RDa")
 
 
 
@@ -164,3 +232,48 @@ lines(roc1,col="red")
 
 auc(roc2)
 auc(roc1)
+
+
+##dicriminability
+
+
+label<- unlist(label_list)
+
+C_combined1<- t(matrix(unlist(testRun$C_list),r))
+C_combined2<- t(matrix(unlist(testRun2$C_list),r))
+
+require("class")
+
+KNNtest<-function(k, C_combined){
+  n<- length(label)
+  cl<- sapply(1:length(label), function(i){
+    true_cl = label[i]
+    true_cl==knn(C_combined[-i,],test = C_combined[i,],cl=label[-i],k = k)
+  })
+  1-sum(cl)/n
+}
+
+K<- 40
+
+
+
+
+knn1<- sapply(c(1:K),function(k)KNNtest(k, C_combined1))
+knn2<- sapply(c(1:K),function(k)KNNtest(k, C_combined2))
+
+##for method with fixed effects, remove group mean
+C_combined3<- t(C_combined2)
+C_combined3[,batchID==1]<-C_combined3[,batchID==1] - rowMeans(C_combined3[,batchID==1])
+C_combined3[,batchID==2]<-C_combined3[,batchID==2] - rowMeans(C_combined3[,batchID==2])
+C_combined3[,batchID==3]<-C_combined3[,batchID==3] - rowMeans(C_combined3[,batchID==3])
+C_combined3<- t(C_combined3)
+
+knn3<- sapply(c(1:K),function(k)KNNtest(k, C_combined3))
+
+
+df<-data.frame("k"=c(1:K),"misclassification" = c(knn1,knn2,knn3),"method"=rep(c("random factor model","shared factor model","shared factor model (removing group mean)"),each=K))
+
+
+pdf("misclassification_data_knn.pdf",8,5)
+ggplot(data=df, aes(x=k,y=misclassification))+geom_line(aes(group=method,col=method))
+dev.off()

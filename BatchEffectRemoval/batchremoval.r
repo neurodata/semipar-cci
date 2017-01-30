@@ -1,6 +1,6 @@
-require("BayesLogit")
+# require("BayesLogit")
 
-runBatchRemoval<- function(A_list, r, tot_iter){
+runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
   
   trace_sigma2<- numeric()
   
@@ -8,17 +8,20 @@ runBatchRemoval<- function(A_list, r, tot_iter){
   
   # func_logit<-  function(x){1/(1+exp(-x))}
   func_loglogit<-  function(x){
-     l = -log(1+exp(-x))
-     l[l< -1E6]<- -1E6
-     l[l> 1E6]<- 1E6
-     l
-    }
+    l = -log(1+exp(-x))
+    l[l< -1E6]<- -1E6
+    l[l> 1E6]<- 1E6
+    l
+  }
   
   samplePsi= function(X, w, K, Binv, b){
     r<- ncol(X)
     V<- solve(t(X)%*% (X*w) + Binv)
     m<- V%*% ( t(X)%*%K+ Binv%*%b)
-    t(chol(V))%*% rnorm(r)+m
+    if(EM)
+      m
+    else
+      t(chol(V))%*% rnorm(r)+m
   }
   
   
@@ -39,7 +42,7 @@ runBatchRemoval<- function(A_list, r, tot_iter){
         A_local = A_list[[j]][[x]]
         psi<- psi_list[[j]][[x]]
         
-
+        
         loss = loss + sum(A_local * func_loglogit(psi) + (1-A_local)* func_loglogit(-psi))
         
       }
@@ -92,7 +95,7 @@ runBatchRemoval<- function(A_list, r, tot_iter){
   
   for(iter in 1:tot_iter){
     
-   
+    
     
     #update w_list
     w_list<- lapply(c(1:m_j),function(j){
@@ -100,8 +103,10 @@ runBatchRemoval<- function(A_list, r, tot_iter){
         
         psi<- psi_list[[j]][[x]]
         b = psi[upper.tri(psi)]
-        w<- rpg(n*(n-1)/2,1,b)
-        # w<- 1/2/b * tanh(b/2)
+        if(EM)
+          w<- 1/2/b * tanh(b/2)
+        else
+          w<- rpg(n*(n-1)/2,1,b)
         
         W<- matrix(0,n,n)
         W[upper.tri(W)]<- w
@@ -142,6 +147,8 @@ runBatchRemoval<- function(A_list, r, tot_iter){
     for(j in 1:m_j){
       n_j<- ncol(C_list[[j]])
       
+      F_local = F_list[[j]]
+      
       for(i in 1:n_j){
         
         y<- numeric()
@@ -149,7 +156,12 @@ runBatchRemoval<- function(A_list, r, tot_iter){
         X<- numeric()
         
         for(k in 1: (n-1)){
-          X_i <- F[-(1:k),] %*%diag( F[k,]) 
+          # use shared factor to give some acceleration in the beginning
+          if(iter < (tot_iter/4) )
+            X_i <- F[-(1:k),] %*%diag( F[k,]) 
+          else
+            X_i <- F_local[-(1:k),] %*%diag( F_local[k,])
+          
           y_i <- A_list[[j]][[i]][k,-(1:k)]
           w_i<- w_list[[j]][[i]][k,-(1:k)]
           y<- c(y,y_i)
@@ -170,13 +182,16 @@ runBatchRemoval<- function(A_list, r, tot_iter){
     F_sum<- F_list[[1]]
     for(j in 2:length(F_list)){
       if(m_j>1)
-      F_sum = F_sum + F_list[[j]]
+        F_sum = F_sum + F_list[[j]]
     }
     
     var = 1/(m_j /sigma2 + 1/nu2)
     m =  var* (F_sum/sigma2)
     
-    F<- m + rnorm( n*r, sd=sqrt(var))
+    if(EM)
+      F<- m
+    else
+      F<- m + rnorm( n*r, sd=sqrt(var))
     
     #Compute psi = FCF
     
@@ -194,12 +209,14 @@ runBatchRemoval<- function(A_list, r, tot_iter){
     F_diff2_sum<- (F_list[[1]]-F)^2
     for(j in 2:length(F_list)){
       if(m_j>1)
-      F_diff2_sum =   F_diff2_sum + (F_list[[j]]-F)^2
+        F_diff2_sum =   F_diff2_sum + (F_list[[j]]-F)^2
     }
     
     
-    
-    sigma2 = 1/rgamma(1, n*r*m_j/2 , sum(F_diff2_sum)/2)
+    if(EM)
+      sigma2 =  (sum(F_diff2_sum)/2+ 0.01 )/((n*r*m_j)/2+0.01)
+    else
+      sigma2 = 1/rgamma(1, n*r*m_j/2 , sum(F_diff2_sum)/2)
     
     trace_sigma2<- c(trace_sigma2, sigma2)
     
@@ -208,9 +225,9 @@ runBatchRemoval<- function(A_list, r, tot_iter){
     #code to capture and store MAP
     
     est = list("F_list"=F_list,
-         "C_list"=C_list,
-         "F"=F,
-         "sigma2"= sigma2)
+               "C_list"=C_list,
+               "F"=F,
+               "sigma2"= sigma2)
     
     cur_loss = computeLoss(F, F_list,C_list,psi_list,sigma2,nu2)
     
@@ -221,11 +238,11 @@ runBatchRemoval<- function(A_list, r, tot_iter){
       }
     }
     
-    if(is.na(cur_loss)){
-      break
-    }
+    # if(is.na(cur_loss)){
+      # break
+    # }
     
-    print(c(cur_loss,best_loss))
+    print(c(cur_loss,best_loss, sigma2))
   }
   
   return(list("F_list"=F_list,
@@ -234,6 +251,6 @@ runBatchRemoval<- function(A_list, r, tot_iter){
               "sigma2"= sigma2,
               "trace_sigma2"= trace_sigma2,
               "MAP" = MAP_est
-              ))
+  ))
   
 }

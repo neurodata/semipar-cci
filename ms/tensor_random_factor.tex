@@ -1,5 +1,4 @@
 \documentclass[12pt]{article}
-\pdfoutput=1 
 
 \addtolength{\oddsidemargin}{-.875in}
 \addtolength{\evensidemargin}{-.875in}
@@ -66,15 +65,15 @@
 \baselineskip=28pt
 
 \title
-    {Batch Effect Removal}
+    {Random-Factor Tensor Factorization \\for Removing Batch Effects in Graphs}
 
 
 
-\author{
-     Leo L. Duan and
-     Joshua T. Vogelstein
-    % \textsuperscript{*}\footnotemark[2]\and
-}
+%\author{
+%     Leo L. Duan and
+%     Joshua T. Vogelstein
+%    % \textsuperscript{*}\footnotemark[2]\and
+%}
 
 
 \date{}
@@ -84,10 +83,11 @@
 \maketitle
 
 \begin{abstract}
-%{\noindent  KEY WORDS:  Complete Membership, High Dimensional Clustering, Repulsive Regularization.}
+Batch effects are unwanted random variations caused by different data sources and experimental conditions. Generalized linear random effects model is effective to mitigate these confounders in traditional low dimensional data; however, there is a lack of such tool for high dimensional and multiway array data. While tensor factorization is routinely used for dimension reduction, due to the sharing of factors among all batches, the batch effects quickly populate the low dimensional core and confound the signal. In this research, we propose a different strategy by letting factor matrices vary over batches, while leaving the remaining variation in the core. This allows capturing sophisticated batch effects, while retaining the low rank structure for describing signal. To allow estimation with flexible factors, we utilize a hierarchical random effects model to borrow information among the batches. An efficient closed-form expectation conditional maxmization strategy is developed for rapid estimation. We focus the application on the joint diagonalization of brain connectivity data obtained from different sources. Our model show substantial gains in the simulations and application over the alternatives.\\
+{\noindent  KEY WORDS:  High Dimensional Random Effects, Joint Diagonalization, Connectome}
 \end{abstract}
 
-\section{Motivation}
+\section{Introduction}
 
 There are two sources of variability: treatment effect and batch (group) effect. The batch effect can confound the treatment effect.
 
@@ -108,38 +108,74 @@ with $k=1\ldots l$ and $l=2\ldots n$.
 
 Each group has $n\times d$ parameters. This leads to much great flexibility to capture the batch effect, while allowing $d$ to be low.
 
+\section{Estimation}
+
+
+
+
 \section{Simulation}
 
-For $m_j = 50$ for $g=3$ groups, and $d=5$, we generate symmetric adjecency matrices of size $50\times 50$ as follows:
+For $m$ subjects in each of $g=2$ groups, and $d=5$, we generate symmetric adjecency matrices of size $n\times n$ as follows:
 
 
 \be
 f_{0,kr} & \stackrel{iid}{\sim} \text{N}(0, 1)\\
-f_{j,kr} & \stackrel{indep}{\sim} \text{N}(f_{0,kr}, 0.5^2)\\
-c_{ji,r} & \sim \left\{ \begin{array}{cc} &  \text{N}( 0.1 r, 0.1^2) \text{ for  } i =  1,\ldots,25  \\
-&  \text{N}( 1/r^3, 0.1^2) \text{ for  } i = 26,\ldots,50  \end{array}\right.
+f_{j,kr} & \stackrel{indep}{\sim} \text{N}(f_{0,kr}, \sigma^2)\\
+ c_{ji,r} & \sim \text{N}( 0.1 r, 0.1^2)
+% c_{ji,r} & \sim \left\{ \begin{array}{cc} &  \text{N}( 0.1 r, 0.1^2) \text{ for  } i =  1,\ldots,25  \\
+% &  \text{N}( 1/r^3, 0.1^2) \text{ for  } i = 26,\ldots,50  \end{array}\right.
 \ee
-where we let the $c_{ji,r}$ to be random realization with two distinct treatment effects in each group, $25$ with treatment 1 and $25$ with treatment 2.
+% where we let the $c_{ji,r}$ to be random realization with two distinct treatment effects in each group, $m/2$ with treatment 1 and $m/2$ with treatment 2.
 
 
-Using the reduced model with $f_{j,kr} = f_{0,kr}$ for all $j=1\ldots g$, the batch effects are passed to the estimates of the core $c_{ji,r}$.
+% Using the reduced model with $f_{j,kr} = f_{0,kr}$ for all $j=1\ldots g$, the batch effects are passed to the estimates of the core $c_{ji,r}$.
+% \bfi
+% \centering
+% \bsfi{0.8\columnwidth}
+% \includegraphics[width=1\columnwidth]{../BatchEffectRemoval/BE_not_removed}
+% \esfi
+% \caption{Core estimate with shared factor model.}
+% \efi
+
+% Using the random factor model, the batch effects are captured by the parameters in the random effect factors $f_{j,kr}$, yielding core estimates $c_{ji,r}$ without batch effect while preserving treatment difference.
+
+
+% \bfi
+% \centering
+% \bsfi{0.8\columnwidth}
+% \includegraphics[width=1\columnwidth]{../BatchEffectRemoval/batch_removal}
+% \esfi
+% \caption{Core estimate with random factor model.}
+% \efi
+
+We compute the $L1$ Wasserstein distance $\inf \mathbb{E}[|X-Y|]$ between the core distribution in group 1 and 2.
+
+
+
 \bfi
 \centering
 \bsfi{0.8\columnwidth}
-\includegraphics[width=1\columnwidth]{../BatchEffectRemoval/BE_not_removed}
+\includegraphics[width=1\columnwidth]{../BatchEffectRemoval/dist_sigma}
 \esfi
-\caption{Core estimate with shared factor model.}
+\caption{Distance between the distribution of $c_{1}$ and $c_{2}$.}
 \efi
-
-Using the random factor model, the batch effects are captured by the parameters in the random effect factors $f_{j,kr}$, yielding core estimates $c_{ji,r}$ without batch effect while preserving treatment difference.
 
 \bfi
 \centering
 \bsfi{0.8\columnwidth}
-\includegraphics[width=1\columnwidth]{../BatchEffectRemoval/batch_removal}
+\includegraphics[width=1\columnwidth]{../BatchEffectRemoval/dist_M}
 \esfi
-\caption{Core estimate with random factor model.}
+\caption{Distance between the distribution of $c_{1}$ and $c_{2}$.}
 \efi
+
+\bfi
+\centering
+\bsfi{0.8\columnwidth}
+\includegraphics[width=1\columnwidth]{../BatchEffectRemoval/dist_N}
+\esfi
+\caption{Distance between the distribution of $c_{1}$ and $c_{2}$.}
+\efi
+
 
 
 \section{Data Application}

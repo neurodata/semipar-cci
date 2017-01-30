@@ -70,7 +70,7 @@ rm(F_list)
 
 source("batchremoval.r")
 
-testRun<- runBatchRemoval(A_list, r=5, 200)
+testRun<- runBatchRemoval(A_list, r=5, 100, EM=T)
 
 F_list =  testRun$MAP$F_list
 C_list =  testRun$MAP$C_list
@@ -78,7 +78,7 @@ F = testRun$MAP$F
 sigma2 = testRun$MAP$sigma2
 trace_sigma2 = testRun$trace_sigma2
 
-# ts.plot(trace_sigma2)
+ts.plot(trace_sigma2)
 
 sqrt(sigma2)/sd(F)
 
@@ -126,6 +126,7 @@ plot(c(p_list_wo_batch[[1]][[2]]),c(p_est_list[[1]][[2]]) - c(p_list_wo_batch[[1
 
 
 image(A_list[[1]][[2]],zlim = c(0,1))
+image(p_list[[1]][[2]],zlim = c(0,1))
 image(p_est_list[[1]][[2]],zlim = c(0,1))
 image(p_list_wo_batch[[1]][[2]],zlim = c(0,1))
 

@@ -85,12 +85,11 @@ image(avgAsex2[[3]])
 dev.off()
 
 
-lapply(label_list, length)
 
 source("batchremoval.r")
 
-r=10
-testRun<- runBatchRemoval(A_list, r=r, 200)
+r=5
+testRun<- runBatchRemoval(A_list, r=r, 200,EM = T)
 load("resultDataA.RDa")
 
 
@@ -253,6 +252,18 @@ KNNtest<-function(k, C_combined){
   1-sum(cl)/n
 }
 
+KNNtestSubset<-function(k, C_combined, subset){
+  label_subset<- label[subset]
+  n<- length(label_subset)
+  C_combined_subset <- C_combined[subset,]
+  cl<- sapply(1:length(label_subset), function(i){
+    true_cl = label[i]
+    true_cl==knn(C_combined_subset[-i,],test = C_combined_subset[i,],cl=label_subset[-i],k = k)
+  })
+  1-sum(cl)/n
+}
+
+
 K<- 40
 
 
@@ -276,4 +287,28 @@ df<-data.frame("k"=c(1:K),"misclassification" = c(knn1,knn2,knn3),"method"=rep(c
 
 pdf("misclassification_data_knn.pdf",8,5)
 ggplot(data=df, aes(x=k,y=misclassification))+geom_line(aes(group=method,col=method))
+dev.off()
+
+
+##knn in each group
+K<- 40
+knn11<- sapply(c(1:K),function(k)KNNtestSubset(k, C_combined1, subset = batchID==1))
+knn21<- sapply(c(1:K),function(k)KNNtestSubset(k, C_combined2, subset = batchID==1))
+knn31<- sapply(c(1:K),function(k)KNNtestSubset(k, C_combined3, subset = batchID==1))
+
+knn12<- sapply(c(1:K),function(k)KNNtestSubset(k, C_combined1, subset = batchID==2))
+knn22<- sapply(c(1:K),function(k)KNNtestSubset(k, C_combined2, subset = batchID==2))
+knn32<- sapply(c(1:K),function(k)KNNtestSubset(k, C_combined3, subset = batchID==2))
+
+knn13<- sapply(c(1:K),function(k)KNNtestSubset(k, C_combined1, subset = batchID==3))
+knn23<- sapply(c(1:K),function(k)KNNtestSubset(k, C_combined2, subset = batchID==3))
+knn33<- sapply(c(1:K),function(k)KNNtestSubset(k, C_combined3, subset = batchID==3))
+
+
+
+df1<-data.frame("k"=c(1:K),"misclassification" = c(knn11,knn21,knn31,knn12,knn22,knn32,knn13,knn23,knn33),"method"=rep(c("random factor model","shared factor model","shared factor model (removing group mean)"),each=K), "batch"=rep(c("BNU1","KKI2009","MRN114"),each= K*3))
+
+
+pdf("misclassification_data_knn_each_batch.pdf",8,5)
+ggplot(data=df1, aes(x=k,y=misclassification))+geom_line(aes(group=method,col=method))+ facet_grid(~ batch)
 dev.off()

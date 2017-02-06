@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.14159265-2.6-0.99996 (TeX Live 2016) (preloaded format=xelatex 2016.5.22)  26 JAN 2017 15:01
+This is XeTeX, Version 3.14159265-2.6-0.99996 (TeX Live 2016) (preloaded format=xelatex 2016.5.22)  30 JAN 2017 14:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -277,10 +277,12 @@ LaTeX Warning: No \author given.
 [1
 
 ]
-File: ../BatchEffectRemoval/BE_not_removed.pdf Graphic file (type QTm)
- <use  "../BatchEffectRemoval/BE_not_removed.pdf" > [2]
-File: ../BatchEffectRemoval/batch_removal.pdf Graphic file (type QTm)
- <use  "../BatchEffectRemoval/batch_removal.pdf" > [3]
+File: ../BatchEffectRemoval/dist_sigma.pdf Graphic file (type QTm)
+ <use  "../BatchEffectRemoval/dist_sigma.pdf" > [2]
+File: ../BatchEffectRemoval/dist_M.pdf Graphic file (type QTm)
+ <use  "../BatchEffectRemoval/dist_M.pdf" >
+File: ../BatchEffectRemoval/dist_N.pdf Graphic file (type QTm)
+ <use  "../BatchEffectRemoval/dist_N.pdf" > [3]
 File: ../BatchEffectRemoval/avgA1.pdf Graphic file (type QTm)
  <use  "../BatchEffectRemoval/avgA1.pdf" >
 File: ../BatchEffectRemoval/avgA2.pdf Graphic file (type QTm)
@@ -314,12 +316,12 @@ Package natbib Warning: Empty `thebibliography' environment on input line 8.
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 4525 strings out of 493591
- 66313 string characters out of 6143546
+ 4527 strings out of 493591
+ 66333 string characters out of 6143546
  136624 words of memory out of 5000000
- 7876 multiletter control sequences out of 15000+600000
+ 7877 multiletter control sequences out of 15000+600000
  12397 words of font info for 48 fonts, out of 8000000 for 9000
  1347 hyphenation exceptions out of 8191
- 42i,12n,40p,1244b,1701s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 42i,8n,40p,1244b,1701s stack positions out of 5000i,500n,10000p,200000b,80000s
 
 Output written on /Volumes/shared_data/work/git/semipar-cci/ms/.texpadtmp/tensor_random_factor.pdf (7 pages).

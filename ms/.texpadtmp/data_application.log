@@ -1,9 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  30 JAN 2017 08:21
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (TeX Live 2016) (preloaded format=pdflatex 2016.5.22)  6 FEB 2017 09:46
 entering extended mode
  restricted \write18 enabled.
+ file:line:error style messages enabled.
  %&-line parsing enabled.
-**tensor_random_factor.tex
-(./tensor_random_factor.tex
+**data_application.tex
+(./data_application.tex
 LaTeX2e <2016/03/31>
 Babel <3.9r> and hyphenation patterns for 83 language(s) loaded.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/base/article.cls
@@ -22,58 +23,45 @@ File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/color.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/color.sty
 Package: color 2016/05/09 v1.1c Standard LaTeX Color (DPC)
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/color.cfg
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: pdftex.def on input line 144.
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/pdftex-def/pdftex.def
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/pdftex-def/pdftex.def
 File: pdftex.def 2011/05/27 v0.06d Graphics/color for pdfTeX
-
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/infwarerr.sty
 Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
 Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 )
 \Gread@gobject=\count87
-))
-(/usr/local/texlive/2016/texmf-dist/tex/latex/natbib/natbib.sty
+)) (/usr/local/texlive/2016/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
 \bibhang=\skip43
 \bibsep=\skip44
 LaTeX Info: Redefining \cite on input line 694.
 \c@NAT@ctr=\count88
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/rotating/rotating.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/rotating/rotating.sty
 Package: rotating 2009/03/28 v2.16a rotated objects in LaTeX
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphicx.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/keyval.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphics.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/graphics.sty
 Package: graphics 2016/05/09 v1.0r Standard LaTeX Graphics (DPC,SPQR)
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/trig.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/01/02 v1.10 sample graphics configuration
 )
 Package graphics Info: Driver file: pdftex.def on input line 96.
 )
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/ifthen.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 )
 \c@r@tfl@t=\count89
@@ -81,14 +69,11 @@ Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 \rotFPbot=\skip46
 \rot@float@box=\box26
 \rot@mess@toks=\toks15
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/caption/subcaption.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/caption/subcaption.sty
 Package: subcaption 2016/02/20 v1.1-142 Sub-captions (AR)
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/caption/caption.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/caption/caption.sty
 Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/caption/caption3.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/caption/caption3.sty
 Package: caption3 2016/02/04 v1.7-139 caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 67.
 \captionmargin=\dimen105
@@ -104,16 +89,14 @@ Package caption Info: rotating package is loaded.
 )
 \c@subfigure=\count91
 \c@subtable=\count92
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/float/float.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count93
 \float@exts=\toks16
 \float@box=\box27
 \@float@everytoks=\toks17
 \@floatcapt=\box28
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amscls/amsthm.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2015/03/04 v2.20.2
 \thm@style=\toks18
 \thm@bodyfont=\toks19
@@ -124,25 +107,21 @@ Package: amsthm 2015/03/04 v2.20.2
 \thm@postskip=\skip48
 \thm@headsep=\skip49
 \dth@everypar=\toks23
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsmath.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsmath.sty
 Package: amsmath 2016/03/10 v2.15b AMS math features
 \@mathmargin=\skip50
 
 For additional information on amsmath, use the `?' option.
 (/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsgen.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks24
 \ex@=\dimen112
-))
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsbsy.sty
+)) (/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen113
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsopn.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
 \inf@bad=\count94
@@ -182,30 +161,25 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 635.
 \mathdisplay@stack=\toks28
 LaTeX Info: Redefining \[ on input line 2739.
 LaTeX Info: Redefining \] on input line 2740.
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/amssymb.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
-))
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/inputenc.sty
+)) (/usr/local/texlive/2016/texmf-dist/tex/latex/base/inputenc.sty
 Package: inputenc 2015/03/17 v1.2c Input encoding file
 \inpenc@prehook=\toks29
 \inpenc@posthook=\toks30
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/utf8.def
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/base/utf8.def
 File: utf8.def 2016/02/28 v1.1s UTF-8 support for inputenc
 Now handling font encoding OML ...
 ... no UTF-8 mapping file for font encoding OML
 Now handling font encoding T1 ...
 ... processing UTF-8 mapping file for font encoding T1
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/t1enc.dfu
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/base/t1enc.dfu
 File: t1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
    defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
@@ -441,8 +415,7 @@ File: t1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
 )
 Now handling font encoding OT1 ...
 ... processing UTF-8 mapping file for font encoding OT1
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/ot1enc.dfu
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/base/ot1enc.dfu
 File: ot1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
    defining Unicode char U+00A0 (decimal 160)
    defining Unicode char U+00A1 (decimal 161)
@@ -482,8 +455,7 @@ File: ot1enc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
 )
 Now handling font encoding OMS ...
 ... processing UTF-8 mapping file for font encoding OMS
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/base/omsenc.dfu
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/base/omsenc.dfu
 File: omsenc.dfu 2016/02/28 v1.1s UTF-8 support for inputenc
    defining Unicode char U+00A7 (decimal 167)
    defining Unicode char U+00B6 (decimal 182)
@@ -506,16 +478,13 @@ Now handling font encoding U ...
    defining Unicode char U+2026 (decimal 8230)
    defining Unicode char U+2122 (decimal 8482)
    defining Unicode char U+2423 (decimal 9251)
-))
-(/usr/local/texlive/2016/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
+)) (/usr/local/texlive/2016/texmf-dist/tex/latex/algorithm2e/algorithm2e.sty
 Package: algorithm2e 2013/01/06 v5.00 algorithms environments
 \c@AlgoLine=\count106
 \algocf@hangindent=\skip53
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/tools/xspace.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/tools/xspace.sty
 Package: xspace 2014/10/28 v1.13 Space after command names (DPC,MH)
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/relsize/relsize.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/relsize/relsize.sty
 Package: relsize 2013/03/29 ver 4.1
 )
 ********************************************************
@@ -573,24 +542,22 @@ Package: mhequ
 \MHC@ls=\count115
 \MHt@tc@ls=\count116
 \MHrem@inc@ls=\count117
-)
-(./tensor_random_factor.aux)
-\openout1 = `tensor_random_factor.aux'.
+) (/Volumes/shared_data/work/git/semipar-cci/ms/.texpadtmp/data_application.aux)
+\openout1 = `data_application.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 81.
-LaTeX Font Info:    ... okay on input line 81.
-
-(/usr/local/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 80.
+LaTeX Font Info:    ... okay on input line 80.
+ (/usr/local/texlive/2016/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count118
 \scratchdimen=\dimen127
@@ -604,37 +571,28 @@ LaTeX Font Info:    ... okay on input line 81.
 \makeMPintoPDFobject=\count123
 \everyMPtoPDFconversion=\toks32
 ) (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
-Package: pdftexcmds 2016/05/10 v0.21 Utility functions of pdfTeX for LuaTeX (HO
-)
-
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+Package: pdftexcmds 2016/05/10 v0.21 Utility functions of pdfTeX for LuaTeX (HO)
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ifluatex.sty
 Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
 Package ifluatex Info: LuaTeX not detected.
-)
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/ifpdf.sty
 Package: ifpdf 2016/05/14 v3.1 Provides the ifpdf switch
 )
 Package pdftexcmds Info: LuaTeX not detected.
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode found.
-)
-(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+) (/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/grfext.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/grfext.sty
 Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
-
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
 Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-))
-(/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+)) (/usr/local/texlive/2016/texmf-dist/tex/latex/oberdiek/kvoptions.sty
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
-
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
 Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
-
-(/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+ (/usr/local/texlive/2016/texmf-dist/tex/generic/oberdiek/etexcmds.sty
 Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
 Package etexcmds Info: Could not find \expanded.
 (etexcmds)             That can mean that you are not using pdfTeX 1.50 or
@@ -642,192 +600,78 @@ Package etexcmds Info: Could not find \expanded.
 (etexcmds)             In the latter case, load this package earlier.
 )))
 Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
+(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPEG,.JBIG2,.JB2,.eps]
 (grfext)             \AppendGraphicsExtensions on input line 456.
-
-(/usr/local/texlive/2016/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
-File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
-e
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Try loading font information for U+msa on input line 83.
+ <../BatchEffectRemoval/sex_classification_raw_5dataset.pdf, id=1, 578.16pt x 433.62pt>
+File: ../BatchEffectRemoval/sex_classification_raw_5dataset.pdf Graphic file (type pdf)
+ <use ../BatchEffectRemoval/sex_classification_raw_5dataset.pdf>
+Package pdftex.def Info: ../BatchEffectRemoval/sex_classification_raw_5dataset.pdf used on input line 89.
+(pdftex.def)             Requested size: 258.23624pt x 193.67157pt.
+ <../BatchEffectRemoval/selection_dataset_good.pdf, id=2, 578.16pt x 433.62pt>
+File: ../BatchEffectRemoval/selection_dataset_good.pdf Graphic file (type pdf)
+ <use ../BatchEffectRemoval/selection_dataset_good.pdf>
+Package pdftex.def Info: ../BatchEffectRemoval/selection_dataset_good.pdf used on input line 100.
+(pdftex.def)             Requested size: 258.23624pt x 193.67157pt.
+ [1
 
-(/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
+{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map} <../BatchEffectRemoval/sex_classification_raw_5dataset.pdf> <../BatchEffectRemoval/selection_dataset_good.pdf>] <../BatchEffectRemoval/knnErrorPerDataset.pdf, id=20, 722.7pt x 433.62pt>
+File: ../BatchEffectRemoval/knnErrorPerDataset.pdf Graphic file (type pdf)
+ <use ../BatchEffectRemoval/knnErrorPerDataset.pdf>
+Package pdftex.def Info: ../BatchEffectRemoval/knnErrorPerDataset.pdf used on input line 116.
+(pdftex.def)             Requested size: 516.47249pt x 309.88377pt.
+ <../BatchEffectRemoval/knnErrorCombined.pdf, id=21, 433.62pt x 433.62pt>
+File: ../BatchEffectRemoval/knnErrorCombined.pdf Graphic file (type pdf)
+ <use ../BatchEffectRemoval/knnErrorCombined.pdf>
+Package pdftex.def Info: ../BatchEffectRemoval/knnErrorCombined.pdf used on input line 127.
+(pdftex.def)             Requested size: 258.23624pt x 258.2486pt.
+ [2 <../BatchEffectRemoval/knnErrorPerDataset.pdf>] <../BatchEffectRemoval/core.pdf, id=30, 505.89pt x 505.89pt>
+File: ../BatchEffectRemoval/core.pdf Graphic file (type pdf)
+ <use ../BatchEffectRemoval/core.pdf>
+Package pdftex.def Info: ../BatchEffectRemoval/core.pdf used on input line 137.
+(pdftex.def)             Requested size: 258.23624pt x 258.23978pt.
+ <../BatchEffectRemoval/fitted_dataset.pdf, id=31, 722.7pt x 722.7pt>
+File: ../BatchEffectRemoval/fitted_dataset.pdf Graphic file (type pdf)
+ <use ../BatchEffectRemoval/fitted_dataset.pdf>
+Package pdftex.def Info: ../BatchEffectRemoval/fitted_dataset.pdf used on input line 148.
+(pdftex.def)             Requested size: 516.47249pt x 516.47295pt.
+ [3 <../BatchEffectRemoval/knnErrorCombined.pdf> <../BatchEffectRemoval/core.pdf>] <../BatchEffectRemoval/distance_between_dataset.pdf, id=45, 722.7pt x 289.08pt>
+File: ../BatchEffectRemoval/distance_between_dataset.pdf Graphic file (type pdf)
+ <use ../BatchEffectRemoval/distance_between_dataset.pdf>
+Package pdftex.def Info: ../BatchEffectRemoval/distance_between_dataset.pdf used on input line 157.
+(pdftex.def)             Requested size: 516.47249pt x 206.58917pt.
+ [4 <../BatchEffectRemoval/fitted_dataset.pdf>]
+LaTeX Font Info:    Try loading font information for U+msa on input line 166.
+ (/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 83.
+LaTeX Font Info:    Try loading font information for U+msb on input line 166.
 
 (/usr/local/texlive/2016/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-
-LaTeX Warning: No \author given.
-
-[1
-
-{/usr/local/texlive/2016/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-<../BatchEffectRemoval/dist_sigma.pdf, id=11, 433.62pt x 289.08pt>
-File: ../BatchEffectRemoval/dist_sigma.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/dist_sigma.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/dist_sigma.pdf used on input lin
-e 158.
-(pdftex.def)             Requested size: 413.17957pt x 275.46693pt.
- [2]
-<../BatchEffectRemoval/dist_M.pdf, id=21, 433.62pt x 289.08pt>
-File: ../BatchEffectRemoval/dist_M.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/dist_M.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/dist_M.pdf used on input line 16
-6.
-(pdftex.def)             Requested size: 413.17957pt x 275.46693pt.
-
-<../BatchEffectRemoval/dist_N.pdf, id=22, 433.62pt x 289.08pt>
-File: ../BatchEffectRemoval/dist_N.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/dist_N.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/dist_N.pdf used on input line 17
-4.
-(pdftex.def)             Requested size: 413.17957pt x 275.46693pt.
- [3 <../BatchEffectRemoval/dist_sigma.pdf> <../BatchEffectRemoval/dist_M.pdf>]
-<../BatchEffectRemoval/avgA1.pdf, id=36, 433.62pt x 433.62pt>
-File: ../BatchEffectRemoval/avgA1.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/avgA1.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/avgA1.pdf used on input line 193
-.
-(pdftex.def)             Requested size: 165.27498pt x 165.27354pt.
-
-<../BatchEffectRemoval/avgA2.pdf, id=37, 433.62pt x 433.62pt>
-File: ../BatchEffectRemoval/avgA2.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/avgA2.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/avgA2.pdf used on input line 197
-.
-(pdftex.def)             Requested size: 165.27498pt x 165.27354pt.
-
-<../BatchEffectRemoval/avgA3.pdf, id=38, 433.62pt x 433.62pt>
-File: ../BatchEffectRemoval/avgA3.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/avgA3.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/avgA3.pdf used on input line 201
-.
-(pdftex.def)             Requested size: 165.27498pt x 165.27354pt.
-
-<../BatchEffectRemoval/avgA1sex1.pdf, id=39, 433.62pt x 433.62pt>
-File: ../BatchEffectRemoval/avgA1sex1.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/avgA1sex1.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/avgA1sex1.pdf used on input line
- 206.
-(pdftex.def)             Requested size: 165.27498pt x 165.27354pt.
-
-<../BatchEffectRemoval/avgA2sex1.pdf, id=40, 433.62pt x 433.62pt>
-File: ../BatchEffectRemoval/avgA2sex1.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/avgA2sex1.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/avgA2sex1.pdf used on input line
- 210.
-(pdftex.def)             Requested size: 165.27498pt x 165.27354pt.
-
-<../BatchEffectRemoval/avgA3sex1.pdf, id=41, 433.62pt x 433.62pt>
-File: ../BatchEffectRemoval/avgA3sex1.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/avgA3sex1.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/avgA3sex1.pdf used on input line
- 214.
-(pdftex.def)             Requested size: 165.27498pt x 165.27354pt.
-
-<../BatchEffectRemoval/avgA1sex2.pdf, id=42, 433.62pt x 433.62pt>
-File: ../BatchEffectRemoval/avgA1sex2.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/avgA1sex2.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/avgA1sex2.pdf used on input line
- 219.
-(pdftex.def)             Requested size: 165.27498pt x 165.27354pt.
-
-<../BatchEffectRemoval/avgA2sex2.pdf, id=43, 433.62pt x 433.62pt>
-File: ../BatchEffectRemoval/avgA2sex2.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/avgA2sex2.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/avgA2sex2.pdf used on input line
- 223.
-(pdftex.def)             Requested size: 165.27498pt x 165.27354pt.
-
-<../BatchEffectRemoval/avgA3sex2.pdf, id=44, 433.62pt x 433.62pt>
-File: ../BatchEffectRemoval/avgA3sex2.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/avgA3sex2.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/avgA3sex2.pdf used on input line
- 227.
-(pdftex.def)             Requested size: 165.27498pt x 165.27354pt.
- [4 <../BatchEffectRemoval/dist_N.pdf>] <../BatchEffectRemoval/BE_not_removed_d
-ata.pdf, id=53, 722.7pt x 433.62pt>
-File: ../BatchEffectRemoval/BE_not_removed_data.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/BE_not_removed_data.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/BE_not_removed_data.pdf used on 
-input line 239.
-(pdftex.def)             Requested size: 413.17957pt x 247.90701pt.
- [5 <../BatchEffectRemoval/avgA1.pdf> <../BatchEffectRemoval/avgA2.pdf> <../Bat
-chEffectRemoval/avgA3.pdf> <../BatchEffectRemoval/avgA1sex1.pdf> <../BatchEffec
-tRemoval/avgA2sex1.pdf> <../BatchEffectRemoval/avgA3sex1.pdf> <../BatchEffectRe
-moval/avgA1sex2.pdf> <../BatchEffectRemoval/avgA2sex2.pdf> <../BatchEffectRemov
-al/avgA3sex2.pdf>]
-<../BatchEffectRemoval/batch_removal_data.pdf, id=102, 722.7pt x 433.62pt>
-File: ../BatchEffectRemoval/batch_removal_data.pdf Graphic file (type pdf)
-
-<use ../BatchEffectRemoval/batch_removal_data.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/batch_removal_data.pdf used on i
-nput line 247.
-(pdftex.def)             Requested size: 413.17957pt x 247.90701pt.
-
-<../BatchEffectRemoval/misclassification_data_knn.pdf, id=103, 578.16pt x 361.3
-5pt>
-File: ../BatchEffectRemoval/misclassification_data_knn.pdf Graphic file (type p
-df)
- <use ../BatchEffectRemoval/misclassification_data_knn.pdf>
-Package pdftex.def Info: ../BatchEffectRemoval/misclassification_data_knn.pdf u
-sed on input line 257.
-(pdftex.def)             Requested size: 413.17957pt x 258.23648pt.
- [6 <../BatchEffectRemoval/BE_not_removed_data.pdf> <../BatchEffectRemoval/batc
-h_removal_data.pdf>] (./tensor_random_factor.bbl
-
-Package natbib Warning: Empty `thebibliography' environment on input line 8.
-
-) [7 <../BatchEffectRemoval/misclassification_data_knn.pdf>]
-(./tensor_random_factor.aux) )
+) [5 <../BatchEffectRemoval/distance_between_dataset.pdf>] (/Volumes/shared_data/work/git/semipar-cci/ms/.texpadtmp/data_application.aux) )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 5556 strings out of 493014
- 81236 string characters out of 6133351
- 159827 words of memory out of 5000000
- 8991 multiletter control sequences out of 15000+600000
- 12397 words of font info for 48 fonts, out of 8000000 for 9000
+ 5495 strings out of 493014
+ 80152 string characters out of 6133351
+ 154827 words of memory out of 5000000
+ 8941 multiletter control sequences out of 15000+600000
+ 8891 words of font info for 34 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,8n,40p,1244b,2336s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts
-/cm/cmbx10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/
-cm/cmbx12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/c
-m/cmex10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmmi12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmmi8.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cm
-r10.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
-2.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.
-pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
-></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-</usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.
-pfb>
-Output written on tensor_random_factor.pdf (7 pages, 389462 bytes).
+ 42i,9n,40p,296b,2267s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2016/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb>
+Output written on /Volumes/shared_data/work/git/semipar-cci/ms/.texpadtmp/data_application.pdf (5 pages, 347074 bytes).
 PDF statistics:
- 163 PDF objects out of 1000 (max. 8388607)
- 111 compressed objects within 2 object streams
+ 88 PDF objects out of 1000 (max. 8388607)
+ 59 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 76 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 36 words of extra memory for PDF output out of 10000 (max. 10000000)
 

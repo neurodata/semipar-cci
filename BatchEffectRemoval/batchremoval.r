@@ -1,10 +1,20 @@
-# require("BayesLogit")
+require("BayesLogit")
 
-runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
+runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
+  
+  burnin = T
   
   trace_sigma2<- numeric()
+  trace_loss<- numeric()
   
   sigma2<- 0.01
+  
+  gamma_a = alpha * q^ (3*(c(1:r)-1))
+  gamma_b = q^(2*(c(1:r)-1))
+  tau<- 1/rgamma(r,gamma_a ,  rate=gamma_b)
+  
+  total_m = sum(sapply(C_list,ncol))
+  
   
   # func_logit<-  function(x){1/(1+exp(-x))}
   func_loglogit<-  function(x){
@@ -17,7 +27,7 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
   samplePsi= function(X, w, K, Binv, b){
     r<- ncol(X)
     V<- solve(t(X)%*% (X*w) + Binv)
-    m<- V%*% ( t(X)%*%K+ Binv%*%b)
+    m<- V%*% ( t(X)%*%K+ Binv*b)
     if(EM)
       m
     else
@@ -117,26 +127,31 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
     
     #update F_list
     for(j in 1:m_j){
+      p<- ncol(C_list[[j]])
+
       for(k in 1:n){
         
-        n_j<- ncol(C_list[[j]])
         #update F
         F_wo_k<-  F_list[[j]][-k,]
         
-        y<- numeric()
-        w<- numeric()
-        X<- numeric()
-        for(i in 1:n_j){
-          y_i<- A_list[[j]][[i]][k,-k]
-          w_i<- w_list[[j]][[i]][k,-k]
-          X_i<- F_wo_k %*% diag(C_list[[j]][,i]) 
-          y<- c(y,y_i)
-          w<- c(w,w_i)
-          X<- rbind(X,X_i)
-        }
+        y<- c(sapply(c(1:p), function(i) A_list[[j]][[i]][k,-k]))
+        w<- c(sapply(c(1:p), function(i) w_list[[j]][[i]][k,-k]))
+        X<- matrix(sapply(c(1:p), function(i) c(C_list[[j]][,i]) * t(F_wo_k)),ncol=r,byrow = T)
+        
+        # y<- numeric()
+        # w<- numeric()
+        # X<- numeric()
+        # for(i in 1:p){
+        #   y_i<- A_list[[j]][[i]][k,-k]
+        #   w_i<- w_list[[j]][[i]][k,-k]
+        #   X_i<- F_wo_k %*% diag(C_list[[j]][,i]) 
+        #   y<- c(y,y_i)
+        #   w<- c(w,w_i)
+        #   X<- rbind(X,X_i)
+        # }
         
         K<- y- 1/2
-        Binv<- diag(1/sigma2, r)
+        Binv<- rep(1/sigma2, r)
         b<- F[k,]
         F_list[[j]][k,]<- samplePsi(X, w, K, Binv,b)
       }
@@ -145,39 +160,50 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
     #update C_list
     
     for(j in 1:m_j){
-      n_j<- ncol(C_list[[j]])
+      p<- ncol(C_list[[j]])
       
-      F_local = F_list[[j]]
+      # if(iter < (tot_iter/4))
+      if(burnin)
+        F_local=F
+      else
+        F_local = F_list[[j]]
       
-      for(i in 1:n_j){
+      for(i in 1:p){
         
-        y<- numeric()
-        w<- numeric()
-        X<- numeric()
+        y<- unlist(sapply(c(1:(n-1)), function(k) A_list[[j]][[i]][k,-(1:k)]))
+        w<- unlist(sapply(c(1:(n-1)), function(k) w_list[[j]][[i]][k,-(1:k)]))
+        X<- matrix( unlist(sapply(c(1:(n-1)), function(k) (t(F_local[-(1:k),])* ( F_local[k,])))), ncol=r,byrow = T)
         
-        for(k in 1: (n-1)){
-          # use shared factor to give some acceleration in the beginning
-          if(iter < (tot_iter/4) )
-            X_i <- F[-(1:k),] %*%diag( F[k,]) 
-          else
-            X_i <- F_local[-(1:k),] %*%diag( F_local[k,])
-          
-          y_i <- A_list[[j]][[i]][k,-(1:k)]
-          w_i<- w_list[[j]][[i]][k,-(1:k)]
-          y<- c(y,y_i)
-          w<- c(w,w_i)
-          X<- rbind(X,X_i)
-        }
+        
+        # y<- numeric()
+        # w<- numeric()
+        # X<- numeric()
+        # 
+        # for(k in 1: (n-1)){
+        #   # use shared factor to give some acceleration in the beginning
+        #     # X_i <- F[-(1:k),] %*%diag( F[k,])
+        #   # else
+        #     X_i <- F_local[-(1:k),] %*%diag( F_local[k,])
+        #     
+        #     
+        #   
+        #   y_i <- A_list[[j]][[i]][k,-(1:k)]
+        #   w_i<- w_list[[j]][[i]][k,-(1:k)]
+        #   y<- c(y,y_i)
+        #   w<- c(w,w_i)
+        #   X<- rbind(X,X_i)
+        # }
         
         K<- y- 1/2
-        Binv<- diag(1E-5, r)
+        # Binv<- rep(1E-5, r)
+        Binv = 1/tau
         b<- rep(0,r)
         C_list[[j]][,i]<- samplePsi(X, w, K, Binv,b)
       }
     }
     #update F with prior (0, nu2)
     
-    nu2 = 1
+    nu2 = 1E6
     
     F_sum<- F_list[[1]]
     for(j in 2:length(F_list)){
@@ -188,10 +214,11 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
     var = 1/(m_j /sigma2 + 1/nu2)
     m =  var* (F_sum/sigma2)
     
-    if(EM)
+    if(EM){
       F<- m
-    else
+    }   else{
       F<- m + rnorm( n*r, sd=sqrt(var))
+      }
     
     #Compute psi = FCF
     
@@ -212,14 +239,18 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
         F_diff2_sum =   F_diff2_sum + (F_list[[j]]-F)^2
     }
     
-    
-    if(EM)
+    if(EM){
       sigma2 =  (sum(F_diff2_sum)/2+ 0.01 )/((n*r*m_j)/2+0.01)
-    else
+    }    else{
       sigma2 = 1/rgamma(1, n*r*m_j/2 , sum(F_diff2_sum)/2)
+    }
     
-    trace_sigma2<- c(trace_sigma2, sigma2)
+    #update tau
     
+    C_diff2_sum = rowSums(sapply(c(1:m_j), function(j)    rowSums(C_list[[j]]^2)))
+    
+    tau = 1/rgamma(r, gamma_a + total_m/2 , gamma_b + C_diff2_sum/2)
+
     print(iter)
     
     #code to capture and store MAP
@@ -230,6 +261,16 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
                "sigma2"= sigma2)
     
     cur_loss = computeLoss(F, F_list,C_list,psi_list,sigma2,nu2)
+    
+    if(iter>10 & burnin){
+      if(cur_loss < trace_loss[iter-1])
+        burnin = F
+    }
+      
+    
+    trace_sigma2<- c(trace_sigma2, sigma2)
+    trace_loss<- c(trace_loss, cur_loss)
+    
     
     if(!is.na(cur_loss)){
       if(cur_loss> best_loss){
@@ -242,7 +283,8 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
       # break
     # }
     
-    print(c(cur_loss,best_loss, sigma2))
+    print(c(cur_loss,best_loss))
+    print(tau)
   }
   
   return(list("F_list"=F_list,
@@ -250,6 +292,7 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE){
               "F"=F,
               "sigma2"= sigma2,
               "trace_sigma2"= trace_sigma2,
+              "trace_loss" = trace_loss,
               "MAP" = MAP_est
   ))
   

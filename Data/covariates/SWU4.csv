@@ -1,0 +1,469 @@
+SUBID,SESSION,AGE_AT_SCAN_1,SEX,DSM_IV_TR,FIQ,VIQ,PIQ,BMI,RESTING_STATE_INSTRUCTION,VISUAL_STIMULATION_CONDITION,RETEST_DESIGN,PRECEDING_CONDITION,RETEST_DURATION,RETEST_UNITS,TIME_OF_DAY,SEASON,SATIETY,LMP,HANDEDNESS
+25629,Baseline,18,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,1,0,0,#
+25629,Retest_1,#,#,#,#,#,#,#,#,#,#,0,347,d,4,1,0,0,#
+25630,Baseline,22,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,0,#
+25630,Retest_1,#,#,#,#,#,#,#,#,#,#,0,332,d,2,1,0,0,#
+25631,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25631,Retest_1,#,#,#,#,#,#,#,#,#,#,0,533,d,2,1,0,-1,#
+25632,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25632,Retest_1,#,#,#,#,#,#,#,#,#,#,0,531,d,4,1,0,-1,#
+25633,Baseline,18,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25633,Retest_1,#,#,#,#,#,#,#,#,#,#,0,653,d,4,3,0,0,#
+25634,Baseline,23,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25634,Retest_1,#,#,#,#,#,#,#,#,#,#,0,648,d,2,3,0,0,#
+25635,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,-1,#
+25635,Retest_1,#,#,#,#,#,#,#,#,#,#,0,562,d,3,2,0,-1,#
+25636,Baseline,24,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25636,Retest_1,#,#,#,#,#,#,#,#,#,#,0,560,d,3,2,0,0,#
+25637,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,1,0,0,#
+25637,Retest_1,#,#,#,#,#,#,#,#,#,#,0,378,d,4,2,0,0,#
+25638,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,0,#
+25638,Retest_1,#,#,#,#,#,#,#,#,#,#,0,366,d,4,2,0,0,#
+25739,Baseline,27,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,0,#
+25739,Retest_1,#,#,#,#,#,#,#,#,#,#,0,365,d,3,2,0,0,#
+25740,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25740,Retest_1,#,#,#,#,#,#,#,#,#,#,0,336,d,2,1,0,0,#
+25741,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25741,Retest_1,#,#,#,#,#,#,#,#,#,#,0,372,d,3,2,0,0,#
+25742,Baseline,18,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25742,Retest_1,#,#,#,#,#,#,#,#,#,#,0,331,d,4,1,0,0,#
+25743,Baseline,18,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25743,Retest_1,#,#,#,#,#,#,#,#,#,#,0,459,d,4,3,0,0,#
+25744,Baseline,18,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,0,#
+25744,Retest_1,#,#,#,#,#,#,#,#,#,#,0,451,d,5,3,0,0,#
+25745,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25745,Retest_1,#,#,#,#,#,#,#,#,#,#,0,370,d,3,2,0,-1,#
+25746,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25746,Retest_1,#,#,#,#,#,#,#,#,#,#,0,462,d,3,3,0,0,#
+25747,Baseline,17,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25747,Retest_1,#,#,#,#,#,#,#,#,#,#,0,381,d,4,2,0,-1,#
+25748,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,0,#
+25748,Retest_1,#,#,#,#,#,#,#,#,#,#,0,331,d,4,1,0,0,#
+25794,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,0,#
+25794,Retest_1,#,#,#,#,#,#,#,#,#,#,0,389,d,4,2,0,0,#
+25795,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25795,Retest_1,#,#,#,#,#,#,#,#,#,#,0,338,d,2,1,0,0,#
+25796,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25796,Retest_1,#,#,#,#,#,#,#,#,#,#,0,331,d,4,1,0,0,#
+25797,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25797,Retest_1,#,#,#,#,#,#,#,#,#,#,0,373,d,4,2,0,0,#
+25798,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25798,Retest_1,#,#,#,#,#,#,#,#,#,#,0,373,d,4,2,0,-1,#
+25799,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25799,Retest_1,#,#,#,#,#,#,#,#,#,#,0,336,d,1,1,0,-1,#
+25800,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25800,Retest_1,#,#,#,#,#,#,#,#,#,#,0,451,d,4,3,0,-1,#
+25801,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25801,Retest_1,#,#,#,#,#,#,#,#,#,#,0,452,d,3,3,0,-1,#
+25802,Baseline,18,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25802,Retest_1,#,#,#,#,#,#,#,#,#,#,0,337,d,2,1,0,-1,#
+25803,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25803,Retest_1,#,#,#,#,#,#,#,#,#,#,0,457,d,4,3,0,0,#
+25804,Baseline,18,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25804,Retest_1,#,#,#,#,#,#,#,#,#,#,0,457,d,4,3,0,0,#
+25805,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25805,Retest_1,#,#,#,#,#,#,#,#,#,#,0,339,d,4,1,0,-1,#
+25806,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25806,Retest_1,#,#,#,#,#,#,#,#,#,#,0,335,d,4,1,0,-1,#
+25807,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25807,Retest_1,#,#,#,#,#,#,#,#,#,#,0,381,d,3,2,0,0,#
+25808,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,0,#
+25808,Retest_1,#,#,#,#,#,#,#,#,#,#,0,455,d,3,3,0,0,#
+25809,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25809,Retest_1,#,#,#,#,#,#,#,#,#,#,0,335,d,5,1,0,-1,#
+25810,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25810,Retest_1,#,#,#,#,#,#,#,#,#,#,0,378,d,4,2,0,-1,#
+25811,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,0,#
+25811,Retest_1,#,#,#,#,#,#,#,#,#,#,0,335,d,4,1,0,0,#
+25812,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25812,Retest_1,#,#,#,#,#,#,#,#,#,#,0,332,d,3,1,0,0,#
+25813,Baseline,18,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25813,Retest_1,#,#,#,#,#,#,#,#,#,#,0,372,d,4,2,0,-1,#
+25814,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25814,Retest_1,#,#,#,#,#,#,#,#,#,#,0,457,d,5,3,0,-1,#
+25815,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25815,Retest_1,#,#,#,#,#,#,#,#,#,#,0,337,d,5,1,0,-1,#
+25816,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25816,Retest_1,#,#,#,#,#,#,#,#,#,#,0,336,d,5,1,0,-1,#
+25817,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25817,Retest_1,#,#,#,#,#,#,#,#,#,#,0,368,d,3,2,0,0,#
+25818,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25818,Retest_1,#,#,#,#,#,#,#,#,#,#,0,366,d,4,2,0,-1,#
+25819,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25819,Retest_1,#,#,#,#,#,#,#,#,#,#,0,387,d,3,2,0,-1,#
+25820,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,0,#
+25820,Retest_1,#,#,#,#,#,#,#,#,#,#,0,339,d,4,1,0,0,#
+25821,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25821,Retest_1,#,#,#,#,#,#,#,#,#,#,0,329,d,2,1,0,0,#
+25822,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25822,Retest_1,#,#,#,#,#,#,#,#,#,#,0,332,d,5,1,0,0,#
+25823,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,0,#
+25823,Retest_1,#,#,#,#,#,#,#,#,#,#,0,338,d,4,1,0,0,#
+25824,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25824,Retest_1,#,#,#,#,#,#,#,#,#,#,0,339,d,2,1,0,-1,#
+25825,Baseline,18,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25825,Retest_1,#,#,#,#,#,#,#,#,#,#,0,380,d,3,2,0,0,#
+25826,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25826,Retest_1,#,#,#,#,#,#,#,#,#,#,0,395,d,3,2,0,0,#
+25827,Baseline,18,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25827,Retest_1,#,#,#,#,#,#,#,#,#,#,0,330,d,4,1,0,0,#
+25828,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25828,Retest_1,#,#,#,#,#,#,#,#,#,#,0,464,d,2,3,0,-1,#
+25829,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25829,Retest_1,#,#,#,#,#,#,#,#,#,#,0,336,d,3,1,0,-1,#
+25830,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25830,Retest_1,#,#,#,#,#,#,#,#,#,#,0,329,d,3,1,0,-1,#
+25831,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25831,Retest_1,#,#,#,#,#,#,#,#,#,#,0,454,d,4,3,0,-1,#
+25832,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25832,Retest_1,#,#,#,#,#,#,#,#,#,#,0,367,d,3,2,0,-1,#
+25833,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25833,Retest_1,#,#,#,#,#,#,#,#,#,#,0,462,d,3,3,0,-1,#
+25834,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25834,Retest_1,#,#,#,#,#,#,#,#,#,#,0,455,d,5,3,0,-1,#
+25835,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25835,Retest_1,#,#,#,#,#,#,#,#,#,#,0,337,d,2,1,0,-1,#
+25836,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25836,Retest_1,#,#,#,#,#,#,#,#,#,#,0,339,d,3,1,0,0,#
+25837,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25837,Retest_1,#,#,#,#,#,#,#,#,#,#,0,459,d,3,3,0,-1,#
+25838,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25838,Retest_1,#,#,#,#,#,#,#,#,#,#,0,458,d,4,3,0,-1,#
+25839,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25839,Retest_1,#,#,#,#,#,#,#,#,#,#,0,455,d,3,3,0,0,#
+25840,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,0,#
+25840,Retest_1,#,#,#,#,#,#,#,#,#,#,0,455,d,3,3,0,0,#
+25841,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25841,Retest_1,#,#,#,#,#,#,#,#,#,#,0,453,d,3,3,0,-1,#
+25842,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25842,Retest_1,#,#,#,#,#,#,#,#,#,#,0,345,d,3,2,0,0,#
+25843,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,0,#
+25843,Retest_1,#,#,#,#,#,#,#,#,#,#,0,345,d,4,2,0,0,#
+25844,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25844,Retest_1,#,#,#,#,#,#,#,#,#,#,0,345,d,4,2,0,0,#
+25845,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,0,#
+25845,Retest_1,#,#,#,#,#,#,#,#,#,#,0,351,d,3,2,0,0,#
+25846,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,0,#
+25846,Retest_1,#,#,#,#,#,#,#,#,#,#,0,351,d,3,2,0,0,#
+25847,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25847,Retest_1,#,#,#,#,#,#,#,#,#,#,0,344,d,3,2,0,0,#
+25848,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25848,Retest_1,#,#,#,#,#,#,#,#,#,#,0,352,d,4,2,0,-1,#
+25849,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,0,#
+25849,Retest_1,#,#,#,#,#,#,#,#,#,#,0,307,d,5,1,0,0,#
+25850,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,0,#
+25850,Retest_1,#,#,#,#,#,#,#,#,#,#,0,308,d,4,1,0,0,#
+25851,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25851,Retest_1,#,#,#,#,#,#,#,#,#,#,0,307,d,2,1,0,0,#
+25852,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,-1,#
+25852,Retest_1,#,#,#,#,#,#,#,#,#,#,0,308,d,4,1,0,-1,#
+25853,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25853,Retest_1,#,#,#,#,#,#,#,#,#,#,0,350,d,3,2,0,0,#
+25854,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25854,Retest_1,#,#,#,#,#,#,#,#,#,#,0,358,d,3,2,0,0,#
+25855,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25855,Retest_1,#,#,#,#,#,#,#,#,#,#,0,305,d,2,1,0,-1,#
+25856,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,-1,#
+25856,Retest_1,#,#,#,#,#,#,#,#,#,#,0,308,d,5,1,0,-1,#
+25857,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25857,Retest_1,#,#,#,#,#,#,#,#,#,#,0,351,d,3,2,0,0,#
+25858,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25858,Retest_1,#,#,#,#,#,#,#,#,#,#,0,309,d,4,1,0,-1,#
+25859,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,-1,#
+25859,Retest_1,#,#,#,#,#,#,#,#,#,#,0,307,d,2,1,0,-1,#
+25860,Baseline,18,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25860,Retest_1,#,#,#,#,#,#,#,#,#,#,0,350,d,4,2,0,0,#
+25861,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25861,Retest_1,#,#,#,#,#,#,#,#,#,#,0,307,d,3,1,0,0,#
+25862,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25862,Retest_1,#,#,#,#,#,#,#,#,#,#,0,310,d,4,1,0,0,#
+25863,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,2,0,0,#
+25863,Retest_1,#,#,#,#,#,#,#,#,#,#,0,308,d,4,1,0,0,#
+25639,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,-1,#
+25639,Retest_1,#,#,#,#,#,#,#,#,#,#,0,434,d,3,3,0,-1,#
+25640,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,2,0,0,#
+25640,Retest_1,#,#,#,#,#,#,#,#,#,#,0,349,d,3,2,0,0,#
+25641,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,2,0,0,#
+25641,Retest_1,#,#,#,#,#,#,#,#,#,#,0,349,d,4,2,0,0,#
+25642,Baseline,22,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,2,0,0,#
+25642,Retest_1,#,#,#,#,#,#,#,#,#,#,0,306,d,4,1,0,0,#
+25643,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25643,Retest_1,#,#,#,#,#,#,#,#,#,#,0,296,d,2,2,0,0,#
+25644,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25644,Retest_1,#,#,#,#,#,#,#,#,#,#,0,234,d,2,1,0,0,#
+25645,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25645,Retest_1,#,#,#,#,#,#,#,#,#,#,0,234,d,5,1,0,-1,#
+25646,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25646,Retest_1,#,#,#,#,#,#,#,#,#,#,0,296,d,2,2,0,0,#
+25647,Baseline,17,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25647,Retest_1,#,#,#,#,#,#,#,#,#,#,0,234,d,3,1,0,0,#
+25648,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,0,#
+25648,Retest_1,#,#,#,#,#,#,#,#,#,#,0,234,d,4,1,0,0,#
+25649,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25649,Retest_1,#,#,#,#,#,#,#,#,#,#,0,231,d,3,1,0,0,#
+25650,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25650,Retest_1,#,#,#,#,#,#,#,#,#,#,0,281,d,4,2,0,-1,#
+25651,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25651,Retest_1,#,#,#,#,#,#,#,#,#,#,0,355,d,2,3,0,-1,#
+25652,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25652,Retest_1,#,#,#,#,#,#,#,#,#,#,0,357,d,3,3,0,0,#
+25653,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25653,Retest_1,#,#,#,#,#,#,#,#,#,#,0,294,d,4,2,0,-1,#
+25654,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25654,Retest_1,#,#,#,#,#,#,#,#,#,#,0,137,d,3,1,0,0,#
+25655,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,0,#
+25655,Retest_1,#,#,#,#,#,#,#,#,#,#,0,350,d,4,3,0,0,#
+25656,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25656,Retest_1,#,#,#,#,#,#,#,#,#,#,0,352,d,2,3,0,0,#
+25657,Baseline,22,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25657,Retest_1,#,#,#,#,#,#,#,#,#,#,0,228,d,2,1,0,-1,#
+25658,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25658,Retest_1,#,#,#,#,#,#,#,#,#,#,0,233,d,2,1,0,-1,#
+25659,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25659,Retest_1,#,#,#,#,#,#,#,#,#,#,0,228,d,3,1,0,0,#
+25660,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,0,#
+25660,Retest_1,#,#,#,#,#,#,#,#,#,#,0,353,d,4,3,0,0,#
+25661,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,0,#
+25661,Retest_1,#,#,#,#,#,#,#,#,#,#,0,351,d,5,3,0,0,#
+25662,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25662,Retest_1,#,#,#,#,#,#,#,#,#,#,0,227,d,2,1,0,0,#
+25663,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25663,Retest_1,#,#,#,#,#,#,#,#,#,#,0,290,d,3,2,0,-1,#
+25664,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,0,#
+25664,Retest_1,#,#,#,#,#,#,#,#,#,#,0,225,d,5,1,0,0,#
+25665,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25665,Retest_1,#,#,#,#,#,#,#,#,#,#,0,351,d,4,3,0,0,#
+25666,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25666,Retest_1,#,#,#,#,#,#,#,#,#,#,0,342,d,2,3,0,0,#
+25667,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25667,Retest_1,#,#,#,#,#,#,#,#,#,#,0,348,d,2,3,0,0,#
+25668,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25668,Retest_1,#,#,#,#,#,#,#,#,#,#,0,227,d,2,1,0,0,#
+25669,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25669,Retest_1,#,#,#,#,#,#,#,#,#,#,0,227,d,5,1,0,-1,#
+25670,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25670,Retest_1,#,#,#,#,#,#,#,#,#,#,0,224,d,2,1,0,-1,#
+25671,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25671,Retest_1,#,#,#,#,#,#,#,#,#,#,0,348,d,4,3,0,-1,#
+25672,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,0,#
+25672,Retest_1,#,#,#,#,#,#,#,#,#,#,0,227,d,3,1,0,0,#
+25673,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25673,Retest_1,#,#,#,#,#,#,#,#,#,#,0,286,d,3,2,0,0,#
+25674,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25674,Retest_1,#,#,#,#,#,#,#,#,#,#,0,344,d,4,3,0,0,#
+25675,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,0,#
+25675,Retest_1,#,#,#,#,#,#,#,#,#,#,0,342,d,3,3,0,0,#
+25676,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25676,Retest_1,#,#,#,#,#,#,#,#,#,#,0,352,d,3,3,0,0,#
+25677,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25677,Retest_1,#,#,#,#,#,#,#,#,#,#,0,344,d,3,3,0,0,#
+25678,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25678,Retest_1,#,#,#,#,#,#,#,#,#,#,0,282,d,4,2,0,0,#
+25679,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,0,#
+25679,Retest_1,#,#,#,#,#,#,#,#,#,#,0,282,d,4,2,0,0,#
+25680,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25680,Retest_1,#,#,#,#,#,#,#,#,#,#,0,278,d,3,2,0,-1,#
+25681,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,0,#
+25681,Retest_1,#,#,#,#,#,#,#,#,#,#,0,345,d,5,3,0,0,#
+25682,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25682,Retest_1,#,#,#,#,#,#,#,#,#,#,0,349,d,4,3,0,-1,#
+25683,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,-1,#
+25683,Retest_1,#,#,#,#,#,#,#,#,#,#,0,218,d,3,1,0,-1,#
+25684,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,-1,#
+25684,Retest_1,#,#,#,#,#,#,#,#,#,#,0,220,d,4,1,0,-1,#
+25685,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25685,Retest_1,#,#,#,#,#,#,#,#,#,#,0,341,d,2,3,0,0,#
+25686,Baseline,22,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25686,Retest_1,#,#,#,#,#,#,#,#,#,#,0,225,d,2,1,0,-1,#
+25687,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25687,Retest_1,#,#,#,#,#,#,#,#,#,#,0,232,d,4,1,0,-1,#
+25688,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25688,Retest_1,#,#,#,#,#,#,#,#,#,#,0,225,d,5,1,0,-1,#
+25689,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25689,Retest_1,#,#,#,#,#,#,#,#,#,#,0,219,d,3,1,0,0,#
+25690,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25690,Retest_1,#,#,#,#,#,#,#,#,#,#,0,219,d,5,1,0,-1,#
+25691,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,0,#
+25691,Retest_1,#,#,#,#,#,#,#,#,#,#,0,273,d,3,2,0,0,#
+25692,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25692,Retest_1,#,#,#,#,#,#,#,#,#,#,0,218,d,3,1,0,-1,#
+25693,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25693,Retest_1,#,#,#,#,#,#,#,#,#,#,0,223,d,3,1,0,-1,#
+25694,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25694,Retest_1,#,#,#,#,#,#,#,#,#,#,0,219,d,2,1,0,-1,#
+25695,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25695,Retest_1,#,#,#,#,#,#,#,#,#,#,0,219,d,4,1,0,-1,#
+25696,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25696,Retest_1,#,#,#,#,#,#,#,#,#,#,0,277,d,3,2,0,-1,#
+25697,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,-1,#
+25697,Retest_1,#,#,#,#,#,#,#,#,#,#,0,220,d,5,1,0,-1,#
+25698,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25698,Retest_1,#,#,#,#,#,#,#,#,#,#,0,349,d,5,3,0,-1,#
+25699,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25699,Retest_1,#,#,#,#,#,#,#,#,#,#,0,352,d,2,3,0,-1,#
+25700,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25700,Retest_1,#,#,#,#,#,#,#,#,#,#,0,353,d,3,3,0,-1,#
+25701,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,-1,#
+25701,Retest_1,#,#,#,#,#,#,#,#,#,#,0,278,d,4,2,0,-1,#
+25702,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25702,Retest_1,#,#,#,#,#,#,#,#,#,#,0,278,d,3,2,0,-1,#
+25703,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25703,Retest_1,#,#,#,#,#,#,#,#,#,#,0,222,d,2,1,0,-1,#
+25704,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25704,Retest_1,#,#,#,#,#,#,#,#,#,#,0,268,d,4,2,0,-1,#
+25705,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25705,Retest_1,#,#,#,#,#,#,#,#,#,#,0,282,d,4,2,0,-1,#
+25706,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25706,Retest_1,#,#,#,#,#,#,#,#,#,#,0,268,d,4,2,0,-1,#
+25707,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25707,Retest_1,#,#,#,#,#,#,#,#,#,#,0,348,d,3,3,0,-1,#
+25708,Baseline,25,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25708,Retest_1,#,#,#,#,#,#,#,#,#,#,0,267,d,3,2,0,-1,#
+25709,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25709,Retest_1,#,#,#,#,#,#,#,#,#,#,0,225,d,3,1,0,-1,#
+25710,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,-1,#
+25710,Retest_1,#,#,#,#,#,#,#,#,#,#,0,344,d,4,3,0,-1,#
+25711,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25711,Retest_1,#,#,#,#,#,#,#,#,#,#,0,340,d,3,3,0,-1,#
+25712,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25712,Retest_1,#,#,#,#,#,#,#,#,#,#,0,217,d,4,1,0,-1,#
+25713,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25713,Retest_1,#,#,#,#,#,#,#,#,#,#,0,343,d,4,3,0,-1,#
+25714,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25714,Retest_1,#,#,#,#,#,#,#,#,#,#,0,340,d,4,3,0,-1,#
+25715,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25715,Retest_1,#,#,#,#,#,#,#,#,#,#,0,221,d,2,1,0,-1,#
+25716,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,3,0,-1,#
+25716,Retest_1,#,#,#,#,#,#,#,#,#,#,0,341,d,2,3,0,-1,#
+25717,Baseline,24,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25717,Retest_1,#,#,#,#,#,#,#,#,#,#,0,276,d,4,2,0,0,#
+25718,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25718,Retest_1,#,#,#,#,#,#,#,#,#,#,0,297,d,4,3,0,-1,#
+25719,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25719,Retest_1,#,#,#,#,#,#,#,#,#,#,0,297,d,4,3,0,-1,#
+25720,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,-1,#
+25720,Retest_1,#,#,#,#,#,#,#,#,#,#,0,296,d,5,3,0,-1,#
+25721,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25721,Retest_1,#,#,#,#,#,#,#,#,#,#,0,296,d,2,3,0,0,#
+25722,Baseline,22,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25722,Retest_1,#,#,#,#,#,#,#,#,#,#,0,297,d,4,3,0,0,#
+25723,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,3,0,0,#
+25723,Retest_1,#,#,#,#,#,#,#,#,#,#,0,295,d,4,3,0,0,#
+25724,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25724,Retest_1,#,#,#,#,#,#,#,#,#,#,0,294,d,2,3,0,0,#
+25725,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25725,Retest_1,#,#,#,#,#,#,#,#,#,#,0,294,d,2,3,0,-1,#
+25726,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25726,Retest_1,#,#,#,#,#,#,#,#,#,#,0,298,d,3,3,0,0,#
+25727,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,0,#
+25727,Retest_1,#,#,#,#,#,#,#,#,#,#,0,296,d,2,3,0,0,#
+25728,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,3,0,-1,#
+25728,Retest_1,#,#,#,#,#,#,#,#,#,#,0,296,d,3,3,0,-1,#
+25729,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,-1,#
+25729,Retest_1,#,#,#,#,#,#,#,#,#,#,0,296,d,4,3,0,-1,#
+25730,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,3,0,-1,#
+25730,Retest_1,#,#,#,#,#,#,#,#,#,#,0,294,d,4,3,0,-1,#
+25731,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,-1,#
+25731,Retest_1,#,#,#,#,#,#,#,#,#,#,0,277,d,5,3,0,-1,#
+25732,Baseline,22,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25732,Retest_1,#,#,#,#,#,#,#,#,#,#,0,216,d,5,2,0,0,#
+25733,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25733,Retest_1,#,#,#,#,#,#,#,#,#,#,0,277,d,3,3,0,0,#
+25734,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25734,Retest_1,#,#,#,#,#,#,#,#,#,#,0,278,d,3,3,0,0,#
+25735,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,-1,#
+25735,Retest_1,#,#,#,#,#,#,#,#,#,#,0,271,d,4,3,0,-1,#
+25736,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,0,#
+25736,Retest_1,#,#,#,#,#,#,#,#,#,#,0,260,d,5,3,0,0,#
+25737,Baseline,22,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,-1,#
+25737,Retest_1,#,#,#,#,#,#,#,#,#,#,0,259,d,5,3,0,-1,#
+25738,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,-1,#
+25738,Retest_1,#,#,#,#,#,#,#,#,#,#,0,268,d,4,3,0,-1,#
+25749,Baseline,22,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,-1,#
+25749,Retest_1,#,#,#,#,#,#,#,#,#,#,0,209,d,5,2,0,-1,#
+25750,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25750,Retest_1,#,#,#,#,#,#,#,#,#,#,0,269,d,5,3,0,0,#
+25751,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25751,Retest_1,#,#,#,#,#,#,#,#,#,#,0,144,d,2,1,0,0,#
+25752,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,-1,#
+25752,Retest_1,#,#,#,#,#,#,#,#,#,#,0,144,d,4,1,0,-1,#
+25753,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,-1,#
+25753,Retest_1,#,#,#,#,#,#,#,#,#,#,0,203,d,2,2,0,-1,#
+25754,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,0,#
+25754,Retest_1,#,#,#,#,#,#,#,#,#,#,0,145,d,4,1,0,0,#
+25756,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,-1,#
+25756,Retest_1,#,#,#,#,#,#,#,#,#,#,0,254,d,2,3,0,-1,#
+25757,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,-1,#
+25757,Retest_1,#,#,#,#,#,#,#,#,#,#,0,134,d,3,1,0,-1,#
+25758,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25758,Retest_1,#,#,#,#,#,#,#,#,#,#,0,254,d,4,3,0,0,#
+25759,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,0,0,-1,#
+25759,Retest_1,#,#,#,#,#,#,#,#,#,#,0,196,d,5,2,0,-1,#
+25760,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,0,0,0,#
+25760,Retest_1,#,#,#,#,#,#,#,#,#,#,0,133,d,3,1,0,0,#
+25761,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,0,0,-1,#
+25761,Retest_1,#,#,#,#,#,#,#,#,#,#,0,131,d,3,1,0,-1,#
+25762,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,-1,#
+25762,Retest_1,#,#,#,#,#,#,#,#,#,#,0,131,d,5,1,0,-1,#
+25763,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25763,Retest_1,#,#,#,#,#,#,#,#,#,#,0,196,d,2,2,0,0,#
+25764,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,-1,#
+25764,Retest_1,#,#,#,#,#,#,#,#,#,#,0,131,d,4,1,0,-1,#
+25765,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,0,#
+25765,Retest_1,#,#,#,#,#,#,#,#,#,#,0,253,d,3,3,0,0,#
+25766,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,-1,#
+25766,Retest_1,#,#,#,#,#,#,#,#,#,#,0,252,d,2,3,0,-1,#
+25767,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,-1,#
+25767,Retest_1,#,#,#,#,#,#,#,#,#,#,0,252,d,2,3,0,-1,#
+25768,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,-1,#
+25768,Retest_1,#,#,#,#,#,#,#,#,#,#,0,195,d,3,2,0,-1,#
+25769,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25769,Retest_1,#,#,#,#,#,#,#,#,#,#,0,255,d,3,3,0,0,#
+25770,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,-1,#
+25770,Retest_1,#,#,#,#,#,#,#,#,#,#,0,195,d,2,2,0,-1,#
+25771,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,-1,#
+25771,Retest_1,#,#,#,#,#,#,#,#,#,#,0,252,d,3,3,0,-1,#
+25772,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,-1,#
+25772,Retest_1,#,#,#,#,#,#,#,#,#,#,0,131,d,3,1,0,-1,#
+25773,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,-1,#
+25773,Retest_1,#,#,#,#,#,#,#,#,#,#,0,133,d,2,1,0,-1,#
+25774,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,0,0,0,#
+25774,Retest_1,#,#,#,#,#,#,#,#,#,#,0,130,d,2,1,0,0,#
+25775,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,5,0,0,-1,#
+25775,Retest_1,#,#,#,#,#,#,#,#,#,#,0,252,d,2,3,0,-1,#
+25776,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,-1,#
+25776,Retest_1,#,#,#,#,#,#,#,#,#,#,0,124,d,4,1,0,-1,#
+25777,Baseline,22,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,-1,#
+25777,Retest_1,#,#,#,#,#,#,#,#,#,#,0,125,d,2,1,0,-1,#
+25778,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,0,#
+25778,Retest_1,#,#,#,#,#,#,#,#,#,#,0,124,d,2,1,0,0,#
+25779,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,0,#
+25779,Retest_1,#,#,#,#,#,#,#,#,#,#,0,247,d,3,3,0,0,#
+25780,Baseline,20,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,0,0,-1,#
+25780,Retest_1,#,#,#,#,#,#,#,#,#,#,0,246,d,4,3,0,-1,#
+25781,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25781,Retest_1,#,#,#,#,#,#,#,#,#,#,0,246,d,2,3,0,0,#
+25782,Baseline,21,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,-1,#
+25782,Retest_1,#,#,#,#,#,#,#,#,#,#,0,124,d,3,1,0,-1,#
+25783,Baseline,19,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,-1,#
+25783,Retest_1,#,#,#,#,#,#,#,#,#,#,0,122,d,3,1,0,-1,#
+25784,Baseline,21,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,0,#
+25784,Retest_1,#,#,#,#,#,#,#,#,#,#,0,245,d,3,3,0,0,#
+25785,Baseline,19,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,0,#
+25785,Retest_1,#,#,#,#,#,#,#,#,#,#,0,121,d,3,1,0,0,#
+25786,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,2,0,0,0,#
+25786,Retest_1,#,#,#,#,#,#,#,#,#,#,0,242,d,4,3,0,0,#
+25787,Baseline,20,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25787,Retest_1,#,#,#,#,#,#,#,#,#,#,0,121,d,5,1,0,0,#
+25788,Baseline,22,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,4,0,0,0,#
+25788,Retest_1,#,#,#,#,#,#,#,#,#,#,0,121,d,5,1,0,0,#
+25789,Baseline,24,1,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,1,0,0,#
+25789,Retest_1,#,#,#,#,#,#,#,#,#,#,0,147,d,4,3,0,0,#
+25790,Baseline,22,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,1,0,-1,#
+25790,Retest_1,#,#,#,#,#,#,#,#,#,#,0,151,d,2,3,0,-1,#
+25791,Baseline,25,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,1,0,-1,#
+25791,Retest_1,#,#,#,#,#,#,#,#,#,#,0,152,d,2,3,0,-1,#
+25792,Baseline,23,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,1,0,-1,#
+25792,Retest_1,#,#,#,#,#,#,#,#,#,#,0,141,d,3,3,0,-1,#
+25793,Baseline,23,2,#,#,#,#,#,"Lie Still and Relax During Scan. Try Not to Have Active Thoughts.",4,2,0,#,#,3,1,0,-1,#
+25793,Retest_1,#,#,#,#,#,#,#,#,#,#,0,154,d,3,3,0,-1,#

@@ -1,20 +1,20 @@
 require("BayesLogit")
 
-runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
+runBatchRemoval<- function(A_list, r, tot_iter, alpha =1, q=1.5){
   
-  burnin = T
+  m_j = length(A_list)
   
   trace_sigma2<- numeric()
-  trace_loss<- numeric()
   
-  sigma2<- 0.01
+  sigma2<- rep(0.1,m_j)
   
-  gamma_a = alpha * q^ (3*(c(1:r)-1))
-  gamma_b = q^(2*(c(1:r)-1))
-  tau<- 1/rgamma(r,gamma_a ,  rate=gamma_b)
   
-  total_m = sum(sapply(C_list,ncol))
+  #gamma for var of C
   
+
+  gamma_a= alpha * q^(3* ((1:r)-1))
+  gamma_b=  q^(2* ((1:r)-1))
+  var_c = 1/rgamma(r, gamma_a, rate=gamma_b)
   
   # func_logit<-  function(x){1/(1+exp(-x))}
   func_loglogit<-  function(x){
@@ -27,15 +27,18 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
   samplePsi= function(X, w, K, Binv, b){
     r<- ncol(X)
     V<- solve(t(X)%*% (X*w) + Binv)
-    m<- V%*% ( t(X)%*%K+ Binv*b)
-    if(EM)
-      m
-    else
-      t(chol(V))%*% rnorm(r)+m
+    m<- V%*% ( t(X)%*%K+ Binv%*%b)
+    t(chol(V))%*% rnorm(r)+m
+  }
+  
+  symmetrize<- function(X){
+    X= t(X)
+    X[lower.tri(X)]<- t(X)[lower.tri(X)]
+    X
   }
   
   
-  computeLoss = function(F, F_list,C_list,psi_list,sigma2,nu2){
+  computeLoss = function(F, F_list,C_list, Z_list,psi_list,sigma2,nu2){
     
     loss = 0
     
@@ -45,7 +48,9 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
       
       F_local = F_list[[j]]
       
-      loss =  loss - sum((F_local- F)^2)/2/sigma2 - n*r*log(sigma2)/2
+      loss =  loss - sum((F_local- F)^2)/2/sigma2[j] - n*r*log(sigma2[j])/2
+      
+      Z_local = Z_list[[j]]
       
       for(x in 1:ncol(C_list[[j]])){ 
         
@@ -53,7 +58,7 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
         psi<- psi_list[[j]][[x]]
         
         
-        loss = loss + sum(A_local * func_loglogit(psi) + (1-A_local)* func_loglogit(-psi))
+        loss = loss + sum(A_local * func_loglogit(psi + Z_local) + (1-A_local)* func_loglogit(- psi - Z_local))
         
       }
     }
@@ -63,7 +68,6 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
   }
   
   
-  m_j = length(A_list)
   n = nrow(A_list[[1]][[1]])
   
   #initialize F and C with SVD
@@ -76,18 +80,26 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
   avgC = eigenLogitAvgA$d[1:r]
   avgF = eigenLogitAvgA$u
   
+  avgZ = avgP - avgF%*% diag(avgC) %*%t(avgF)
+  
   F = avgF
   
   # randomly initialize F
   F_list<- list()
   for(j in 1:m_j){
-    F_list[[j]]<-  avgF + matrix(rnorm(n*r,sd=sqrt(sigma2)),n)
+    F_list[[j]]<-  avgF + matrix(rnorm(n*r,sd=sqrt(sigma2[j])),n)
   }
   # randomly initialize C
   C_list<- list()
   for(j in 1:m_j){
     C_list[[j]] <- avgC + matrix( rnorm(r*length(A_list[[j]]), sd = 0.1), r)
   }
+  #randomly initialize Z
+  Z_list<- list()
+  for(j in 1:m_j){
+    Z_list[[j]]<-  matrix(0,n,n) #0 + symmetrize(matrix(rnorm(n*n,sd=1),n))
+  }
+  
   
   best_loss = -Inf
   MAP_est = list()
@@ -111,33 +123,57 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
     w_list<- lapply(c(1:m_j),function(j){
       lapply( c(1:ncol(C_list[[j]])), function(x){ 
         
-        psi<- psi_list[[j]][[x]]
-        b = psi[upper.tri(psi)]
-        if(EM)
-          w<- 1/2/b * tanh(b/2)
-        else
-          w<- rpg(n*(n-1)/2,1,b)
+        psi0<- psi_list[[j]][[x]] + Z_list[[j]]
+        b = psi0[lower.tri(psi0)]
+        w<- rpg(n*(n-1)/2,1,b)
         
         W<- matrix(0,n,n)
-        W[upper.tri(W)]<- w
-        W[lower.tri(W)]<- t(W)[lower.tri(W)]
+        W[lower.tri(W)]<- w
+        W= symmetrize(W)
         W
       } )
     })
     
+    #update Z_list
+    for(j in 1:m_j){
+      
+      lowerWs = sapply(w_list[[j]], function(x) x[lower.tri(x)])
+      lowerPsi = sapply(psi_list[[j]], function(x) x[lower.tri(x)])
+      lowerYs = sapply(A_list[[j]], function(x) x[lower.tri(x)])
+      
+      v = 1/(rowSums(lowerWs) + 1E-2)
+      m = v * rowSums( - lowerWs* lowerPsi + lowerYs -0.5)
+      
+      z = rnorm(length(m),m, sqrt(v))
+      
+      Z_list[[j]] [lower.tri(Z_list[[j]])] = z
+      Z_list[[j]] = symmetrize(Z_list[[j]])
+    }
+    
     #update F_list
     for(j in 1:m_j){
-      p<- ncol(C_list[[j]])
-
       for(k in 1:n){
         
+        p<- ncol(C_list[[j]])
         #update F
         F_wo_k<-  F_list[[j]][-k,]
         
+        # y<- numeric()
+        # w<- numeric()
+        # X<- numeric()
+        # for(i in 1:n_j){
+        #   y_i<- A_list[[j]][[i]][k,-k]
+        #   w_i<- w_list[[j]][[i]][k,-k]
+        #   X_i<- F_wo_k %*% diag(C_list[[j]][,i]) 
+        #   y<- c(y,y_i)
+        #   w<- c(w,w_i)
+        #   X<- rbind(X,X_i)
+        # }
+        
         y<- c(sapply(c(1:p), function(i) A_list[[j]][[i]][k,-k]))
+        z<- c(sapply(c(1:p), function(i) Z_list[[j]][k,-k]))
         w<- c(sapply(c(1:p), function(i) w_list[[j]][[i]][k,-k]))
         X<- matrix(sapply(c(1:p), function(i) c(C_list[[j]][,i]) * t(F_wo_k)),ncol=r,byrow = T)
-        
         # y<- numeric()
         # w<- numeric()
         # X<- numeric()
@@ -149,9 +185,9 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
         #   w<- c(w,w_i)
         #   X<- rbind(X,X_i)
         # }
-        
-        K<- y- 1/2
-        Binv<- rep(1/sigma2, r)
+
+        K<- y- 1/2 - w*z
+        Binv<- diag(1/sigma2[j], r)
         b<- F[k,]
         F_list[[j]][k,]<- samplePsi(X, w, K, Binv,b)
       }
@@ -162,63 +198,43 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
     for(j in 1:m_j){
       p<- ncol(C_list[[j]])
       
-      # if(iter < (tot_iter/4))
-      if(burnin)
+      if(iter <10){
         F_local=F
-      else
+      }      else{
         F_local = F_list[[j]]
+      }      
+      
+      X<- matrix( unlist(sapply(c(1:(n-1)), function(k) (t(F_local[-(1:k),])* ( F_local[k,])))), ncol=r,byrow = T)
       
       for(i in 1:p){
         
         y<- unlist(sapply(c(1:(n-1)), function(k) A_list[[j]][[i]][k,-(1:k)]))
         w<- unlist(sapply(c(1:(n-1)), function(k) w_list[[j]][[i]][k,-(1:k)]))
-        X<- matrix( unlist(sapply(c(1:(n-1)), function(k) (t(F_local[-(1:k),])* ( F_local[k,])))), ncol=r,byrow = T)
         
+        z<- unlist(sapply(c(1:(n-1)), function(k) Z_list[[j]][k,-(1:k)]))
         
-        # y<- numeric()
-        # w<- numeric()
-        # X<- numeric()
-        # 
-        # for(k in 1: (n-1)){
-        #   # use shared factor to give some acceleration in the beginning
-        #     # X_i <- F[-(1:k),] %*%diag( F[k,])
-        #   # else
-        #     X_i <- F_local[-(1:k),] %*%diag( F_local[k,])
-        #     
-        #     
-        #   
-        #   y_i <- A_list[[j]][[i]][k,-(1:k)]
-        #   w_i<- w_list[[j]][[i]][k,-(1:k)]
-        #   y<- c(y,y_i)
-        #   w<- c(w,w_i)
-        #   X<- rbind(X,X_i)
-        # }
-        
-        K<- y- 1/2
-        # Binv<- rep(1E-5, r)
-        Binv = 1/tau
+
+        K<- y- 1/2 - w *z
+        Binv<- diag(1/var_c)#diag(1E-5, r)
         b<- rep(0,r)
         C_list[[j]][,i]<- samplePsi(X, w, K, Binv,b)
       }
     }
     #update F with prior (0, nu2)
     
-    nu2 = 1E6
+    nu2 = 1
     
-    F_sum<- F_list[[1]]
+    F_sum<- F_list[[1]]/sigma2[1]
     for(j in 2:length(F_list)){
       if(m_j>1)
-        F_sum = F_sum + F_list[[j]]
+        F_sum = F_sum + F_list[[j]]/sigma2[j]
     }
     
-    var = 1/(m_j /sigma2 + 1/nu2)
-    m =  var* (F_sum/sigma2)
+    var = 1/( sum(1/sigma2) + 1/nu2)
+    m =  var* (F_sum)
     
-    if(EM){
-      F<- m
-    }   else{
-      F<- m + rnorm( n*r, sd=sqrt(var))
-      }
+
+    F<- m + rnorm( n*r, sd=sqrt(var))
     
     #Compute psi = FCF
     
@@ -233,44 +249,44 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
     
     #update sigma
     
-    F_diff2_sum<- (F_list[[1]]-F)^2
-    for(j in 2:length(F_list)){
-      if(m_j>1)
-        F_diff2_sum =   F_diff2_sum + (F_list[[j]]-F)^2
+    
+    for(j in 1:m_j){
+      F_diff2_sum<- (F_list[[j]]-F)^2
+      # if(EM){
+      #   sigma2[j] =  (sum(F_diff2_sum)/2+ 0.01 )/((n*r)/2+0.01)
+      # }      else{
+        sigma2[j] = 1/rgamma(1, n*r/2-1 , sum(F_diff2_sum)/2)
+        # }
     }
+    sigma2[sigma2>2] = 2
     
-    if(EM){
-      sigma2 =  (sum(F_diff2_sum)/2+ 0.01 )/((n*r*m_j)/2+0.01)
-    }    else{
-      sigma2 = 1/rgamma(1, n*r*m_j/2 , sum(F_diff2_sum)/2)
-    }
     
-    #update tau
+    # for(j in 2:length(F_list)){
+    #   if(m_j>1)
+    #     F_diff2_sum =   F_diff2_sum + (F_list[[j]]-F)^2
+    # }
     
-    C_diff2_sum = rowSums(sapply(c(1:m_j), function(j)    rowSums(C_list[[j]]^2)))
+    #update var_c
     
-    tau = 1/rgamma(r, gamma_a + total_m/2 , gamma_b + C_diff2_sum/2)
-
+    C_mat = do.call("cbind",C_list)
+    
+    var_c = 1/rgamma(r, gamma_a + ncol(C_mat)/2, rate=gamma_b + rowSums(C_mat^2)/2)
+    
+    
+    # trace_sigma2<- c(trace_sigma2, sigma2)
+    
     print(iter)
+    print(var_c)
     
     #code to capture and store MAP
     
     est = list("F_list"=F_list,
                "C_list"=C_list,
+               "Z_list"=Z_list,
                "F"=F,
                "sigma2"= sigma2)
     
-    cur_loss = computeLoss(F, F_list,C_list,psi_list,sigma2,nu2)
-    
-    if(iter>10 & burnin){
-      if(cur_loss < trace_loss[iter-1])
-        burnin = F
-    }
-      
-    
-    trace_sigma2<- c(trace_sigma2, sigma2)
-    trace_loss<- c(trace_loss, cur_loss)
-    
+    cur_loss = computeLoss(F, F_list,C_list,Z_list,psi_list,sigma2,nu2)
     
     if(!is.na(cur_loss)){
       if(cur_loss> best_loss){
@@ -280,19 +296,19 @@ runBatchRemoval<- function(A_list, r, tot_iter, EM=FALSE,q=3,alpha=1){
     }
     
     # if(is.na(cur_loss)){
-      # break
+    # break
     # }
     
     print(c(cur_loss,best_loss))
-    print(tau)
+    print(sigma2)
   }
   
   return(list("F_list"=F_list,
               "C_list"=C_list,
+              "Z_list"=Z_list,
               "F"=F,
               "sigma2"= sigma2,
               "trace_sigma2"= trace_sigma2,
-              "trace_loss" = trace_loss,
               "MAP" = MAP_est
   ))
   

@@ -7,11 +7,11 @@ func_logit<- function(x){
 }
 
 #fitted functions
-getFitted<- function(C_list,F_list){
+getFitted<- function(C_list,F_list, Z_list=0){
   lapply(c(1:length(C_list)),function(j){
     lapply( c(1:ncol(C_list[[j]])), function(x){ 
       F_local = F_list[[j]]
-      p<- func_logit(F_local%*% (t(F_local)*C_list[[j]][,x]))
+      p<- func_logit(F_local%*% (t(F_local)*C_list[[j]][,x]) + Z_list[[j]])
       p
     } )
   })

@@ -9,7 +9,7 @@ knnLOO <-function(k, M,label){
 }
 
 knnLOOVaryingK <-function(M,label){
-  sapply(c(1:5), function(k)knnLOO(k,M,label))
+  sapply(c(1:10), function(k)knnLOO(k,M,label))
 }
 
 

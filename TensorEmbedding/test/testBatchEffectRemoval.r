@@ -4,7 +4,7 @@ require("digest")
 
 logit<- function(x){ 1/(1+exp(-x))}
 
-setwd("~/git/semipar-cci/TestData/openconnecto.me/mrdata/share/dti/ndmg_v0011/")
+# setwd("~/git/semipar-cci/TestData/openconnecto.me/mrdata/share/dti/ndmg_v0011/")
 
 list_batch<- list.files(path = ".")
 
@@ -84,7 +84,7 @@ tensorDecomp<- TensorEmbedding::symm_group_tensor_decomp(tensorA, subject_serial
 
 save(tensorDecomp, file = "~/git/semipar-cci/Tests/tensorDecompSubj1.Rda")
 
-# load(file= "tensorDecompSubj.Rda")
+load(file= "~/git/semipar-cci/Tests/tensorDecompSubj1.Rda")
 
 L <- tensorDecomp$L
 C <- tensorDecomp$C

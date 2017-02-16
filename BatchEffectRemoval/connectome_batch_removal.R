@@ -34,9 +34,9 @@ ns = sapply(label_list,length)
 batchID = unlist(sapply(c(1:length(ns)),function(i){rep(i,ns[i])} ))
 
 
-pdf("core.pdf")
+# pdf("core.pdf")
 plotCore(batch_removed$C_list)
-dev.off()
+# dev.off()
 
 plotCore(batch_not_removed$C_list)
 
@@ -116,7 +116,7 @@ dev.off()
 #compute distance metric
 ####
 
-p_random_factor_model <- getFitted(batch_removed$MAP$C_list,batch_removed$MAP$F_list)
+p_random_factor_model <- getFitted(batch_removed$MAP$C_list,batch_removed$MAP$F_list, batch_removed$MAP$Z_list)
 adjusted_p_random_factor_model <- getFitted2(batch_removed$MAP$C_list,batch_removed$MAP$F)
 
 
@@ -135,13 +135,21 @@ for(i in 1:m_j){
     diffMat_adjusted_p[i,j]<- sqrt(mean((rowMeans(adjusted_p_lowtri[[i]]) - rowMeans(adjusted_p_lowtri[[j]]))^2))
   }
 }
-# 
+
+
 # image(batch_removed$F_list[[1]])
 # image(batch_removed$F_list[[2]])
 # image(batch_removed$F_list[[3]])
 # image(batch_removed$F_list[[4]])
 # image(batch_removed$F)
-# 
+ 
+
+image(A_list[[1]][[1]])
+image(p_random_factor_model[[1]][[1]])
+
+image(A_list[[3]][[4]])
+image(p_random_factor_model[[3]][[4]])
+
 
 
 A_flat<- lapply(A_list,function(x) rowMeans(sapply(x, c)))

@@ -1,0 +1,3 @@
+useDynLib(RandomFactorTensor)
+importFrom(Rcpp, evalCpp)
+exportPattern("^[[:alpha:]]+")

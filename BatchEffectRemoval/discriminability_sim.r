@@ -1,6 +1,6 @@
 setwd("~/git/semipar-cci/BatchEffectRemoval/")
 
-n<- 50
+n<- 70
 r<- 5
 F<- matrix(rnorm(n*r),n)
 
@@ -70,41 +70,51 @@ rm(F_list)
 
 source("batchremoval.r")
 
-testRun<- runBatchRemoval(A_list, r=5, 100, EM=T)
+testRun<- runBatchRemoval(A_list, r=5, 100,q=2)
 
-F_list =  testRun$MAP$F_list
-C_list =  testRun$MAP$C_list
-F = testRun$MAP$F
-sigma2 = testRun$MAP$sigma2
-trace_sigma2 = testRun$trace_sigma2
+# image(func_logit(testRun$Z_list[[1]]),zlim = c(0,1))
 
-ts.plot(trace_sigma2)
+Z_list =  testRun$Z_list
+
+F_list =  testRun$F_list
+C_list =  testRun$C_list
+F = testRun$F
+sigma2 = testRun$sigma2
+
 
 sqrt(sigma2)/sd(F)
 
 
-image(rbind(C_list[[1]],C_list[[2]],C_list[[3]]))
+ts.plot(do.call("rbind", C_list))
 
 
-
-image(F)
-image(F_list[[1]])
-image(F_list[[2]])
-image(F_list[[3]])
 
 p_est_list<- lapply(c(1:m_j),function(j){
   lapply( c(1:ncol(C_list[[j]])), function(x){ 
     F_local = F_list[[j]]
-    p<- func_logit(F_local%*% (t(F_local)*C_list[[j]][,x]))
+    p<- func_logit(F_local%*% (t(F_local)*C_list[[j]][,x]) + Z_list[[j]])
     p
   } )
 })
 
 
+plot(c(p_list[[1]][[1]]), c(p_est_list[[1]][[1]]), ylab="generating_prob",xlab="fitted")
+plot(c(p_list[[2]][[1]]), c(p_est_list[[2]][[1]]), ylab="generating_prob",xlab="fitted")
+
+
+# plot(c(p_list[[1]][[1]]), c(func_logit(testRun$Z_list[[1]])), ylab="generating_prob",xlab="fitted")
+# plot(c(p_list[[3]][[1]]), c(func_logit(testRun$Z_list[[3]])), ylab="generating_prob",xlab="fitted")
+
+
+
+
+
+
+
 p_list_wo_batch<- lapply(c(1:m_j),function(j){
   lapply( c(1:ncol(C_list[[j]])), function(x){ 
     F_local = F
-    p<- func_logit(F_local%*% (t(F_local)*C_list[[j]][,x]))
+    p<- func_logit(F_local%*% (t(F_local)*C_list[[j]][,x]) + Z_list[[j]])
     p
   } )
 })
@@ -113,21 +123,24 @@ p_list_wo_batch<- lapply(c(1:m_j),function(j){
 p_truth_wo_batch<- lapply(c(1:m_j),function(j){
   lapply( c(1:ncol(C_list0[[j]])), function(x){ 
     F_local = F0
-    p<- func_logit(F_local%*% (t(F_local)*C_list0[[j]][,x]))
+    p<- func_logit(F_local%*% (t(F_local)*C_list0[[j]][,x])+ Z_list[[j]])
     p
   } )
 })
 
-plot(c(p_list[[1]][[1]]), c(p_est_list[[1]][[1]]), ylab="generating_prob",xlab="fitted")
 plot(c(p_truth_wo_batch[[1]][[1]]), c(p_list_wo_batch[[1]][[1]]), ylab="truth",xlab="est_wo_be")
 
 plot(c(p_list[[1]][[1]]), c(p_list_wo_batch[[1]][[1]]), ylab="generating_prob",xlab="est_wo_be")
 plot(c(p_list_wo_batch[[1]][[2]]),c(p_est_list[[1]][[2]]) - c(p_list_wo_batch[[1]][[2]]), xlab="est_wo_batch",ylab="diff")
 
 
-image(A_list[[1]][[2]],zlim = c(0,1))
+# image(A_list[[1]][[1]],zlim = c(0,1))
+image(p_est_list[[1]][[1]],zlim = c(0,1))
+image(p_list[[1]][[1]],zlim = c(0,1))
+
+
+
 image(p_list[[1]][[2]],zlim = c(0,1))
-image(p_est_list[[1]][[2]],zlim = c(0,1))
 image(p_list_wo_batch[[1]][[2]],zlim = c(0,1))
 
 image(p_est_list[[1]][[1]],zlim = c(0,1))

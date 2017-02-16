@@ -2,20 +2,16 @@ setwd("~/git/ABadea/")
 
 load("./listData.Rda")
 
-load("./tensorDecomp.Rda")
+load("./tensorDecompBinary.Rda")
 
 L<- tensorDecomp$L
 C<- tensorDecomp$C
 
 n<- dim(L)[1]
-k<- dim(C)[1]
-p<- dim(C)[3]
+p<- dim(C)[1]
+k<- dim(C)[2]
 
-diagC<- matrix(0,p,k)
-
-for(i in 1:p){
-  diagC[i,]<- diag(C[,,i])
-}
+diagC<- C
 
 diagC
 

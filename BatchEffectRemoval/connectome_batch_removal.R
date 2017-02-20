@@ -1,4 +1,4 @@
-setwd("~/git/semipar-cci/BatchEffectRemoval/")
+setwd("F:\\work/git/semipar-cci/BatchEffectRemoval/")
 source("getFitted.r")
 source("classification.r")
 
@@ -32,7 +32,6 @@ m_j = length(A_list)
 
 ns = sapply(label_list,length)
 batchID = unlist(sapply(c(1:length(ns)),function(i){rep(i,ns[i])} ))
-
 
 # pdf("core.pdf")
 plotCore(batch_removed$C_list)

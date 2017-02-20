@@ -132,3 +132,29 @@ for(j in 1:m){
 }
 
 # plot(colMeans(trace_D))
+
+
+
+n<- 50
+r<- 10
+m<- 10
+
+zeroB<- matrix(0,r,r)
+zeroA<- matrix(0,n,n)
+
+U<- matrix(rnorm(n*r),n)
+svdU = svd(U)
+U= svdU$u
+
+
+U2<- matrix(rnorm(r*r),r)
+svdU2 = svd(U2)
+U2= svdU2$u
+
+U3 = U%*% U2
+
+t(U3)%*%U3
+
+t(U)%*%U3 -U2
+
+U%*% t(U)%*% U3 - U3

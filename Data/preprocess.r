@@ -10,9 +10,10 @@ dataset_list<- c("BNU1", "BNU3" , "KKI2009", "MRN114","SWU4")
 
 dataset= dataset_list[[1]]
 covariatePath<- paste("covariates/",dataset,".csv",sep="")
-covariates<- read.csv(file = covariatePath)
+covariates<- read.csv(file = covariatePath, stringsAsFactors = F)
 covariates= covariates[covariates$SESSION== "Baseline",]
 covariates$SEX = as.numeric(as.character(covariates$SEX))
+covariates$AGE =as.numeric(covariates$AGE_AT_SCAN_1)
 
 graphmlPath<- paste("desikan/",dataset,sep="")
 listGraphML<- list.files(path = graphmlPath, pattern = "*.graphml")
@@ -23,11 +24,13 @@ common_id = intersect( covariates$SUBID, as.numeric(graphMLSubjectID))
 A_list =list()
 Sex_list=numeric()
 id_list=numeric()
+age_list = numeric()
 for(i in 1:length(common_id)){
   x= common_id[[i]]
   A_list[[i]] = getA(paste("desikan/BNU1/BNU1_00",x,"_1_DTI_desikan.graphml",sep=""))
   Sex_list =c (Sex_list, as.numeric(covariates$SEX)[covariates$SUBID==x])
   id_list= c(id_list, x)
+  age_list= c(age_list, covariates$AGE[covariates$SUBID==x])
 }
 
 pdf(paste("viz/",dataset,".pdf",sep=""),4,8)
@@ -37,17 +40,25 @@ for(A in A_list){
 }
 dev.off()
 
-Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list)
+Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list, "age"=age_list)
 save(Data1, file="processed/BNU1.RDa")
 
 
 #BNU3
 rm(list=ls())
+source("getA.r")
+require("base")
+dataset_list<- c("BNU1", "BNU3" , "KKI2009", "MRN114","SWU4")
+
+
 dataset= dataset_list[[2]]
 covariatePath<- paste("covariates/",dataset,".csv",sep="")
-covariates<- read.csv(file = covariatePath)
+covariates<- read.csv(file = covariatePath,stringsAsFactors = F)
 covariates= covariates[covariates$SESSION== "Baseline",]
 covariates$SEX = as.numeric(as.character(covariates$SEX))
+covariates$AGE =as.numeric(covariates$AGE_AT_SCAN_1)
+
+
 
 graphmlPath<- paste("desikan/",dataset,sep="")
 listGraphML<- list.files(path = graphmlPath, pattern = "*.graphml")
@@ -58,11 +69,14 @@ common_id = intersect( covariates$SUBID, as.numeric(graphMLSubjectID))
 A_list =list()
 Sex_list=numeric()
 id_list=numeric()
+age_list= numeric()
+
 for(i in 1:length(common_id)){
   x= common_id[[i]]
   A_list[[i]] = getA(paste("desikan/BNU3/BNU3_00",x,"_1_DTI_desikan.graphml",sep=""))
   Sex_list =c (Sex_list, as.numeric(covariates$SEX)[covariates$SUBID==x])
   id_list= c(id_list, x)
+  age_list= c(age_list, covariates$AGE[covariates$SUBID==x])
 }
 
 pdf(paste("viz/",dataset,".pdf",sep=""),4,8)
@@ -72,7 +86,7 @@ for(A in A_list){
 }
 dev.off()
 
-Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list)
+Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list, "age"=age_list)
 save(Data1, file="processed/BNU3.RDa")
 
 
@@ -94,6 +108,9 @@ covariates = cbind(covariates, "SESSION"=rep(c(1:2)))
 covariates= covariates[covariates$SESSION== 1,]
 covariates$SEX = (covariates$Sex=="F")*1+(covariates$Sex=="M")*2
 covariates$SUBID = covariates$SubjectID
+covariates$AGE =as.numeric(covariates$Age)
+
+
 
 graphmlPath<- paste("desikan/",dataset,sep="")
 listGraphML<- list.files(path = graphmlPath, pattern = "*.graphml")
@@ -104,11 +121,15 @@ common_id = intersect( covariates$SUBID, as.numeric(graphMLSubjectID))
 A_list =list()
 Sex_list=numeric()
 id_list=numeric()
+age_list= numeric()
+
 for(i in 1:length(common_id)){
   x= common_id[[i]]
   A_list[[i]] = getA(paste("desikan/KKI2009/KKI2009_",x,"_1_DTI_desikan.graphml",sep=""))
   Sex_list =c (Sex_list, as.numeric(covariates$SEX)[covariates$SUBID==x])
   id_list= c(id_list, x)
+  age_list= c(age_list, covariates$AGE[covariates$SUBID==x])
+  
 }
 
 pdf(paste("viz/",dataset,".pdf",sep=""),4,8)
@@ -118,7 +139,7 @@ for(A in A_list){
 }
 dev.off()
 
-Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list)
+Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list, "age"=age_list)
 save(Data1, file="processed/KKI2009.RDa")
 
 
@@ -138,6 +159,9 @@ covariates<- read.csv(file = covariatePath)
 
 covariates$SEX = covariates$Sex+1
 covariates$SUBID = as.character(covariates$URSI)
+covariates$AGE = as.numeric(covariates$Age)
+covariates$CCI
+
 
 graphmlPath<- paste("desikan/",dataset,sep="")
 listGraphML<- list.files(path = graphmlPath, pattern = "*.graphml")
@@ -148,12 +172,17 @@ common_id = intersect( covariates$SUBID, graphMLSubjectID)
 A_list =list()
 Sex_list=numeric()
 id_list=numeric()
+age_list= numeric()
+cci_list = numeric()
 for(i in 1:length(common_id)){
   x= common_id[[i]]
   print(x)
   A_list[[i]] = getA(paste("desikan/MRN114/MRN114_",x,"_1_DTI_desikan.graphml",sep=""))
   Sex_list =c (Sex_list, as.numeric(covariates$SEX)[covariates$SUBID==x])
   id_list= c(id_list, x)
+  age_list= c(age_list, covariates$AGE[covariates$SUBID==x])
+  cci_list= c(cci_list, covariates$CCI[covariates$SUBID==x])
+  
 }
 
 pdf(paste("viz/",dataset,".pdf",sep=""),4,8)
@@ -163,7 +192,7 @@ for(A in A_list){
 }
 dev.off()
 
-Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list)
+Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list, "age"=age_list,"CCI"=cci_list)
 save(Data1, file="processed/MRN114.RDa")
 
 
@@ -188,6 +217,8 @@ covariates= covariates[covariates$SESSION== "Baseline",]
 covariates$SEX = as.numeric(as.character(covariates$SEX))
 covariates$SUBID
 
+covariates$AGE = as.numeric(as.character(covariates$AGE_AT_SCAN_1))
+
 graphmlPath<- paste("desikan/",dataset,sep="")
 listGraphML<- list.files(path = graphmlPath, pattern = "*.graphml")
 graphMLSubjectID<- as.numeric(unlist(lapply(listGraphML, function(x){strsplit(x,"_")[[1]][2]})))
@@ -197,12 +228,16 @@ common_id = intersect( covariates$SUBID, graphMLSubjectID)
 A_list =list()
 Sex_list=numeric()
 id_list=numeric()
+age_list= numeric()
+
 for(i in 1:length(common_id)){
   x= common_id[[i]]
   print(x)
   A_list[[i]] = getA(paste("desikan/SWU4/SWU4_00",x,"_1_DTI_desikan.graphml",sep=""))
   Sex_list =c (Sex_list, as.numeric(covariates$SEX)[covariates$SUBID==x])
   id_list= c(id_list, x)
+  age_list= c(age_list, covariates$AGE[covariates$SUBID==x])
+  
 }
 
 pdf(paste("viz/",dataset,".pdf",sep=""),4,8)
@@ -212,5 +247,5 @@ for(A in A_list){
 }
 dev.off()
 
-Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list)
+Data1 = list("A"=A_list,"SEX"=Sex_list,"id"=id_list, "age"=age_list)
 save(Data1, file="processed/SWU4.RDa")

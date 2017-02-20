@@ -8,8 +8,8 @@ knnLOO <-function(k, M,label){
   1-sum(cl)/n
 }
 
-knnLOOVaryingK <-function(M,label){
-  sapply(c(1:10), function(k)knnLOO(k,M,label))
+knnLOOVaryingK <-function(M,label,max_k=10){
+  sapply(c(1:max_k), function(k)knnLOO(k,M,label))
 }
 
 

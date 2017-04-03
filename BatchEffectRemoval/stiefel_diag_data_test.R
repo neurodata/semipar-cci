@@ -1,4 +1,4 @@
-setwd("F://work/git/semipar-cci/BatchEffectRemoval/")
+setwd("D://work/git/semipar-cci/BatchEffectRemoval/")
 
 require("rstiefel")
 require("msm")
@@ -39,8 +39,13 @@ for(i in 1:length(y_list)){
 }
 
 
-r=5
-stiefelDecomp = stiefel_diagonalize(y_list_pick, r=r,diagD = F)
+r=30
+stiefelDecomp = stiefel_diagonalize(y_list_pick, r=r,diagD = T)
+
+estP = getPEst(stiefelDecomp$U0,  stiefelDecomp$D_list)
+
+image(estP[[1]])
+
 
 D_list = stiefelDecomp$D_list
 ts.plot(stiefelDecomp$trace_D[,1:5])
